@@ -9,11 +9,10 @@ async function bootstrap() {
     .setTitle('Breta API')
     .setDescription('Test')
     .setVersion('0.0.1')
-    .addTag('Beauty')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('docs', app, document);
 
   await app.listen(3000);
 }
