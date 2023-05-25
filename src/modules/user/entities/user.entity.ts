@@ -1,4 +1,10 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import {
+  ObjectType,
+  Field,
+  Int,
+  ID,
+  GraphQLISODateTime,
+} from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
@@ -10,29 +16,33 @@ import {
 @Entity({ name: 'users' })
 @ObjectType()
 export class User {
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
-  @Field(() => Int)
   user_id: number;
 
-  @Column({ type: 'varchar', length: 150 })
   @Field()
+  @Column({ type: 'varchar', length: 150 })
+  username: string;
+
+  @Field()
+  @Column({ type: 'varchar', length: 150 })
   email: string;
 
-  @Column({ type: 'varchar', length: 255 })
   @Field()
+  @Column({ type: 'varchar', length: 255 })
   password: string;
 
+  @Field(() => GraphQLISODateTime)
   @CreateDateColumn({
-    type: 'datetime',
+    type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  @Field()
   created_At: Date;
 
+  @Field(() => GraphQLISODateTime)
   @UpdateDateColumn({
-    type: 'datetime',
+    type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  @Field()
   updated_At: Date;
 }
