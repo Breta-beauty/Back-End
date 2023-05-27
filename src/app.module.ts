@@ -17,6 +17,7 @@ const configService = new ConfigService();
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      csrfPrevention: false,
     }),
     ConfigModule.forRoot({
       envFilePath: '.env',
