@@ -14,6 +14,6 @@ export class CreateUserInput {
 
   @Field()
   @IsNotEmpty()
-  @Length(6)
+  @Length(6, 30)
   password: string;
 }
