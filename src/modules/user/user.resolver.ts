@@ -28,20 +28,20 @@ export class UserResolver {
   }
 
   @Query(() => User, { name: 'user' })
-  findOne(@Args('user_id', { type: () => Int }) user_id: number) {
+  findOne(@Args('user_id', { type: () => Int }) user_id: string) {
     return this.userService.findOne(user_id);
   }
 
   @Mutation(() => User)
   updateUser(
-    @Args('user_id') user_id: number,
+    @Args('user_id') user_id: string,
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
   ) {
     return this.userService.update(user_id, updateUserInput);
   }
 
   @Mutation(() => User)
-  removeUser(@Args('user_id', { type: () => Int }) user_id: number) {
+  removeUser(@Args('user_id', { type: () => Int }) user_id: string) {
     return this.userService.remove(user_id);
   }
 

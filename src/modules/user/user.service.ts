@@ -38,7 +38,7 @@ export class UserService {
     return users;
   }
 
-  async findOne(user_id: number) {
+  async findOne(user_id: string) {
     const user = await this.userRepo.findOne({
       where: { user_id },
     });
@@ -47,7 +47,7 @@ export class UserService {
     return user;
   }
 
-  async update(user_id: number, changes: UpdateUserInput) {
+  async update(user_id: string, changes: UpdateUserInput) {
     const user = await this.userRepo.findOneBy({ user_id });
     if (!user) throw new NotFoundException('No se encontró al usuario');
 
@@ -63,7 +63,7 @@ export class UserService {
     return this.userRepo.save(user);
   }
 
-  async remove(user_id: number) {
+  async remove(user_id: string) {
     const user = await this.userRepo.findOneBy({ user_id });
     if (!user) throw new NotFoundException('El usuario no existe');
   }

@@ -1,10 +1,4 @@
-import {
-  ObjectType,
-  Field,
-  Int,
-  ID,
-  GraphQLISODateTime,
-} from '@nestjs/graphql';
+import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
@@ -17,8 +11,8 @@ import {
 @ObjectType()
 export class User {
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  user_id: number;
+  @PrimaryGeneratedColumn('uuid')
+  user_id: string;
 
   @Field()
   @Column({ type: 'varchar', length: 150 })
