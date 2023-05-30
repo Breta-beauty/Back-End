@@ -8,6 +8,8 @@ import { Repository } from 'typeorm';
 import { AuthService } from '../auth/auth.service';
 import { LoginResponse } from './dto/login-response';
 import { LoginInput } from './dto/login.input';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/guards/auth/jwt-auth.guard';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -32,6 +34,7 @@ export class UserResolver {
     return this.userService.findOne(user_id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Mutation(() => User)
   updateUser(
     @Args('user_id') user_id: string,
@@ -40,6 +43,7 @@ export class UserResolver {
     return this.userService.update(user_id, updateUserInput);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Mutation(() => User)
   removeUser(@Args('user_id', { type: () => Int }) user_id: string) {
     return this.userService.remove(user_id);
