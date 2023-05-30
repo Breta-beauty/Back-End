@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -9,12 +10,17 @@ async function bootstrap() {
     .setTitle('Breta API')
     .setDescription('Test')
     .setVersion('0.0.1')
-    .addTag('Beauty')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('docs', app, document);
 
+  app.useGlobalPipes(new ValidationPipe());
+  app.enableCors({
+    origin: '*',
+    methods: ['GET', 'POST'],
+    allowedHeaders: '*',
+  });
   await app.listen(3000);
 }
 bootstrap();
