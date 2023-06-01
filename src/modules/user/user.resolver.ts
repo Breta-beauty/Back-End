@@ -5,7 +5,7 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../authn/auth.service';
 import { LoginResponse } from './dto/login-response';
 import { LoginInput } from './dto/login.input';
 import { UseGuards } from '@nestjs/common';
