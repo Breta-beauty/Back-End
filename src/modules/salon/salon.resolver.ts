@@ -24,12 +24,15 @@ export class SalonResolver {
   }
 
   @Mutation(() => Salon)
-  updateSalon(@Args('updateSalonInput') updateSalonInput: UpdateSalonInput) {
-    return this.salonService.update(updateSalonInput.id, updateSalonInput);
+  updateSalon(
+    @Args('salon_id') salon_id: number,
+    @Args('updateSalonInput') updateSalonInput: UpdateSalonInput,
+  ) {
+    return this.salonService.update(salon_id, updateSalonInput);
   }
 
   @Mutation(() => Salon)
-  removeSalon(@Args('id', { type: () => Int }) id: number) {
-    return this.salonService.remove(id);
+  removeSalon(@Args('salon_id') salon_id: number) {
+    return this.salonService.remove(salon_id);
   }
 }
