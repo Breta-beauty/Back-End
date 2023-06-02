@@ -21,9 +21,18 @@ type LoginResponse {
   user: User
 }
 
+type Salon {
+  salon_id: ID!
+  name: String!
+  description: String!
+  created_At: DateTime!
+  updated_At: DateTime!
+}
+
 type Query {
   users: [User!]!
   user(user_id: Int!): User!
+  salon(id: Int!): Salon!
 }
 
 type Mutation {
@@ -31,6 +40,9 @@ type Mutation {
   updateUser(user_id: String!, updateUserInput: UpdateUserInput!): User!
   removeUser(user_id: Int!): User!
   login(loginUserInput: LoginInput!): LoginResponse!
+  createSalon(createSalonInput: CreateSalonInput!): Salon!
+  updateSalon(salon_id: Float!, updateSalonInput: UpdateSalonInput!): Salon!
+  removeSalon(salon_id: Float!): Salon!
 }
 
 input CreateUserInput {
@@ -48,4 +60,14 @@ input UpdateUserInput {
 input LoginInput {
   email: String!
   password: String!
+}
+
+input CreateSalonInput {
+  name: String!
+  description: String
+}
+
+input UpdateSalonInput {
+  name: String
+  description: String
 }
