@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 import { createTransport } from 'nodemailer';
@@ -9,7 +8,6 @@ import * as Mail from 'nodemailer/lib/mailer';
 export class EmailService {
   private nodemailerTrasport: Mail;
   constructor(
-    private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {
     this.nodemailerTrasport = createTransport({

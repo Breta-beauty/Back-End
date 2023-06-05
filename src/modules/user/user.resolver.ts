@@ -10,6 +10,7 @@ import { LoginResponse } from './dto/login-response';
 import { LoginInput } from './dto/login.input';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/guards/auth/jwt-auth.guard';
+import { ConfirmEmailInput } from '../email/dto/confirm-email.input';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -52,5 +53,10 @@ export class UserResolver {
   @Mutation(() => LoginResponse, { name: 'login' })
   login(@Args('loginUserInput') loginUserInput: LoginInput) {
     return this.authService.login(loginUserInput);
+  }
+
+  @Mutation(() => User)
+  confirmEmail(@Args('confirmEmailInput') confirmEmailInput: ConfirmEmailInput) {
+    return this.userService.confirm(confirmEmailInput);
   }
 }

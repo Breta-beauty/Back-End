@@ -10,6 +10,7 @@ import { join } from 'path';
 import { AuthModule } from './modules/authn/auth.module';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { EmailModule } from './modules/email/email.module';
+import * as Joi from '@hapi/joi';
 
 @Module({
   imports: [
@@ -31,6 +32,11 @@ import { EmailModule } from './modules/email/email.module';
     ConfigModule.forRoot({
       envFilePath: '.env',
       isGlobal: true,
+      validationSchema: Joi.object({
+        JWT_VERIFICATION_TOKEN_SECRET: Joi.string().required(),
+        JWT_VERIFICATION_TOKEN_EXPIRATION_TIME: Joi.string().required(),
+        EMAIL_CONFIRMATION_URL: Joi.string().required(),
+      })
     }),
     UserModule,
     DatabaseModule,
