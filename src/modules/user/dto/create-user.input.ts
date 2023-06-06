@@ -16,4 +16,7 @@ export class CreateUserInput {
   @IsNotEmpty()
   @Length(6, 30)
   password: string;
+
+  @Field({ defaultValue: false })
+  is_Verified: boolean
 }

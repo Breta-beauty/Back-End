@@ -15,16 +15,20 @@ export class User {
   user_id: string;
 
   @Field()
-  @Column({ type: 'varchar', length: 150 })
+  @Column({ type: 'varchar', length: 150, unique: true })
   username: string;
 
   @Field()
-  @Column({ type: 'varchar', length: 150 })
+  @Column({ type: 'varchar', length: 150, unique: true })
   email: string;
 
   @Field()
   @Column({ type: 'varchar', length: 255 })
   password: string;
+
+  @Field({ defaultValue: false })
+  @Column({ type: 'boolean' })
+  is_Verified: boolean;
 
   @Field(() => GraphQLISODateTime)
   @CreateDateColumn({
