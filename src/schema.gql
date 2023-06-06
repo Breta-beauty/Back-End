@@ -2,11 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  user_id: ID!
-  username: String!
-  email: String!
-  password: String!
+type Profile {
+  profile_id: String!
+  wallpaper: String!
+  profile_picture: String!
+  description: String!
+  user: User!
   created_At: DateTime!
   updated_At: DateTime!
 }
@@ -16,6 +17,17 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type User {
+  user_id: ID!
+  username: String!
+  email: String!
+  password: String!
+  type: String!
+  profile: Profile!
+  created_At: DateTime!
+  updated_At: DateTime!
+}
+
 type LoginResponse {
   access_token: String!
   user: User
@@ -24,6 +36,7 @@ type LoginResponse {
 type Query {
   users: [User!]!
   user(user_id: Int!): User!
+  profile(id: Int!): Profile!
 }
 
 type Mutation {
@@ -31,21 +44,37 @@ type Mutation {
   updateUser(user_id: String!, updateUserInput: UpdateUserInput!): User!
   removeUser(user_id: Int!): User!
   login(loginUserInput: LoginInput!): LoginResponse!
+  createProfile(createProfileInput: CreateProfileInput!): Profile!
+  updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
+  removeProfile(id: Int!): Profile!
 }
 
 input CreateUserInput {
   username: String!
   email: String!
   password: String!
+  type: String!
 }
 
 input UpdateUserInput {
   username: String
   email: String
   password: String
+  type: String
 }
 
 input LoginInput {
   email: String!
   password: String!
+}
+
+input CreateProfileInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateProfileInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }

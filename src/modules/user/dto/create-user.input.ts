@@ -4,16 +4,23 @@ import { IsEmail, IsNotEmpty, Length, IsString } from 'class-validator';
 @InputType()
 export class CreateUserInput {
   @Field()
-  @IsString()
+  @IsString({ message: 'El nombre de usuario no puede estar vacío.' })
   username: string;
 
   @Field()
   @IsEmail()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'El campo email no puede estar vacío.' })
   email: string;
 
   @Field()
-  @IsNotEmpty()
-  @Length(6, 30)
+  @IsNotEmpty({ message: 'La contraseña no puede estar vacía.' })
+  @Length(8, 30, {
+    message:
+      'La contraseña no puede ser menor a 8 caracteres ni superior a 30.',
+  })
   password: string;
+
+  @Field()
+  @IsString()
+  type: 'salon' | 'customer';
 }

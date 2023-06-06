@@ -9,6 +9,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { AuthModule } from './modules/auth/auth.module';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
+import { ProfileModule } from './modules/profile/profile.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql';
     UserModule,
     DatabaseModule,
     AuthModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -14,7 +14,7 @@ export const dataSourceOptions: DataSourceOptions = {
   port: configService.get('POSTGRES_PORT'),
   username: configService.get('POSTGRES_USER'),
   password: configService.get('POSTGRES_PASSWORD'),
-  synchronize: false,
+  synchronize: true,
 
   entities: [join('dist', '**', '*.entity.{ts,js}')],
   migrations: ['dist/migrations/*.{ts,js}'],
