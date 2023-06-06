@@ -20,7 +20,12 @@ export class CreateUserInput {
   })
   password: string;
 
+<<<<<<< HEAD
   @Field()
   @IsString()
   type: 'salon' | 'customer';
+=======
+  @Field({ defaultValue: false })
+  is_Verified: boolean
+>>>>>>> c6c0fbff7f61914cb89a487d16b92f3077b36f4d
 }

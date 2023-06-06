@@ -18,17 +18,18 @@ export class User {
   user_id: string;
 
   @Field()
-  @Column({ type: 'varchar', length: 150 })
+  @Column({ type: 'varchar', length: 150, unique: true })
   username: string;
 
   @Field()
-  @Column({ type: 'varchar', length: 150 })
+  @Column({ type: 'varchar', length: 150, unique: true })
   email: string;
 
   @Field()
   @Column({ type: 'varchar', length: 255 })
   password: string;
 
+<<<<<<< HEAD
   @Field()
   @Column({ type: 'varchar', length: 20, default: 'customer' })
   type: 'salon' | 'customer';
@@ -37,6 +38,11 @@ export class User {
   @OneToOne(() => Profile, { nullable: true })
   @JoinColumn()
   profile: Profile;
+=======
+  @Field({ defaultValue: false })
+  @Column({ type: 'boolean' })
+  is_Verified: boolean;
+>>>>>>> c6c0fbff7f61914cb89a487d16b92f3077b36f4d
 
   @Field(() => GraphQLISODateTime)
   @CreateDateColumn({

@@ -2,12 +2,21 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+<<<<<<< HEAD
 type Profile {
   profile_id: String!
   wallpaper: String!
   profile_picture: String!
   description: String!
   user: User!
+=======
+type User {
+  user_id: ID!
+  username: String!
+  email: String!
+  password: String!
+  is_Verified: Boolean!
+>>>>>>> c6c0fbff7f61914cb89a487d16b92f3077b36f4d
   created_At: DateTime!
   updated_At: DateTime!
 }
