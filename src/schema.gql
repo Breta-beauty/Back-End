@@ -7,6 +7,7 @@ type User {
   username: String!
   email: String!
   password: String!
+  is_Verified: Boolean!
   created_At: DateTime!
   updated_At: DateTime!
 }
