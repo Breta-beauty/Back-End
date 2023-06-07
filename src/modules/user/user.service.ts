@@ -23,7 +23,7 @@ export class UserService {
     const user = await this.userRepo.findOne({
       where: { email: payload.email },
     });
-    if (user) throw new BadRequestException('El usuario ya existe');
+    if (user) throw new BadRequestException(['El usuario ya existe']);
 
     const saltRounds = 10;
     const password = payload.password;
@@ -42,7 +42,7 @@ export class UserService {
 
   async findAll() {
     const users = await this.userRepo.find();
-    if (!users) throw new NotFoundException('No se encontraron usuarios');
+    if (!users) throw new NotFoundException(['No se encontraron usuarios']);
 
     return users;
   }
@@ -51,7 +51,7 @@ export class UserService {
     const user = await this.userRepo.findOne({
       where: { user_id },
     });
-    if (!user) throw new NotFoundException('No se encontró al usuario');
+    if (!user) throw new NotFoundException(['No se encontró al usuario']);
 
     return user;
   }
@@ -67,7 +67,7 @@ export class UserService {
 
   async update(user_id: string, changes: UpdateUserInput) {
     const user = await this.userRepo.findOneBy({ user_id });
-    if (!user) throw new NotFoundException('No se encontró al usuario');
+    if (!user) throw new NotFoundException(['No se encontró al usuario']);
 
     if (changes.password) {
       const saltRounds = 10;
@@ -107,6 +107,6 @@ export class UserService {
 
   async remove(user_id: string) {
     const user = await this.userRepo.findOneBy({ user_id });
-    if (!user) throw new NotFoundException('El usuario no existe');
+    if (!user) throw new NotFoundException(['El usuario no existe']);
   }
 }

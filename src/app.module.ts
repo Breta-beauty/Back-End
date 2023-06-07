@@ -23,7 +23,6 @@ import * as Joi from '@hapi/joi';
         const graphQLFormattedError: GraphQLFormattedError = {
           message: error.message,
           extensions: {
-            code: error.extensions.code,
             originalError: error.extensions.originalError,
           },
         };

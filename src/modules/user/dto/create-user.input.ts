@@ -8,7 +8,7 @@ export class CreateUserInput {
   username: string;
 
   @Field()
-  @IsEmail()
+  @IsEmail({}, { message: 'Debes introducir un correo valido.' })
   @IsNotEmpty({ message: 'El campo email no puede estar vacío.' })
   email: string;
 
