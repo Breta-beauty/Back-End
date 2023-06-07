@@ -23,7 +23,7 @@ export class UserService {
     const user = await this.userRepo.findOne({
       where: { email: payload.email },
     });
-    if (user) throw new BadRequestException(['El usuario ya existe']);
+    if (user) throw new BadRequestException([['El usuario ya existe']]);
 
     const saltRounds = 10;
     const password = payload.password;
@@ -67,7 +67,7 @@ export class UserService {
 
   async update(user_id: string, changes: UpdateUserInput) {
     const user = await this.userRepo.findOneBy({ user_id });
-    if (!user) throw new NotFoundException(['No se encontró al usuario']);
+    if (!user) throw new NotFoundException([['No se encontró al usuario']]);
 
     if (changes.password) {
       const saltRounds = 10;

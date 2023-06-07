@@ -9,6 +9,5 @@ export class LoginInput {
   email: string;
 
   @Field()
-  @IsNotEmpty()
   password: string;
 }
