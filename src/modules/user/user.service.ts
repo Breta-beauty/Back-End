@@ -8,17 +8,22 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
-
+import { EmailConfirmationService } from '../email/email-confirmation.service';
 import * as bcrypt from 'bcrypt';
+import { ConfirmEmailInput } from '../email/dto/confirm-email.input';
+
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private userRepo: Repository<User>,
+    private readonly emailConfirmationService: EmailConfirmationService,
+  ) {}
 
   async create(payload: CreateUserInput) {
     const user = await this.userRepo.findOne({
       where: { email: payload.email },
     });
-    if (user) throw new BadRequestException(['El usuario ya existe']);
+    if (user) throw new BadRequestException([['El usuario ya existe']]);
 
     const saltRounds = 10;
     const password = payload.password;
@@ -27,6 +32,10 @@ export class UserService {
     payload.password = hash;
 
     const newUser = this.userRepo.create(payload);
+
+    if (newUser) {
+      await this.emailConfirmationService.sendVerificationLink(payload.email);
+    }
 
     return this.userRepo.save(newUser);
   }
@@ -47,9 +56,18 @@ export class UserService {
     return user;
   }
 
+  async findOneByEmail(email: string) {
+    const user = await this.userRepo.findOne({
+      where: { email },
+    });
+    if (!user) throw new NotFoundException('No se encontró al usuario');
+
+    return user;
+  }
+
   async update(user_id: string, changes: UpdateUserInput) {
     const user = await this.userRepo.findOneBy({ user_id });
-    if (!user) throw new NotFoundException(['No se encontró al usuario']);
+    if (!user) throw new NotFoundException([['No se encontró al usuario']]);
 
     if (changes.password) {
       const saltRounds = 10;
@@ -61,6 +79,30 @@ export class UserService {
     this.userRepo.merge(user, changes);
 
     return this.userRepo.save(user);
+  }
+
+  async emailConfirmed(email: string) {
+    return this.userRepo.update(
+      { email },
+      {
+        is_Verified: true,
+      },
+    );
+  }
+
+  public async confirmEmail(email: string) {
+    const user = await this.userRepo.findOneBy({ email });
+    if (user.is_Verified) {
+      throw new BadRequestException('Email already confirmed');
+    }
+    await this.emailConfirmed(email);
+  }
+
+  async confirm(confirmationData: ConfirmEmailInput) {
+    const email = await this.emailConfirmationService.decodeConfirmationToken(
+      confirmationData.token,
+    );
+    await this.confirmEmail(email);
   }
 
   async remove(user_id: string) {

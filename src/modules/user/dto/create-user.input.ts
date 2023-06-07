@@ -19,4 +19,11 @@ export class CreateUserInput {
       'La contraseña no puede ser menor a 8 caracteres ni superior a 30.',
   })
   password: string;
+
+  @Field()
+  @IsString()
+  type: 'salon' | 'customer' = 'customer';
+
+  @Field()
+  is_Verified: true | false = false;
 }

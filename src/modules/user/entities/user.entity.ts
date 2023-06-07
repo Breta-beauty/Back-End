@@ -1,8 +1,11 @@
 import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
+import { Profile } from 'src/modules/profile/entities/profile.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -15,16 +18,29 @@ export class User {
   user_id: string;
 
   @Field()
-  @Column({ type: 'varchar', length: 150 })
+  @Column({ type: 'varchar', length: 150, unique: true })
   username: string;
 
   @Field()
-  @Column({ type: 'varchar', length: 150 })
+  @Column({ type: 'varchar', length: 150, unique: true })
   email: string;
 
   @Field()
   @Column({ type: 'varchar', length: 255 })
   password: string;
+
+  @Field({ defaultValue: 'customer', nullable: true })
+  @Column({ type: 'varchar', length: 20, default: 'customer' })
+  type: 'salon' | 'customer';
+
+  @Field({ nullable: true })
+  @Column({ type: 'boolean', default: false })
+  is_Verified: boolean;
+
+  @Field(() => Profile)
+  @OneToOne(() => Profile, { nullable: true })
+  @JoinColumn()
+  profile: Profile;
 
   @Field(() => GraphQLISODateTime)
   @CreateDateColumn({
