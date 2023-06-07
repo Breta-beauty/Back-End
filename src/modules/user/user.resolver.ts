@@ -56,7 +56,9 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  confirmEmail(@Args('confirmEmailInput') confirmEmailInput: ConfirmEmailInput) {
+  confirmEmail(
+    @Args('confirmEmailInput') confirmEmailInput: ConfirmEmailInput,
+  ) {
     return this.userService.confirm(confirmEmailInput);
   }
 }

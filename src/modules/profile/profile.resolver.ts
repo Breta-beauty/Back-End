@@ -1,35 +1,42 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { ProfileService } from './profile.service';
 import { Profile } from './entities/profile.entity';
 import { CreateProfileInput } from './dto/create-profile.input';
 import { UpdateProfileInput } from './dto/update-profile.input';
+import { getProfileResponse } from './dto/profile-response';
 
 @Resolver(() => Profile)
 export class ProfileResolver {
   constructor(private readonly profileService: ProfileService) {}
 
   @Mutation(() => Profile)
-  createProfile(@Args('createProfileInput') createProfileInput: CreateProfileInput) {
-    return this.profileService.create(createProfileInput);
+  createProfile(
+    @Args('user_id', { type: () => ID }) user_id: string,
+    @Args('createProfileInput') createProfileInput: CreateProfileInput,
+  ) {
+    return this.profileService.create(user_id, createProfileInput);
   }
 
-  @Query(() => [Profile], { name: 'profile' })
+  @Query(() => [Profile], { name: 'profiles' })
   findAll() {
     return this.profileService.findAll();
   }
 
-  @Query(() => Profile, { name: 'profile' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.profileService.findOne(id);
+  @Query(() => getProfileResponse, { name: 'profile' })
+  findOne(@Args('profile_id', { type: () => ID }) profile_id: string) {
+    return this.profileService.findOne(profile_id);
   }
 
   @Mutation(() => Profile)
-  updateProfile(@Args('updateProfileInput') updateProfileInput: UpdateProfileInput) {
-    return this.profileService.update(updateProfileInput.id, updateProfileInput);
+  updateProfile(
+    @Args('user_id', { type: () => ID }) user_id: string,
+    @Args('updateProfileInput') updateProfileInput: UpdateProfileInput,
+  ) {
+    return this.profileService.update(user_id, updateProfileInput);
   }
 
   @Mutation(() => Profile)
-  removeProfile(@Args('id', { type: () => Int }) id: number) {
-    return this.profileService.remove(id);
+  removeProfile(@Args('user_id', { type: () => ID }) user_id: string) {
+    return this.profileService.remove(user_id);
   }
 }

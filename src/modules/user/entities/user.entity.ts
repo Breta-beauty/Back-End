@@ -29,20 +29,18 @@ export class User {
   @Column({ type: 'varchar', length: 255 })
   password: string;
 
-<<<<<<< HEAD
-  @Field()
+  @Field({ defaultValue: 'customer', nullable: true })
   @Column({ type: 'varchar', length: 20, default: 'customer' })
   type: 'salon' | 'customer';
+
+  @Field({ nullable: true })
+  @Column({ type: 'boolean', default: false })
+  is_Verified: boolean;
 
   @Field(() => Profile)
   @OneToOne(() => Profile, { nullable: true })
   @JoinColumn()
   profile: Profile;
-=======
-  @Field({ defaultValue: false })
-  @Column({ type: 'boolean' })
-  is_Verified: boolean;
->>>>>>> c6c0fbff7f61914cb89a487d16b92f3077b36f4d
 
   @Field(() => GraphQLISODateTime)
   @CreateDateColumn({

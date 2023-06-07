@@ -9,12 +9,9 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { AuthModule } from './modules/authn/auth.module';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
-<<<<<<< HEAD
 import { ProfileModule } from './modules/profile/profile.module';
-=======
 import { EmailModule } from './modules/email/email.module';
 import * as Joi from '@hapi/joi';
->>>>>>> c6c0fbff7f61914cb89a487d16b92f3077b36f4d
 
 @Module({
   imports: [
@@ -40,16 +37,13 @@ import * as Joi from '@hapi/joi';
         JWT_VERIFICATION_TOKEN_SECRET: Joi.string().required(),
         JWT_VERIFICATION_TOKEN_EXPIRATION_TIME: Joi.string().required(),
         EMAIL_CONFIRMATION_URL: Joi.string().required(),
-      })
+      }),
     }),
     UserModule,
     DatabaseModule,
     AuthModule,
-<<<<<<< HEAD
     ProfileModule,
-=======
     EmailModule,
->>>>>>> c6c0fbff7f61914cb89a487d16b92f3077b36f4d
   ],
   controllers: [AppController],
   providers: [AppService],

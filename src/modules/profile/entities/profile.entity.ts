@@ -17,16 +17,28 @@ export class Profile {
   profile_id: string;
 
   @Field()
+  @Column({ type: 'varchar', length: 150 })
+  full_name: string;
+
+  @Field()
+  @Column({ type: 'varchar', length: 50, unique: true })
+  cellphone: string;
+
+  @Field({ nullable: true })
+  @Column({ type: 'text', nullable: true })
+  description: string;
+
+  @Field({ nullable: true })
   @Column({ type: 'text', nullable: true })
   wallpaper: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ type: 'text', nullable: true })
   profile_picture: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ type: 'text', nullable: true })
-  description: string;
+  location: string;
 
   @Field(() => User)
   @OneToOne(() => User, (user) => user.profile)

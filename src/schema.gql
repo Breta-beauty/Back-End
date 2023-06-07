@@ -2,21 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-<<<<<<< HEAD
 type Profile {
   profile_id: String!
-  wallpaper: String!
-  profile_picture: String!
-  description: String!
+  full_name: String!
+  cellphone: String!
+  description: String
+  wallpaper: String
+  profile_picture: String
+  location: String
   user: User!
-=======
-type User {
-  user_id: ID!
-  username: String!
-  email: String!
-  password: String!
-  is_Verified: Boolean!
->>>>>>> c6c0fbff7f61914cb89a487d16b92f3077b36f4d
   created_At: DateTime!
   updated_At: DateTime!
 }
@@ -31,7 +25,8 @@ type User {
   username: String!
   email: String!
   password: String!
-  type: String!
+  type: String
+  is_Verified: Boolean
   profile: Profile!
   created_At: DateTime!
   updated_At: DateTime!
@@ -42,10 +37,16 @@ type LoginResponse {
   user: User
 }
 
+type getProfileResponse {
+  profile: Profile!
+  user: User
+}
+
 type Query {
   users: [User!]!
   user(user_id: Int!): User!
-  profile(id: Int!): Profile!
+  profiles: [Profile!]!
+  profile(profile_id: ID!): getProfileResponse!
 }
 
 type Mutation {
@@ -53,23 +54,26 @@ type Mutation {
   updateUser(user_id: String!, updateUserInput: UpdateUserInput!): User!
   removeUser(user_id: Int!): User!
   login(loginUserInput: LoginInput!): LoginResponse!
-  createProfile(createProfileInput: CreateProfileInput!): Profile!
-  updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
-  removeProfile(id: Int!): Profile!
+  confirmEmail(confirmEmailInput: ConfirmEmailInput!): User!
+  createProfile(user_id: ID!, createProfileInput: CreateProfileInput!): Profile!
+  updateProfile(user_id: ID!, updateProfileInput: UpdateProfileInput!): Profile!
+  removeProfile(user_id: ID!): Profile!
 }
 
 input CreateUserInput {
   username: String!
   email: String!
   password: String!
-  type: String!
+  type: String! = "customer"
+  is_Verified: Boolean! = false
 }
 
 input UpdateUserInput {
   username: String
   email: String
   password: String
-  type: String
+  type: String = "customer"
+  is_Verified: Boolean = false
 }
 
 input LoginInput {
@@ -77,13 +81,24 @@ input LoginInput {
   password: String!
 }
 
+input ConfirmEmailInput {
+  token: String!
+}
+
 input CreateProfileInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  wallpaper: String
+  profile_image: String
+  full_name: String!
+  cellphone: String!
+  description: String
+  location: String
 }
 
 input UpdateProfileInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  wallpaper: String
+  profile_image: String
+  full_name: String
+  cellphone: String
+  description: String
+  location: String
 }

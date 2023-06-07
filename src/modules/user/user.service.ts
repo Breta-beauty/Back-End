@@ -16,8 +16,8 @@ import { ConfirmEmailInput } from '../email/dto/confirm-email.input';
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepo: Repository<User>,
-    private readonly emailConfirmationService: EmailConfirmationService
-    ) {}
+    private readonly emailConfirmationService: EmailConfirmationService,
+  ) {}
 
   async create(payload: CreateUserInput) {
     const user = await this.userRepo.findOne({
@@ -33,8 +33,10 @@ export class UserService {
 
     const newUser = this.userRepo.create(payload);
 
-    if(newUser) await this.emailConfirmationService.sendVerificationLink(payload.email);
-    
+    if (newUser) {
+      await this.emailConfirmationService.sendVerificationLink(payload.email);
+    }
+
     return this.userRepo.save(newUser);
   }
 
@@ -54,11 +56,11 @@ export class UserService {
     return user;
   }
 
-  async findByEmail(email: string) {
+  async findOneByEmail(email: string) {
     const user = await this.userRepo.findOne({
-      where: {email},
+      where: { email },
     });
-    if (!user) throw new NotFoundException('No se encontro al usuario');
+    if (!user) throw new NotFoundException('No se encontró al usuario');
 
     return user;
   }
@@ -79,24 +81,29 @@ export class UserService {
     return this.userRepo.save(user);
   }
 
-  async emailConfirmed(email: string){
-    return this.userRepo.update({email}, {
-      is_Verified: true
-    });
+  async emailConfirmed(email: string) {
+    return this.userRepo.update(
+      { email },
+      {
+        is_Verified: true,
+      },
+    );
   }
 
-  public async confirmEmail(email:string){
-    const user = await this.findByEmail(email);
-    if(user.is_Verified){
-        throw new BadRequestException('Email already confirmed');
+  public async confirmEmail(email: string) {
+    const user = await this.userRepo.findOneBy({ email });
+    if (user.is_Verified) {
+      throw new BadRequestException('Email already confirmed');
     }
     await this.emailConfirmed(email);
-}
+  }
 
-async confirm(confirmationData: ConfirmEmailInput){
-    const email = await this.emailConfirmationService.decodeConfirmationToken(confirmationData.token);
+  async confirm(confirmationData: ConfirmEmailInput) {
+    const email = await this.emailConfirmationService.decodeConfirmationToken(
+      confirmationData.token,
+    );
     await this.confirmEmail(email);
-}
+  }
 
   async remove(user_id: string) {
     const user = await this.userRepo.findOneBy({ user_id });
