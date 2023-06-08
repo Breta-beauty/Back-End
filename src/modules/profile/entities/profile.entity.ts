@@ -16,14 +16,6 @@ export class Profile {
   @PrimaryGeneratedColumn('uuid')
   profile_id: string;
 
-  @Field()
-  @Column({ type: 'varchar', length: 150 })
-  full_name: string;
-
-  @Field()
-  @Column({ type: 'varchar', length: 50, unique: true })
-  cellphone: string;
-
   @Field({ nullable: true })
   @Column({ type: 'text', nullable: true })
   description: string;
@@ -39,14 +31,6 @@ export class Profile {
   @Field({ nullable: true })
   @Column({ type: 'text', nullable: true })
   location: string;
-
-  @Field({ nullable: true })
-  @Column({ type: 'date', nullable: true })
-  birthday: Date;
-
-  @Field({ nullable: true })
-  @Column({ type: 'varchar', default: 'undetermined' })
-  gender: string;
 
   @Field(() => User)
   @OneToOne(() => User, (user) => user.profile)

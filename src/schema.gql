@@ -4,14 +4,10 @@
 
 type Profile {
   profile_id: String!
-  full_name: String!
-  cellphone: String!
   description: String
   wallpaper: String
   profile_picture: String
   location: String
-  birthday: DateTime
-  gender: String
   user: User!
   created_At: DateTime!
   updated_At: DateTime!
@@ -27,6 +23,10 @@ type User {
   username: String!
   email: String!
   password: String!
+  full_name: String!
+  cellphone: String!
+  birthday: DateTime
+  gender: String
   type: String
   is_Verified: Boolean
   profile: Profile!
@@ -68,6 +68,11 @@ input CreateUserInput {
   password: String!
   type: String! = "customer"
   is_Verified: Boolean! = false
+  full_name: String!
+  cellphone: String!
+  location: String
+  birthday: DateTime
+  gender: String = "undetermined"
 }
 
 input UpdateUserInput {
@@ -76,6 +81,11 @@ input UpdateUserInput {
   password: String
   type: String = "customer"
   is_Verified: Boolean = false
+  full_name: String
+  cellphone: String
+  location: String
+  birthday: DateTime
+  gender: String = "undetermined"
 }
 
 input LoginInput {
@@ -90,21 +100,11 @@ input ConfirmEmailInput {
 input CreateProfileInput {
   wallpaper: String
   profile_image: String
-  full_name: String!
-  cellphone: String!
   description: String
-  location: String
-  birthday: DateTime
-  gender: String = "undetermined"
 }
 
 input UpdateProfileInput {
   wallpaper: String
   profile_image: String
-  full_name: String
-  cellphone: String
   description: String
-  location: String
-  birthday: DateTime
-  gender: String = "undetermined"
 }

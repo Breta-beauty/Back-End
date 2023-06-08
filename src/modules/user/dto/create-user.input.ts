@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, Length, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, Length, IsString, IsDate } from 'class-validator';
 
 @InputType()
 export class CreateUserInput {
@@ -26,4 +26,25 @@ export class CreateUserInput {
 
   @Field()
   is_Verified: true | false = false;
+
+  @Field()
+  @IsString()
+  @IsNotEmpty({ message: 'Debes introducir tu nombre' })
+  full_name: string;
+
+  @Field()
+  @IsString()
+  @IsNotEmpty({ message: 'Debes introducir un número de teléfono' })
+  cellphone: string;
+
+  @Field({ nullable: true })
+  location: string;
+
+  @Field({ nullable: true })
+  @IsDate()
+  birthday: Date;
+
+  @Field({ nullable: true })
+  @IsString()
+  gender: 'male' | 'female' | 'undetermined' = 'undetermined';
 }

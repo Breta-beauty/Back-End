@@ -29,6 +29,22 @@ export class User {
   @Column({ type: 'varchar', length: 255 })
   password: string;
 
+  @Field()
+  @Column({ type: 'varchar', length: 150 })
+  full_name: string;
+
+  @Field()
+  @Column({ type: 'varchar', length: 50, unique: true })
+  cellphone: string;
+
+  @Field({ nullable: true })
+  @Column({ type: 'date', nullable: true })
+  birthday: Date;
+
+  @Field({ nullable: true })
+  @Column({ type: 'varchar', default: 'undetermined' })
+  gender: string;
+
   @Field({ defaultValue: 'customer', nullable: true })
   @Column({ type: 'varchar', length: 20, default: 'customer' })
   type: 'salon' | 'customer';
