@@ -12,7 +12,7 @@ export class EmailConfirmationService {
     private readonly emailService: EmailService,
   ) {}
 
-  public sendVerificationLink(email: string) {
+  public sendVerificationLink(email: string, username: string) {
     const payload: VerificationTokenPayload = { email };
     const token = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_VERIFICATION_TOKEN_SECRET'),
@@ -29,6 +29,13 @@ export class EmailConfirmationService {
       to: email,
       subject: 'Email confirmation',
       text,
+      html: `<html>
+              <h1>Hello ${username}!</h1>
+              <p>Click in the link below to verify your email account</p>
+              <form action="http://127.0.0.1:3000/?token=${token}">
+                <input type="submit" value="Click Here" />
+              </form>
+            </html>`,
     });
   }
 

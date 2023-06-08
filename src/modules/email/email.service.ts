@@ -4,12 +4,11 @@ import { ConfigService } from '@nestjs/config';
 import { createTransport } from 'nodemailer';
 import * as Mail from 'nodemailer/lib/mailer';
 
+const configService = new ConfigService();
 @Injectable()
 export class EmailService {
   private nodemailerTrasport: Mail;
-  constructor(
-    private readonly configService: ConfigService,
-  ) {
+  constructor() {
     this.nodemailerTrasport = createTransport({
       service: configService.get('EMAIL_SERVICE'),
       auth: {

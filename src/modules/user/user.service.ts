@@ -34,7 +34,10 @@ export class UserService {
     const newUser = this.userRepo.create(payload);
 
     if (newUser) {
-      await this.emailConfirmationService.sendVerificationLink(payload.email);
+      await this.emailConfirmationService.sendVerificationLink(
+        payload.email,
+        payload.username,
+      );
     }
 
     return this.userRepo.save(newUser);
@@ -82,7 +85,7 @@ export class UserService {
   }
 
   async emailConfirmed(email: string) {
-    return this.userRepo.update(
+    return await this.userRepo.update(
       { email },
       {
         is_Verified: true,
@@ -95,14 +98,14 @@ export class UserService {
     if (user.is_Verified) {
       throw new BadRequestException('Email already confirmed');
     }
-    await this.emailConfirmed(email);
+    return await this.emailConfirmed(email);
   }
 
   async confirm(confirmationData: ConfirmEmailInput) {
     const email = await this.emailConfirmationService.decodeConfirmationToken(
       confirmationData.token,
     );
-    await this.confirmEmail(email);
+    return await this.confirmEmail(email);
   }
 
   async remove(user_id: string) {

@@ -10,6 +10,8 @@ type Profile {
   wallpaper: String
   profile_picture: String
   location: String
+  birthday: DateTime
+  gender: String
   user: User!
   created_At: DateTime!
   updated_At: DateTime!
@@ -92,6 +94,8 @@ input CreateProfileInput {
   cellphone: String!
   description: String
   location: String
+  birthday: DateTime
+  gender: String = "undetermined"
 }
 
 input UpdateProfileInput {
@@ -101,4 +105,6 @@ input UpdateProfileInput {
   cellphone: String
   description: String
   location: String
+  birthday: DateTime
+  gender: String = "undetermined"
 }

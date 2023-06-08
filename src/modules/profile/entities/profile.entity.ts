@@ -40,6 +40,14 @@ export class Profile {
   @Column({ type: 'text', nullable: true })
   location: string;
 
+  @Field({ nullable: true })
+  @Column({ type: 'date', nullable: true })
+  birthday: Date;
+
+  @Field({ nullable: true })
+  @Column({ type: 'varchar', default: 'undetermined' })
+  gender: string;
+
   @Field(() => User)
   @OneToOne(() => User, (user) => user.profile)
   user: User;
