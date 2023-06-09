@@ -17,9 +17,13 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   user_id: string;
 
+  // @Field()
+  // @Column({ type: 'varchar', length: 150, unique: true })
+  // username: string;
+
   @Field()
-  @Column({ type: 'varchar', length: 150, unique: true })
-  username: string;
+  @Column({ type: 'varchar', length: 150 })
+  full_name: string;
 
   @Field()
   @Column({ type: 'varchar', length: 150, unique: true })
@@ -28,10 +32,6 @@ export class User {
   @Field()
   @Column({ type: 'varchar', length: 255 })
   password: string;
-
-  @Field()
-  @Column({ type: 'varchar', length: 150 })
-  full_name: string;
 
   @Field()
   @Column({ type: 'varchar', length: 50, unique: true })
@@ -43,7 +43,7 @@ export class User {
 
   @Field({ nullable: true })
   @Column({ type: 'varchar', default: 'undetermined' })
-  gender: string;
+  gender: 'male' | 'female' | 'undetermined' = 'undetermined';
 
   @Field({ defaultValue: 'customer', nullable: true })
   @Column({ type: 'varchar', length: 20, default: 'customer' })

@@ -12,4 +12,7 @@ export class CreateProfileInput {
   @Field({ nullable: true })
   @IsString()
   description: string;
+
+  @Field({ nullable: true })
+  location: string;
 }

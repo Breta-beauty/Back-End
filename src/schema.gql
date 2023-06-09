@@ -20,10 +20,9 @@ scalar DateTime
 
 type User {
   user_id: ID!
-  username: String!
+  full_name: String!
   email: String!
   password: String!
-  full_name: String!
   cellphone: String!
   birthday: DateTime
   gender: String
@@ -63,27 +62,23 @@ type Mutation {
 }
 
 input CreateUserInput {
-  username: String!
   email: String!
   password: String!
   type: String! = "customer"
   is_Verified: Boolean! = false
   full_name: String!
   cellphone: String!
-  location: String
   birthday: DateTime
   gender: String = "undetermined"
 }
 
 input UpdateUserInput {
-  username: String
   email: String
   password: String
   type: String = "customer"
   is_Verified: Boolean = false
   full_name: String
   cellphone: String
-  location: String
   birthday: DateTime
   gender: String = "undetermined"
 }
@@ -101,10 +96,12 @@ input CreateProfileInput {
   wallpaper: String
   profile_image: String
   description: String
+  location: String
 }
 
 input UpdateProfileInput {
   wallpaper: String
   profile_image: String
   description: String
+  location: String
 }

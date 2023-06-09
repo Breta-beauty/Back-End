@@ -3,9 +3,9 @@ import { IsEmail, IsNotEmpty, Length, IsString, IsDate } from 'class-validator';
 
 @InputType()
 export class CreateUserInput {
-  @Field()
-  @IsString({ message: 'El nombre de usuario no puede estar vacío.' })
-  username: string;
+  // @Field()
+  // @IsString({ message: 'El nombre de usuario no puede estar vacío.' })
+  // username: string;
 
   @Field()
   @IsEmail({}, { message: 'Debes introducir un correo valido.' })
@@ -36,9 +36,6 @@ export class CreateUserInput {
   @IsString()
   @IsNotEmpty({ message: 'Debes introducir un número de teléfono' })
   cellphone: string;
-
-  @Field({ nullable: true })
-  location: string;
 
   @Field({ nullable: true })
   @IsDate()

@@ -36,7 +36,7 @@ export class UserService {
     if (newUser) {
       await this.emailConfirmationService.sendVerificationLink(
         payload.email,
-        payload.username,
+        payload.full_name,
       );
     }
 
