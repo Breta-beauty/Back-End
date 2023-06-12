@@ -45,7 +45,7 @@ export class User {
   @Column({ type: 'varchar', default: 'undetermined' })
   gender: 'male' | 'female' | 'undetermined' = 'undetermined';
 
-  @Field({ defaultValue: 'customer', nullable: true })
+  @Field({ nullable: true })
   @Column({ type: 'varchar', length: 20, default: 'customer' })
   type: 'salon' | 'customer';
 
