@@ -3,8 +3,6 @@ import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { AuthService } from '../authn/auth.service';
 import { LoginResponse } from './dto/login-response';
 import { LoginInput } from './dto/login.input';
@@ -15,7 +13,6 @@ import { ConfirmEmailInput } from '../email/dto/confirm-email.input';
 @Resolver(() => User)
 export class UserResolver {
   constructor(
-    @InjectRepository(User) private userRepo: Repository<User>,
     private readonly userService: UserService,
     private authService: AuthService,
   ) {}
@@ -33,6 +30,14 @@ export class UserResolver {
   @Query(() => User, { name: 'user' })
   findOne(@Args('user_id', { type: () => Int }) user_id: string) {
     return this.userService.findOne(user_id);
+  }
+
+  @Query(() => [User], { name: 'usersByName' })
+  findUsersByName(
+    @Args('name', { type: () => String }) name: string,
+    @Args('type', { nullable: true }) type: 'customer' | 'salon' = 'customer',
+  ) {
+    return this.userService.findByName(name, type);
   }
 
   @UseGuards(JwtAuthGuard)

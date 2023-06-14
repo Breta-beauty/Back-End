@@ -7,7 +7,7 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { EmailConfirmationService } from '../email/email-confirmation.service';
 import * as bcrypt from 'bcrypt';
 import { ConfirmEmailInput } from '../email/dto/confirm-email.input';
@@ -46,6 +46,18 @@ export class UserService {
   async findAll() {
     const users = await this.userRepo.find();
     if (!users) throw new NotFoundException(['No se encontraron usuarios']);
+
+    return users;
+  }
+
+  async findByName(name: string, type: 'customer' | 'salon') {
+    const users = await this.userRepo.find({
+      where: { full_name: ILike(`%${name}%`), type },
+      order: { full_name: 'asc' },
+    });
+    if (!users || users.length === 0) {
+      throw new NotFoundException(`Ningún resultado coincide con: ${name}`);
+    }
 
     return users;
   }
