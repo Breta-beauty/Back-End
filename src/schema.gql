@@ -46,7 +46,7 @@ type getProfileResponse {
 type Query {
   users: [User!]!
   user(user_id: Int!): User!
-  usersByName(name: String!, type: String): [User!]!
+  findByName(name: String!, type: String): [User!]!
   profiles: [Profile!]!
   profile(profile_id: ID!): getProfileResponse!
 }

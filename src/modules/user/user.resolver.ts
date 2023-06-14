@@ -32,7 +32,7 @@ export class UserResolver {
     return this.userService.findOne(user_id);
   }
 
-  @Query(() => [User], { name: 'usersByName' })
+  @Query(() => [User], { name: 'findByName' })
   findUsersByName(
     @Args('name', { type: () => String }) name: string,
     @Args('type', { nullable: true }) type: 'customer' | 'salon' = 'customer',
