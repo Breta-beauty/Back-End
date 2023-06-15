@@ -50,10 +50,19 @@ export class UserService {
     return users;
   }
 
-  async findByName(name: string, type: 'customer' | 'salon') {
+  async findByName(
+    name: string,
+    type?: 'customer' | 'salon',
+    service?: string,
+  ) {
     const users = await this.userRepo.find({
-      where: { full_name: ILike(`%${name}%`), type },
+      where: {
+        full_name: ILike(`%${name}%`),
+        type,
+        profile: { services: service },
+      },
       order: { full_name: 'asc' },
+      relations: { profile: true },
     });
     if (!users || users.length === 0) {
       throw new NotFoundException(`Ningún resultado coincide con: ${name}`);

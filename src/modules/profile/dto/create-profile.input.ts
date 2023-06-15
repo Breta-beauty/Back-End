@@ -1,5 +1,4 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsDate, IsNotEmpty, IsString } from 'class-validator';
 
 @InputType()
 export class CreateProfileInput {
@@ -10,9 +9,11 @@ export class CreateProfileInput {
   profile_image: string;
 
   @Field({ nullable: true })
-  @IsString()
   description: string;
 
   @Field({ nullable: true })
   location: string;
+
+  @Field(() => [String], { nullable: true })
+  services: string[];
 }

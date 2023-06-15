@@ -36,8 +36,10 @@ export class UserResolver {
   findUsersByName(
     @Args('name', { type: () => String }) name: string,
     @Args('type', { nullable: true }) type: 'customer' | 'salon' = 'customer',
+    @Args('service', { type: () => String, nullable: true })
+    service?: string,
   ) {
-    return this.userService.findByName(name, type);
+    return this.userService.findByName(name, type, service);
   }
 
   @UseGuards(JwtAuthGuard)

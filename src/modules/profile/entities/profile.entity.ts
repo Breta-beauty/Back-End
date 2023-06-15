@@ -32,6 +32,10 @@ export class Profile {
   @Column({ type: 'text', nullable: true })
   location: string;
 
+  @Field(() => [String], { nullable: true })
+  @Column({ type: 'text', array: true, nullable: true })
+  services: string[];
+
   @Field(() => User)
   @OneToOne(() => User, (user) => user.profile)
   user: User;
