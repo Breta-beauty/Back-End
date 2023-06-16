@@ -13,7 +13,7 @@ export class ProfileService {
     @InjectRepository(User) private userRepo: Repository<User>,
   ) {}
 
-  async create(user_id: string, createProfileInput: CreateProfileInput) {
+  async create(user_id: string, createProfileInput?: CreateProfileInput) {
     const user = await this.userRepo.findOneBy({ user_id });
 
     if (!user) throw new NotFoundException('Usuario no encontrado');

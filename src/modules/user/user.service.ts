@@ -11,11 +11,13 @@ import { ILike, Repository } from 'typeorm';
 import { EmailConfirmationService } from '../email/email-confirmation.service';
 import * as bcrypt from 'bcrypt';
 import { ConfirmEmailInput } from '../email/dto/confirm-email.input';
+import { ProfileService } from '../profile/profile.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepo: Repository<User>,
+    private profileService: ProfileService,
     private readonly emailConfirmationService: EmailConfirmationService,
   ) {}
 
@@ -39,8 +41,11 @@ export class UserService {
         payload.full_name,
       );
     }
+    await this.userRepo.save(newUser);
 
-    return this.userRepo.save(newUser);
+    await this.profileService.create(newUser.user_id);
+
+    return newUser;
   }
 
   async findAll() {
