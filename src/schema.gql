@@ -96,7 +96,7 @@ input ConfirmEmailInput {
 
 input CreateProfileInput {
   wallpaper: String
-  profile_image: String
+  profile_picture: String
   description: String
   location: String
   services: [String!]
@@ -104,7 +104,7 @@ input CreateProfileInput {
 
 input UpdateProfileInput {
   wallpaper: String
-  profile_image: String
+  profile_picture: String
   description: String
   location: String
   services: [String!]

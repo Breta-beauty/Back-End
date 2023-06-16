@@ -6,7 +6,7 @@ export class CreateProfileInput {
   wallpaper: string;
 
   @Field({ nullable: true })
-  profile_image: string;
+  profile_picture: string;
 
   @Field({ nullable: true })
   description: string;
