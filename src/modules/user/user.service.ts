@@ -3,15 +3,19 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { User } from './entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Any, ILike, In, Repository } from 'typeorm';
+
+import { ProfileService } from '../profile/profile.service';
+import { EmailConfirmationService } from '../email/email-confirmation.service';
+
+import { FindByInput } from './dto/findBy.input';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { ILike, Repository } from 'typeorm';
-import { EmailConfirmationService } from '../email/email-confirmation.service';
-import * as bcrypt from 'bcrypt';
 import { ConfirmEmailInput } from '../email/dto/confirm-email.input';
-import { ProfileService } from '../profile/profile.service';
+
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -21,7 +25,7 @@ export class UserService {
     private readonly emailConfirmationService: EmailConfirmationService,
   ) {}
 
-  async create(payload: CreateUserInput) {
+  async create(payload: CreateUserInput): Promise<User> {
     const user = await this.userRepo.findOne({
       where: { email: payload.email },
     });
@@ -48,35 +52,35 @@ export class UserService {
     return newUser;
   }
 
-  async findAll() {
+  async findAll(): Promise<User[]> {
     const users = await this.userRepo.find();
     if (!users) throw new NotFoundException(['No se encontraron usuarios']);
 
     return users;
   }
 
-  async findByName(
-    name: string,
-    type?: 'customer' | 'salon',
-    service?: string,
-  ) {
+  async findBy(findByInput: FindByInput): Promise<User[]> {
     const users = await this.userRepo.find({
+      relations: { profile: true },
       where: {
-        full_name: ILike(`%${name}%`),
-        type,
-        profile: { services: service },
+        full_name: ILike(`%${findByInput.name}%`),
+        type: findByInput.type || 'customer',
+        profile: { services: findByInput.service },
       },
       order: { full_name: 'asc' },
-      relations: { profile: true },
     });
     if (!users || users.length === 0) {
-      throw new NotFoundException(`Ningún resultado coincide con: ${name}`);
+      throw new NotFoundException([
+        `Ningún resultado coincide con: ${
+          findByInput.name || findByInput.type || findByInput.service
+        }`,
+      ]);
     }
 
     return users;
   }
 
-  async findOne(user_id: string) {
+  async findOne(user_id: string): Promise<User> {
     const user = await this.userRepo.findOne({
       where: { user_id },
     });
@@ -85,18 +89,18 @@ export class UserService {
     return user;
   }
 
-  async findOneByEmail(email: string) {
+  async findOneByEmail(email: string): Promise<User> {
     const user = await this.userRepo.findOne({
       where: { email },
     });
-    if (!user) throw new NotFoundException('No se encontró al usuario');
+    if (!user) throw new NotFoundException(['No se encontró al usuario']);
 
     return user;
   }
 
   async update(user_id: string, changes: UpdateUserInput) {
     const user = await this.userRepo.findOneBy({ user_id });
-    if (!user) throw new NotFoundException([['No se encontró al usuario']]);
+    if (!user) throw new NotFoundException(['No se encontró al usuario']);
 
     if (changes.password) {
       const saltRounds = 10;
@@ -122,7 +126,7 @@ export class UserService {
   public async confirmEmail(email: string) {
     const user = await this.userRepo.findOneBy({ email });
     if (user.is_Verified) {
-      throw new BadRequestException('Email already confirmed');
+      throw new BadRequestException(['Email already confirmed']);
     }
     return await this.emailConfirmed(email);
   }

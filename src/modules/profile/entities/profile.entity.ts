@@ -33,8 +33,12 @@ export class Profile {
   location: string;
 
   @Field(() => [String], { nullable: true })
-  @Column({ type: 'text', array: true, nullable: true })
+  @Column({ type: 'varchar', length: 100, array: true, nullable: true })
   services: string[];
+
+  @Field(() => [String], { nullable: true })
+  @Column({ type: 'varchar', length: 100, array: true, nullable: true })
+  schedule: string[];
 
   @Field(() => User)
   @OneToOne(() => User, (user) => user.profile)

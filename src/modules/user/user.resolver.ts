@@ -1,14 +1,19 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { UserService } from './user.service';
 import { User } from './entities/user.entity';
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
+import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+
+import { UserService } from './user.service';
 import { AuthService } from '../authn/auth.service';
-import { LoginResponse } from './dto/login-response';
-import { LoginInput } from './dto/login.input';
+
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/guards/auth/jwt-auth.guard';
+
+import { LoginInput } from './dto/login.input';
+import { FindByInput } from './dto/findBy.input';
+import { CreateUserInput } from './dto/create-user.input';
+import { UpdateUserInput } from './dto/update-user.input';
 import { ConfirmEmailInput } from '../email/dto/confirm-email.input';
+
+import { LoginResponse } from './dto/login-response';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -27,19 +32,14 @@ export class UserResolver {
     return this.userService.findAll();
   }
 
-  @Query(() => User, { name: 'user' })
-  findOne(@Args('user_id', { type: () => Int }) user_id: string) {
+  @Query(() => User, { name: 'user', nullable: true })
+  findOne(@Args('user_id', { type: () => String }) user_id: string) {
     return this.userService.findOne(user_id);
   }
 
-  @Query(() => [User], { name: 'findByName' })
-  findUsersByName(
-    @Args('name', { type: () => String }) name: string,
-    @Args('type', { nullable: true }) type: 'customer' | 'salon' = 'customer',
-    @Args('service', { type: () => String, nullable: true })
-    service?: string,
-  ) {
-    return this.userService.findByName(name, type, service);
+  @Query(() => [User], { name: 'findBy' })
+  findUsersByName(@Args('findByInput') findByInput: FindByInput) {
+    return this.userService.findBy(findByInput);
   }
 
   @UseGuards(JwtAuthGuard)
