@@ -62,11 +62,16 @@ export class UserService {
   async findBy(findByInput: FindByInput): Promise<User[]> {
     const users = await this.userRepo.find({
       relations: { profile: true },
-      where: {
-        full_name: ILike(`%${findByInput.name}%`),
-        type: findByInput.type || 'customer',
-        profile: { services: findByInput.service },
-      },
+      where: [
+        {
+          full_name: ILike(`%${findByInput.name}%`),
+          type: findByInput.type,
+        },
+        {
+          type: findByInput.type,
+          profile: { services: findByInput.service },
+        },
+      ],
       order: { full_name: 'asc' },
     });
     if (!users || users.length === 0) {
@@ -82,6 +87,7 @@ export class UserService {
 
   async findOne(user_id: string): Promise<User> {
     const user = await this.userRepo.findOne({
+      relations: { profile: true },
       where: { user_id },
     });
     if (!user) throw new NotFoundException(['No se encontró al usuario']);
