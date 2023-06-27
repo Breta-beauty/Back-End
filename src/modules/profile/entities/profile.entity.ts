@@ -28,16 +28,26 @@ export class Profile {
   @Column({ type: 'text', nullable: true })
   profile_picture: string;
 
-  @Field({ nullable: true })
-  @Column({ type: 'text', nullable: true })
-  location: string;
+  @Field(() => [String], { nullable: true })
+  @Column({ type: 'text', array: true, nullable: true, default: () => "'{}'" })
+  image_gallery: string[];
 
   @Field(() => [String], { nullable: true })
-  @Column({ type: 'varchar', length: 100, array: true, nullable: true })
+  @Column({ type: 'jsonb', array: true, nullable: true })
+  location: string[];
+
+  @Field(() => [String], { nullable: true })
+  @Column({
+    type: 'varchar',
+    length: 100,
+    array: true,
+    nullable: true,
+    default: () => "'{}'",
+  })
   services: string[];
 
   @Field(() => [String], { nullable: true })
-  @Column({ type: 'varchar', length: 100, array: true, nullable: true })
+  @Column({ type: 'jsonb', array: true, nullable: true })
   schedule: string[];
 
   @Field(() => User)

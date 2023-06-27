@@ -7,6 +7,7 @@ import { CreateProfileInput } from './dto/create-profile.input';
 import { UpdateProfileInput } from './dto/update-profile.input';
 
 import { getProfileResponse } from './dto/profile-response';
+import { GalleryInput } from '../user/dto/gallery.input';
 
 @Resolver(() => Profile)
 export class ProfileResolver {
@@ -25,6 +26,10 @@ export class ProfileResolver {
     return this.profileService.findAll();
   }
 
+  @Query(() => [Profile], { name: 'findProfilesBy' })
+  findBy(@Args('service', { type: () => [String] }) service: string[]) {
+    return this.profileService.findBy(service);
+  }
   @Query(() => getProfileResponse, { name: 'profile' })
   findOne(@Args('profile_id', { type: () => ID }) profile_id: string) {
     return this.profileService.findOne(profile_id);
@@ -33,9 +38,18 @@ export class ProfileResolver {
   @Mutation(() => Profile)
   updateProfile(
     @Args('user_id', { type: () => ID }) user_id: string,
-    @Args('updateProfileInput') updateProfileInput: UpdateProfileInput,
+    @Args('updateProfileInput')
+    updateProfileInput: UpdateProfileInput,
   ) {
     return this.profileService.update(user_id, updateProfileInput);
+  }
+
+  @Mutation(() => Profile)
+  addToGallery(
+    @Args('galleryInput', { type: () => GalleryInput })
+    galleryInput: GalleryInput,
+  ) {
+    return this.profileService.addToGallery(galleryInput);
   }
 
   @Mutation(() => Profile)

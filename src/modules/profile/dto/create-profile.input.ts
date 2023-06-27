@@ -13,19 +13,23 @@ export class CreateProfileInput {
   @IsOptional()
   profile_picture: string;
 
+  @Field(() => [String], { nullable: true })
+  @IsArray()
+  @IsOptional()
+  image_gallery: string[];
+
   @Field({ nullable: true })
   @IsString()
   @IsOptional()
   description: string;
 
-  @Field({ nullable: true })
+  @Field(() => [String], { nullable: true })
   @IsString()
   @IsOptional()
-  location: string;
+  location: string[];
 
   @Field(() => [String], { nullable: true })
   @IsArray()
-  @IsString()
   @IsOptional()
   services: string[];
 

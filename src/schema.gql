@@ -7,7 +7,8 @@ type Profile {
   description: String
   wallpaper: String
   profile_picture: String
-  location: String
+  image_gallery: [String!]
+  location: [String!]
   services: [String!]
   schedule: [String!]
   user: User!
@@ -50,13 +51,13 @@ type Query {
   user(user_id: String!): User
   findBy(findByInput: FindByInput!): [User!]!
   profiles: [Profile!]!
+  findProfilesBy(service: [String!]!): [Profile!]!
   profile(profile_id: ID!): getProfileResponse!
 }
 
 input FindByInput {
-  name: String
+  search_input: String
   type: String = "customer"
-  service: String
 }
 
 type Mutation {
@@ -67,6 +68,7 @@ type Mutation {
   confirmEmail(confirmEmailInput: ConfirmEmailInput!): User!
   createProfile(user_id: ID!, createProfileInput: CreateProfileInput!): Profile!
   updateProfile(user_id: ID!, updateProfileInput: UpdateProfileInput!): Profile!
+  addToGallery(galleryInput: GalleryInput!): Profile!
   removeProfile(user_id: ID!): Profile!
 }
 
@@ -104,8 +106,9 @@ input ConfirmEmailInput {
 input CreateProfileInput {
   wallpaper: String
   profile_picture: String
+  image_gallery: [String!]
   description: String
-  location: String
+  location: [String!]
   services: [String!]
   schedule: [String!]
 }
@@ -113,8 +116,14 @@ input CreateProfileInput {
 input UpdateProfileInput {
   wallpaper: String
   profile_picture: String
+  image_gallery: [String!]
   description: String
-  location: String
+  location: [String!]
   services: [String!]
   schedule: [String!]
+}
+
+input GalleryInput {
+  user_id: String!
+  images: [String!]!
 }

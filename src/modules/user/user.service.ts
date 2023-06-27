@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Any, ILike, In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { ProfileService } from '../profile/profile.service';
 import { EmailConfirmationService } from '../email/email-confirmation.service';
@@ -60,24 +60,27 @@ export class UserService {
   }
 
   async findBy(findByInput: FindByInput): Promise<User[]> {
-    const users = await this.userRepo.find({
-      relations: { profile: true },
-      where: [
+    const users = await this.userRepo
+      .createQueryBuilder('users')
+      .leftJoinAndSelect('users.profile', 'profiles')
+      .where('full_name ilike :name and "type" = :type', {
+        name: `%${findByInput.search_input}%`,
+        type: findByInput.type,
+      })
+      .orWhere(
+        `array_to_string("profiles".services, ',') ilike :name and "type" = :type`,
         {
-          full_name: ILike(`%${findByInput.name}%`),
+          name: `%${findByInput.search_input}%`,
           type: findByInput.type,
         },
-        {
-          type: findByInput.type,
-          profile: { services: findByInput.service },
-        },
-      ],
-      order: { full_name: 'asc' },
-    });
+      )
+      .orderBy('full_name', 'ASC')
+      .getMany();
+
     if (!users || users.length === 0) {
       throw new NotFoundException([
         `Ningún resultado coincide con: ${
-          findByInput.name || findByInput.type || findByInput.service
+          findByInput.search_input || findByInput.type
         }`,
       ]);
     }

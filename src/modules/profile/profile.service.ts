@@ -1,11 +1,12 @@
 import { User } from '../user/entities/user.entity';
 import { Profile } from './entities/profile.entity';
-import { Repository } from 'typeorm';
+import { Any, ILike, In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { CreateProfileInput } from './dto/create-profile.input';
 import { UpdateProfileInput } from './dto/update-profile.input';
+import { GalleryInput } from '../user/dto/gallery.input';
 
 @Injectable()
 export class ProfileService {
@@ -47,11 +48,26 @@ export class ProfileService {
     };
   }
 
+  async findBy(service: string[]) {
+    const profiles = await this.profileRepo.find({
+      relations: { user: true },
+      where: { services: In(service) },
+    });
+
+    if (!profiles || profiles.length === 0) {
+      throw new NotFoundException(['Nel, no jalo']);
+    }
+
+    return profiles;
+  }
+
   async update(user_id: string, updateProfileInput: UpdateProfileInput) {
     const user = await this.userRepo.findOne({
       where: { user_id },
       relations: { profile: true },
     });
+
+    if (!user) throw new NotFoundException(['No se encontró al usuario']);
 
     const profile_id = user.profile.profile_id;
 
@@ -63,7 +79,30 @@ export class ProfileService {
     if (!profile) throw new NotFoundException('No se encontró perfil');
 
     this.profileRepo.merge(profile, updateProfileInput);
+
+    // if (updateProfileInput.image_gallery) {
+    //   profile.image_gallery.push(...updateProfileInput.image_gallery);
+    // }
+
     return this.profileRepo.save(profile);
+  }
+
+  async addToGallery(galleryInput: GalleryInput) {
+    const user = await this.userRepo.findOne({
+      where: { user_id: galleryInput.user_id },
+      relations: { profile: true },
+    });
+
+    if (!user) throw new NotFoundException(['No se encontró al usuario']);
+
+    const profile_id = user.profile.profile_id;
+
+    return await this.profileRepo.update(
+      { profile_id },
+      {
+        image_gallery: { ...galleryInput.images },
+      },
+    );
   }
 
   async remove(user_id: string) {
