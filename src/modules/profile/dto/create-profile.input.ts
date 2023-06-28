@@ -1,27 +1,40 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 @InputType()
 export class CreateProfileInput {
   @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
   wallpaper: string;
 
   @Field({ nullable: true })
-  profile_image: string;
-
-  @Field()
   @IsString()
-  @IsNotEmpty({ message: 'Debes introducir tu nombre' })
-  full_name: string;
+  @IsOptional()
+  profile_picture: string;
 
-  @Field()
-  @IsString()
-  @IsNotEmpty({ message: 'Debes introducir un número de teléfono' })
-  cellphone: string;
+  @Field(() => [String], { nullable: true })
+  @IsArray()
+  @IsOptional()
+  image_gallery: string[];
 
   @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
   description: string;
 
-  @Field({ nullable: true })
-  location: string;
+  @Field(() => [String], { nullable: true })
+  @IsArray()
+  @IsOptional()
+  location: string[];
+
+  @Field(() => [String], { nullable: true })
+  @IsArray()
+  @IsOptional()
+  services: string[];
+
+  @Field(() => [String], { nullable: true })
+  @IsArray()
+  @IsOptional()
+  schedule: string[];
 }

@@ -16,14 +16,6 @@ export class Profile {
   @PrimaryGeneratedColumn('uuid')
   profile_id: string;
 
-  @Field()
-  @Column({ type: 'varchar', length: 150 })
-  full_name: string;
-
-  @Field()
-  @Column({ type: 'varchar', length: 50, unique: true })
-  cellphone: string;
-
   @Field({ nullable: true })
   @Column({ type: 'text', nullable: true })
   description: string;
@@ -36,9 +28,27 @@ export class Profile {
   @Column({ type: 'text', nullable: true })
   profile_picture: string;
 
-  @Field({ nullable: true })
-  @Column({ type: 'text', nullable: true })
-  location: string;
+  @Field(() => [String], { nullable: true })
+  @Column({ type: 'text', array: true, nullable: true, default: () => "'{}'" })
+  image_gallery: string[];
+
+  @Field(() => [String], { nullable: true })
+  @Column({ type: 'jsonb', array: true, nullable: true })
+  location: string[];
+
+  @Field(() => [String], { nullable: true })
+  @Column({
+    type: 'varchar',
+    length: 100,
+    array: true,
+    nullable: true,
+    default: () => "'{}'",
+  })
+  services: string[];
+
+  @Field(() => [String], { nullable: true })
+  @Column({ type: 'jsonb', array: true, nullable: true })
+  schedule: string[];
 
   @Field(() => User)
   @OneToOne(() => User, (user) => user.profile)

@@ -12,6 +12,7 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { ProfileModule } from './modules/profile/profile.module';
 import { EmailModule } from './modules/email/email.module';
 import * as Joi from '@hapi/joi';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -37,6 +38,10 @@ import * as Joi from '@hapi/joi';
         JWT_VERIFICATION_TOKEN_EXPIRATION_TIME: Joi.string().required(),
         EMAIL_CONFIRMATION_URL: Joi.string().required(),
       }),
+    }),
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 10,
     }),
     UserModule,
     DatabaseModule,

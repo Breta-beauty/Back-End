@@ -4,10 +4,11 @@ import { IsEmail, IsNotEmpty } from 'class-validator';
 @InputType()
 export class LoginInput {
   @Field()
-  @IsEmail()
-  @IsNotEmpty()
+  @IsEmail({}, { message: 'Debes introducir un correo valido' })
+  @IsNotEmpty({ message: 'Debes introducir un correo' })
   email: string;
 
   @Field()
+  @IsNotEmpty({ message: 'Debes introducir una contraseña' })
   password: string;
 }
