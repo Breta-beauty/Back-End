@@ -24,7 +24,7 @@ export class CreateProfileInput {
   description: string;
 
   @Field(() => [String], { nullable: true })
-  @IsString()
+  @IsArray()
   @IsOptional()
   location: string[];
 
@@ -35,7 +35,6 @@ export class CreateProfileInput {
 
   @Field(() => [String], { nullable: true })
   @IsArray()
-  @IsString()
   @IsOptional()
   schedule: string[];
 }
