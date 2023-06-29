@@ -14,6 +14,7 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { ConfirmEmailInput } from '../email/dto/confirm-email.input';
 
 import { LoginResponse } from './dto/login-response';
+import { UpdateProfileInput } from '../profile/dto/update-profile.input';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -47,8 +48,14 @@ export class UserResolver {
   updateUser(
     @Args('user_id') user_id: string,
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
+    @Args('updateProfileInput', { nullable: true })
+    updateProfileInput?: UpdateProfileInput,
   ) {
-    return this.userService.update(user_id, updateUserInput);
+    return this.userService.update(
+      user_id,
+      updateUserInput,
+      updateProfileInput,
+    );
   }
 
   @UseGuards(JwtAuthGuard)

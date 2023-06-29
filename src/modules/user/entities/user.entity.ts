@@ -54,7 +54,7 @@ export class User {
   is_Verified: boolean;
 
   @Field(() => Profile)
-  @OneToOne(() => Profile, { nullable: true })
+  @OneToOne(() => Profile)
   @JoinColumn()
   profile: Profile;
 

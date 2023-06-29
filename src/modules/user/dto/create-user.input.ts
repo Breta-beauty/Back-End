@@ -1,5 +1,13 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, Length, IsString, IsDate } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  Length,
+  IsString,
+  IsDate,
+  IsOptional,
+  IsPhoneNumber,
+} from 'class-validator';
 
 @InputType()
 export class CreateUserInput {
@@ -25,7 +33,7 @@ export class CreateUserInput {
   type: 'salon' | 'customer' = 'customer';
 
   @Field()
-  is_Verified: true | false = false;
+  is_verified: true | false = false;
 
   @Field()
   @IsString()
@@ -34,14 +42,19 @@ export class CreateUserInput {
 
   @Field()
   @IsString()
+  @IsPhoneNumber('MX', {
+    message: 'Debes introducir un número de teléfono valido',
+  })
   @IsNotEmpty({ message: 'Debes introducir un número de teléfono' })
   cellphone: string;
 
   @Field({ nullable: true })
   @IsDate()
+  @IsOptional()
   birthday: Date;
 
   @Field({ nullable: true })
   @IsString()
+  @IsOptional()
   gender: 'male' | 'female' | 'undetermined' = 'undetermined';
 }

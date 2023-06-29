@@ -36,13 +36,13 @@ type User {
   updated_At: DateTime!
 }
 
-type LoginResponse {
-  access_token: String!
+type getProfileResponse {
+  profile: Profile!
   user: User
 }
 
-type getProfileResponse {
-  profile: Profile!
+type LoginResponse {
+  access_token: String!
   user: User
 }
 
@@ -62,7 +62,7 @@ input FindByInput {
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
-  updateUser(user_id: String!, updateUserInput: UpdateUserInput!): User!
+  updateUser(user_id: String!, updateUserInput: UpdateUserInput!, updateProfileInput: UpdateProfileInput): User!
   removeUser(user_id: Int!): User!
   login(loginUserInput: LoginInput!): LoginResponse!
   confirmEmail(confirmEmailInput: ConfirmEmailInput!): User!
@@ -76,7 +76,7 @@ input CreateUserInput {
   email: String!
   password: String!
   type: String! = "customer"
-  is_Verified: Boolean! = false
+  is_verified: Boolean! = false
   full_name: String!
   cellphone: String!
   birthday: DateTime
@@ -87,11 +87,21 @@ input UpdateUserInput {
   email: String
   password: String
   type: String = "customer"
-  is_Verified: Boolean = false
+  is_verified: Boolean = false
   full_name: String
   cellphone: String
   birthday: DateTime
   gender: String = "undetermined"
+}
+
+input UpdateProfileInput {
+  wallpaper: String
+  profile_picture: String
+  image_gallery: [String!]
+  description: String
+  location: [String!]
+  services: [String!]
+  schedule: [String!]
 }
 
 input LoginInput {
@@ -104,16 +114,6 @@ input ConfirmEmailInput {
 }
 
 input CreateProfileInput {
-  wallpaper: String
-  profile_picture: String
-  image_gallery: [String!]
-  description: String
-  location: [String!]
-  services: [String!]
-  schedule: [String!]
-}
-
-input UpdateProfileInput {
   wallpaper: String
   profile_picture: String
   image_gallery: [String!]
