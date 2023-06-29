@@ -115,7 +115,10 @@ export class UserService {
     updateUserInput: UpdateUserInput,
     updateProfileInput?: UpdateProfileInput,
   ) {
-    const user = await this.userRepo.findOneBy({ user_id });
+    const user = await this.userRepo.findOne({
+      where: { user_id },
+      relations: { profile: true },
+    });
     if (!user) throw new NotFoundException(['No se encontró al usuario']);
 
     if (updateUserInput.password) {
