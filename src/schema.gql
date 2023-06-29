@@ -62,7 +62,7 @@ input FindByInput {
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
-  updateUser(user_id: String!, updateUserInput: UpdateUserInput!, updateProfileInput: UpdateProfileInput): User!
+  updateUser(user_id: String!, updateUserInput: UpdateUserInput!, updateProfileInput: UpdateProfileInput!): User!
   removeUser(user_id: Int!): User!
   login(loginUserInput: LoginInput!): LoginResponse!
   confirmEmail(confirmEmailInput: ConfirmEmailInput!): User!

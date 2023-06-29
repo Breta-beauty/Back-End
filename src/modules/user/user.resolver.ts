@@ -43,13 +43,11 @@ export class UserResolver {
     return this.userService.findBy(findByInput);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Mutation(() => User)
   updateUser(
     @Args('user_id') user_id: string,
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
-    @Args('updateProfileInput', { nullable: true })
-    updateProfileInput?: UpdateProfileInput,
+    @Args('updateProfileInput') updateProfileInput?: UpdateProfileInput,
   ) {
     return this.userService.update(
       user_id,
