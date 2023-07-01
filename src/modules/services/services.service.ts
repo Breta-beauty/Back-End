@@ -68,6 +68,8 @@ export class ServicesService {
     const service = await this.serviceRepo.findOneBy({ service_id });
 
     if (!service) throw new NotFoundException(['No se encontró el servicio']);
+
+    return service;
   }
 
   async update(service_id: number, updateServiceInput: UpdateServiceInput) {

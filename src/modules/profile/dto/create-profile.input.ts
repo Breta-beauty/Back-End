@@ -22,19 +22,4 @@ export class CreateProfileInput {
   @IsString()
   @IsOptional()
   description: string;
-
-  @Field(() => [String], { nullable: true })
-  @IsArray()
-  @IsOptional()
-  location: string[];
-
-  @Field(() => [String], { nullable: true })
-  @IsArray()
-  @IsOptional()
-  services: string[];
-
-  @Field(() => [String], { nullable: true })
-  @IsArray()
-  @IsOptional()
-  schedule: string[];
 }

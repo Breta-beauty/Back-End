@@ -1,20 +1,20 @@
 import { User } from './entities/user.entity';
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 
 import { UserService } from './user.service';
 import { AuthService } from '../authn/auth.service';
+
+import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/guards/auth/jwt-auth.guard';
 
 import { LoginInput } from './dto/login.input';
-import { FindByInput } from '../salon/dto/findBy.input';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { ConfirmEmailInput } from '../email/dto/confirm-email.input';
+import { UpdateProfileInput } from '../profile/dto/update-profile.input';
 
 import { LoginResponse } from './dto/login-response';
-import { UpdateProfileInput } from '../profile/dto/update-profile.input';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -45,7 +45,7 @@ export class UserResolver {
 
   @Mutation(() => User)
   updateUser(
-    @Args('user_id') user_id: string,
+    @Args('user_id', { type: () => ID }) user_id: string,
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
     @Args('updateProfileInput') updateProfileInput?: UpdateProfileInput,
   ) {
@@ -58,7 +58,7 @@ export class UserResolver {
 
   @UseGuards(JwtAuthGuard)
   @Mutation(() => User)
-  removeUser(@Args('user_id', { type: () => Int }) user_id: string) {
+  removeUser(@Args('user_id', { type: () => ID }) user_id: string) {
     return this.userService.remove(user_id);
   }
 

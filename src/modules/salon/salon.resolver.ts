@@ -1,9 +1,12 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { SalonService } from './salon.service';
 import { Salon } from './entities/salon.entity';
+
+import { SalonService } from './salon.service';
+
+import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
+
+import { FindByInput } from './dto/findBy.input';
 import { CreateSalonInput } from './dto/create-salon.input';
 import { UpdateSalonInput } from './dto/update-salon.input';
-import { FindByInput } from './dto/findBy.input';
 
 @Resolver(() => Salon)
 export class SalonResolver {
@@ -11,13 +14,13 @@ export class SalonResolver {
 
   @Mutation(() => Salon)
   createSalon(
-    @Args('user_id') user_id: string,
+    @Args('user_id', { type: () => ID }) user_id: string,
     @Args('createSalonInput') createSalonInput: CreateSalonInput,
   ) {
     return this.salonService.create(user_id, createSalonInput);
   }
 
-  @Query(() => [Salon], { name: 'salon' })
+  @Query(() => [Salon], { name: 'salons' })
   findAll() {
     return this.salonService.findAll();
   }
@@ -33,12 +36,15 @@ export class SalonResolver {
   }
 
   @Mutation(() => Salon)
-  updateSalon(@Args('updateSalonInput') updateSalonInput: UpdateSalonInput) {
-    return this.salonService.update(updateSalonInput.id, updateSalonInput);
+  updateSalon(
+    @Args('salon_id', { type: () => ID }) salon_id: number,
+    @Args('updateSalonInput') updateSalonInput: UpdateSalonInput,
+  ) {
+    return this.salonService.update(salon_id, updateSalonInput);
   }
 
   @Mutation(() => Salon)
-  removeSalon(@Args('salon_id') salon_id: number) {
+  removeSalon(@Args('salon_id', { type: () => ID }) salon_id: number) {
     return this.salonService.remove(salon_id);
   }
 }

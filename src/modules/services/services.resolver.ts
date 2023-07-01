@@ -1,6 +1,9 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { ServicesService } from './services.service';
 import { Service } from './entities/service.entity';
+
+import { ServicesService } from './services.service';
+
+import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
+
 import { CreateServiceInput } from './dto/create-service.input';
 import { UpdateServiceInput } from './dto/update-service.input';
 
@@ -10,7 +13,7 @@ export class ServicesResolver {
 
   @Mutation(() => Service)
   createService(
-    @Args('salon_id') salon_id: number,
+    @Args('salon_id', { type: () => ID }) salon_id: number,
     @Args('createServiceInput') createServiceInput: CreateServiceInput,
   ) {
     return this.servicesService.create(salon_id, createServiceInput);
@@ -22,20 +25,20 @@ export class ServicesResolver {
   }
 
   @Query(() => Service, { name: 'service' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.servicesService.findOne(id);
+  findOne(@Args('service_id', { type: () => ID }) service_id: number) {
+    return this.servicesService.findOne(service_id);
   }
 
   @Mutation(() => Service)
   updateService(
-    @Args('service_id') service_id: number,
+    @Args('service_id', { type: () => ID }) service_id: number,
     @Args('updateServiceInput') updateServiceInput: UpdateServiceInput,
   ) {
     return this.servicesService.update(service_id, updateServiceInput);
   }
 
   @Mutation(() => Service)
-  removeService(@Args('service_id') service_id: number) {
+  removeService(@Args('service_id', { type: () => ID }) service_id: number) {
     return this.servicesService.remove(service_id);
   }
 }

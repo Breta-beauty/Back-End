@@ -70,11 +70,6 @@ type User {
   updated_at: DateTime!
 }
 
-type getProfileResponse {
-  profile: Profile!
-  user: User
-}
-
 type LoginResponse {
   access_token: String!
   user: User
@@ -84,11 +79,12 @@ type Query {
   users: [User!]!
   user(user_id: String!): User
   profiles: [Profile!]!
-  profile(profile_id: ID!): getProfileResponse!
-  salon(salon_id: Int!): Salon!
+  profile(profile_id: ID!): Profile!
+  salons: [Salon!]!
   findSalonsBy(findByInput: FindByInput!): [Salon!]!
+  salon(salon_id: Int!): Salon!
   services: [Service!]!
-  service(id: Int!): Service!
+  service(service_id: ID!): Service!
 }
 
 input FindByInput {
@@ -97,20 +93,20 @@ input FindByInput {
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
-  updateUser(user_id: String!, updateUserInput: UpdateUserInput!, updateProfileInput: UpdateProfileInput!): User!
-  removeUser(user_id: Int!): User!
+  updateUser(user_id: ID!, updateUserInput: UpdateUserInput!, updateProfileInput: UpdateProfileInput!): User!
+  removeUser(user_id: ID!): User!
   login(loginUserInput: LoginInput!): LoginResponse!
   confirmEmail(confirmEmailInput: ConfirmEmailInput!): User!
   createProfile(user_id: ID!, createProfileInput: CreateProfileInput!): Profile!
   updateProfile(user_id: ID!, updateProfileInput: UpdateProfileInput!): Profile!
   addToGallery(galleryInput: GalleryInput!): Profile!
   removeProfile(user_id: ID!): Profile!
-  createSalon(user_id: String!, createSalonInput: CreateSalonInput!): Salon!
-  updateSalon(updateSalonInput: UpdateSalonInput!): Salon!
-  removeSalon(salon_id: Float!): Salon!
-  createService(salon_id: Float!, createServiceInput: CreateServiceInput!): Service!
-  updateService(service_id: Float!, updateServiceInput: UpdateServiceInput!): Service!
-  removeService(service_id: Float!): Service!
+  createSalon(user_id: ID!, createSalonInput: CreateSalonInput!): Salon!
+  updateSalon(salon_id: ID!, updateSalonInput: UpdateSalonInput!): Salon!
+  removeSalon(salon_id: ID!): Salon!
+  createService(salon_id: ID!, createServiceInput: CreateServiceInput!): Service!
+  updateService(service_id: ID!, updateServiceInput: UpdateServiceInput!): Service!
+  removeService(service_id: ID!): Service!
 }
 
 input CreateUserInput {
@@ -140,9 +136,6 @@ input UpdateProfileInput {
   profile_picture: String
   image_gallery: [String!]
   description: String
-  location: [String!]
-  services: [String!]
-  schedule: [String!]
 }
 
 input LoginInput {
@@ -159,9 +152,6 @@ input CreateProfileInput {
   profile_picture: String
   image_gallery: [String!]
   description: String
-  location: [String!]
-  services: [String!]
-  schedule: [String!]
 }
 
 input GalleryInput {
@@ -191,7 +181,6 @@ input UpdateSalonInput {
   description: String
   location: JSON
   schedule: [JSON!]
-  id: Int!
 }
 
 input CreateServiceInput {
