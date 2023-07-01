@@ -26,10 +26,6 @@ export class ProfileResolver {
     return this.profileService.findAll();
   }
 
-  @Query(() => [Profile], { name: 'findProfilesBy' })
-  findBy(@Args('service', { type: () => [String] }) service: string[]) {
-    return this.profileService.findBy(service);
-  }
   @Query(() => getProfileResponse, { name: 'profile' })
   findOne(@Args('profile_id', { type: () => ID }) profile_id: string) {
     return this.profileService.findOne(profile_id);

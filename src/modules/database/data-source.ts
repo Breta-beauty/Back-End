@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 
 import { config } from 'dotenv';
 config();
-import { join } from 'path';
 
 const configService = new ConfigService();
 
@@ -16,7 +15,6 @@ export const dataSourceOptions: DataSourceOptions = {
   password: configService.get('POSTGRES_PASSWORD'),
   synchronize: true,
 
-  entities: [join('dist', '**', '*.entity.{ts,js}')],
   migrations: ['dist/migrations/*.{ts,js}'],
 };
 

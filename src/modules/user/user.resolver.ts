@@ -8,7 +8,7 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/guards/auth/jwt-auth.guard';
 
 import { LoginInput } from './dto/login.input';
-import { FindByInput } from './dto/findBy.input';
+import { FindByInput } from '../salon/dto/findBy.input';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { ConfirmEmailInput } from '../email/dto/confirm-email.input';
@@ -38,10 +38,10 @@ export class UserResolver {
     return this.userService.findOne(user_id);
   }
 
-  @Query(() => [User], { name: 'findBy' })
-  findUsersByName(@Args('findByInput') findByInput: FindByInput) {
-    return this.userService.findBy(findByInput);
-  }
+  // @Query(() => [User], { name: 'findBy' })
+  // findUsersByName(@Args('findByInput') findByInput: FindByInput) {
+  //   return this.userService.findBy(findByInput);
+  // }
 
   @Mutation(() => User)
   updateUser(

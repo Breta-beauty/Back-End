@@ -1,6 +1,6 @@
 import { User } from '../user/entities/user.entity';
 import { Profile } from './entities/profile.entity';
-import { Any, ILike, In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
@@ -48,19 +48,6 @@ export class ProfileService {
     };
   }
 
-  async findBy(service: string[]) {
-    const profiles = await this.profileRepo.find({
-      relations: { user: true },
-      where: { services: In(service) },
-    });
-
-    if (!profiles || profiles.length === 0) {
-      throw new NotFoundException(['Nel, no jalo']);
-    }
-
-    return profiles;
-  }
-
   async update(user_id: string, updateProfileInput: UpdateProfileInput) {
     const user = await this.userRepo.findOne({
       where: { user_id },
@@ -79,10 +66,6 @@ export class ProfileService {
     if (!profile) throw new NotFoundException('No se encontró perfil');
 
     this.profileRepo.merge(profile, updateProfileInput);
-
-    // if (updateProfileInput.image_gallery) {
-    //   profile.image_gallery.push(...updateProfileInput.image_gallery);
-    // }
 
     return this.profileRepo.save(profile);
   }

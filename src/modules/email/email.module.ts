@@ -8,6 +8,6 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [JwtModule, ConfigModule],
   providers: [EmailService, EmailConfirmationService],
-  exports: [EmailConfirmationService]
+  exports: [EmailConfirmationService],
 })
 export class EmailModule {}

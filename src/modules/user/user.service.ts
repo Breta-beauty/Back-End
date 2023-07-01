@@ -11,7 +11,7 @@ import { Repository } from 'typeorm';
 import { ProfileService } from '../profile/profile.service';
 import { EmailConfirmationService } from '../email/email-confirmation.service';
 
-import { FindByInput } from './dto/findBy.input';
+import { FindByInput } from '../salon/dto/findBy.input';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { ConfirmEmailInput } from '../email/dto/confirm-email.input';
@@ -62,34 +62,34 @@ export class UserService {
     return users;
   }
 
-  async findBy(findByInput: FindByInput): Promise<User[]> {
-    const users = await this.userRepo
-      .createQueryBuilder('users')
-      .leftJoinAndSelect('users.profile', 'profiles')
-      .where('full_name ilike :name and "type" = :type', {
-        name: `%${findByInput.search_input}%`,
-        type: findByInput.type,
-      })
-      .orWhere(
-        `array_to_string("profiles".services, ',') ilike :name and "type" = :type`,
-        {
-          name: `%${findByInput.search_input}%`,
-          type: findByInput.type,
-        },
-      )
-      .orderBy('full_name', 'ASC')
-      .getMany();
+  // async findBy(findByInput: FindByInput): Promise<User[]> {
+  //   const users = await this.userRepo
+  //     .createQueryBuilder('users')
+  //     .leftJoinAndSelect('users.profile', 'profiles')
+  //     .where('full_name ilike :name and "type" = :type', {
+  //       name: `%${findByInput.search_input}%`,
+  //       type: findByInput.type,
+  //     })
+  //     .orWhere(
+  //       `array_to_string("profiles".services, ',') ilike :name and "type" = :type`,
+  //       {
+  //         name: `%${findByInput.search_input}%`,
+  //         type: findByInput.type,
+  //       },
+  //     )
+  //     .orderBy('full_name', 'ASC')
+  //     .getMany();
 
-    if (!users || users.length === 0) {
-      throw new NotFoundException([
-        `Ningún resultado coincide con: ${
-          findByInput.search_input || findByInput.type
-        }`,
-      ]);
-    }
+  //   if (!users || users.length === 0) {
+  //     throw new NotFoundException([
+  //       `Ningún resultado coincide con: ${
+  //         findByInput.search_input || findByInput.type
+  //       }`,
+  //     ]);
+  //   }
 
-    return users;
-  }
+  //   return users;
+  // }
 
   async findOne(user_id: string): Promise<User> {
     const user = await this.userRepo.findOne({
@@ -147,14 +147,14 @@ export class UserService {
     return await this.userRepo.update(
       { email },
       {
-        is_Verified: true,
+        is_verified: true,
       },
     );
   }
 
   public async confirmEmail(email: string) {
     const user = await this.userRepo.findOneBy({ email });
-    if (user.is_Verified) {
+    if (user.is_verified) {
       throw new BadRequestException(['Email already confirmed']);
     }
     return await this.emailConfirmed(email);

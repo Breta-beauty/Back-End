@@ -2,24 +2,58 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Service {
+  service_id: ID!
+  service_name: String!
+  category: String!
+  gender: String!
+  description: String!
+  price: Float!
+  cancellation: JSON!
+  timespan: JSON!
+  salon: Salon!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Salon {
+  salon_id: ID!
+  salon_name: String!
+  email: String!
+  cellphone: String!
+  main_picture: String!
+  wallpaper: String!
+  image_gallery: [String!]!
+  description: String!
+  location: JSON!
+  schedule: [JSON!]!
+  services: [Service!]!
+  owner: Profile!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
 type Profile {
   profile_id: String!
   description: String
   wallpaper: String
   profile_picture: String
   image_gallery: [String!]
-  location: [String!]
-  services: [String!]
-  schedule: [String!]
   user: User!
-  created_At: DateTime!
-  updated_At: DateTime!
+  salons: [Salon!]!
+  created_at: DateTime!
+  updated_at: DateTime!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type User {
   user_id: ID!
@@ -30,10 +64,10 @@ type User {
   birthday: DateTime
   gender: String
   type: String
-  is_Verified: Boolean
+  is_verified: Boolean
   profile: Profile!
-  created_At: DateTime!
-  updated_At: DateTime!
+  created_at: DateTime!
+  updated_at: DateTime!
 }
 
 type getProfileResponse {
@@ -49,15 +83,16 @@ type LoginResponse {
 type Query {
   users: [User!]!
   user(user_id: String!): User
-  findBy(findByInput: FindByInput!): [User!]!
   profiles: [Profile!]!
-  findProfilesBy(service: [String!]!): [Profile!]!
   profile(profile_id: ID!): getProfileResponse!
+  salon(salon_id: Int!): Salon!
+  findSalonsBy(findByInput: FindByInput!): [Salon!]!
+  services: [Service!]!
+  service(id: Int!): Service!
 }
 
 input FindByInput {
   search_input: String
-  type: String = "customer"
 }
 
 type Mutation {
@@ -70,6 +105,12 @@ type Mutation {
   updateProfile(user_id: ID!, updateProfileInput: UpdateProfileInput!): Profile!
   addToGallery(galleryInput: GalleryInput!): Profile!
   removeProfile(user_id: ID!): Profile!
+  createSalon(user_id: String!, createSalonInput: CreateSalonInput!): Salon!
+  updateSalon(updateSalonInput: UpdateSalonInput!): Salon!
+  removeSalon(salon_id: Float!): Salon!
+  createService(salon_id: Float!, createServiceInput: CreateServiceInput!): Service!
+  updateService(service_id: Float!, updateServiceInput: UpdateServiceInput!): Service!
+  removeService(service_id: Float!): Service!
 }
 
 input CreateUserInput {
@@ -126,4 +167,49 @@ input CreateProfileInput {
 input GalleryInput {
   user_id: String!
   images: [String!]!
+}
+
+input CreateSalonInput {
+  salon_name: String!
+  email: String!
+  cellphone: String!
+  main_picture: String
+  wallpaper: String
+  image_gallery: [String!]
+  description: String!
+  location: JSON!
+  schedule: [JSON!]!
+}
+
+input UpdateSalonInput {
+  salon_name: String
+  email: String
+  cellphone: String
+  main_picture: String
+  wallpaper: String
+  image_gallery: [String!]
+  description: String
+  location: JSON
+  schedule: [JSON!]
+  id: Int!
+}
+
+input CreateServiceInput {
+  service_name: String!
+  category: String!
+  gender: String!
+  description: String!
+  price: Float!
+  cancellation: JSON!
+  timespan: JSON!
+}
+
+input UpdateServiceInput {
+  service_name: String
+  category: String
+  gender: String
+  description: String
+  price: Float
+  cancellation: JSON
+  timespan: JSON
 }

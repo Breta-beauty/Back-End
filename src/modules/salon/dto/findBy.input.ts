@@ -8,9 +8,4 @@ export class FindByInput {
   @IsString()
   @IsOptional()
   search_input?: string;
-
-  @Field({ nullable: true })
-  @IsString()
-  @IsOptional()
-  type?: 'customer' | 'salon' = 'customer';
 }

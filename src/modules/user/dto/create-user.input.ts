@@ -30,7 +30,7 @@ export class CreateUserInput {
 
   @Field()
   @IsString()
-  type: 'salon' | 'customer' = 'customer';
+  type: 'owner' | 'customer' = 'customer';
 
   @Field()
   is_verified: true | false = false;

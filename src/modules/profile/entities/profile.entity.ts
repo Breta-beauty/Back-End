@@ -1,9 +1,11 @@
 import { ObjectType, Field, GraphQLISODateTime } from '@nestjs/graphql';
+import { Salon } from 'src/modules/salon/entities/salon.entity';
 import { User } from 'src/modules/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -17,54 +19,40 @@ export class Profile {
   profile_id: string;
 
   @Field({ nullable: true })
-  @Column({ type: 'text', nullable: true })
+  @Column('varchar', { nullable: true })
   description: string;
 
   @Field({ nullable: true })
-  @Column({ type: 'text', nullable: true })
+  @Column('varchar', { nullable: true })
   wallpaper: string;
 
   @Field({ nullable: true })
-  @Column({ type: 'text', nullable: true })
+  @Column('varchar', { nullable: true })
   profile_picture: string;
 
   @Field(() => [String], { nullable: true })
-  @Column({ type: 'text', array: true, nullable: true, default: () => "'{}'" })
+  @Column('varchar', { array: true, nullable: true })
   image_gallery: string[];
-
-  @Field(() => [String], { nullable: true })
-  @Column({ type: 'jsonb', array: true, nullable: true })
-  location: string[];
-
-  @Field(() => [String], { nullable: true })
-  @Column({
-    type: 'varchar',
-    length: 100,
-    array: true,
-    nullable: true,
-    default: () => "'{}'",
-  })
-  services: string[];
-
-  @Field(() => [String], { nullable: true })
-  @Column({ type: 'jsonb', array: true, nullable: true })
-  schedule: string[];
 
   @Field(() => User)
   @OneToOne(() => User, (user) => user.profile)
   user: User;
+
+  @Field(() => [Salon])
+  @OneToMany(() => Salon, (salon) => salon.owner)
+  salons: Salon[];
 
   @Field(() => GraphQLISODateTime)
   @CreateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  created_At: Date;
+  created_at: Date;
 
   @Field(() => GraphQLISODateTime)
   @UpdateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  updated_At: Date;
+  updated_at: Date;
 }

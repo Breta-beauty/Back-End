@@ -13,6 +13,8 @@ import { ProfileModule } from './modules/profile/profile.module';
 import { EmailModule } from './modules/email/email.module';
 import * as Joi from '@hapi/joi';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { SalonModule } from './modules/salon/salon.module';
+import { ServicesModule } from './modules/services/services.module';
 
 @Module({
   imports: [
@@ -48,6 +50,8 @@ import { ThrottlerModule } from '@nestjs/throttler';
     AuthModule,
     ProfileModule,
     EmailModule,
+    SalonModule,
+    ServicesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
