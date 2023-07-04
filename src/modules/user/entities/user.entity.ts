@@ -1,5 +1,7 @@
 import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
+
 import { Profile } from 'src/modules/profile/entities/profile.entity';
+
 import {
   Column,
   CreateDateColumn,

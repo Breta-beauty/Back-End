@@ -1,12 +1,15 @@
 import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
-import { GraphQLObjectType } from 'graphql';
-import GraphQLJSON from 'graphql-type-json';
+
 import { Profile } from 'src/modules/profile/entities/profile.entity';
 import { Service } from 'src/modules/services/entities/service.entity';
+
+import GraphQLJSON from 'graphql-type-json';
+
 import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
@@ -22,6 +25,7 @@ export class Salon {
   salon_id: number;
 
   @Field()
+  @Index({ unique: true })
   @Column('varchar')
   salon_name: string;
 

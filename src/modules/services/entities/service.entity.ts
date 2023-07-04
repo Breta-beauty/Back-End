@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -19,6 +20,7 @@ export class Service {
   service_id: number;
 
   @Field()
+  @Index({ unique: true })
   @Column('varchar')
   service_name: string;
 

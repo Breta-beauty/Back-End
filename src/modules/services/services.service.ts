@@ -41,29 +41,6 @@ export class ServicesService {
     return services;
   }
 
-  async findBy(findByInput: FindByInput) {
-    const services = await this.serviceRepo.find({
-      relations: { salon: true },
-      where: [
-        {
-          service_name: ILike(`%${findByInput.search_input}%`),
-        },
-        {
-          salon: { salon_name: ILike(`%${findByInput.search_input}%`) },
-        },
-      ],
-      order: { salon: { salon_name: 'ASC' } },
-    });
-
-    if (!services || services.length === 0) {
-      throw new NotFoundException([
-        `No se encontraron resultado similares a: ${findByInput.search_input}`,
-      ]);
-    }
-
-    return services;
-  }
-
   async findOne(service_id: number) {
     const service = await this.serviceRepo.findOneBy({ service_id });
 
