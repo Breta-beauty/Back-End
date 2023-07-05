@@ -37,15 +37,15 @@ export class ProfileService {
   async findOne(profile_id: string) {
     const profile = await this.profileRepo.findOne({
       where: { profile_id },
-      relations: ['user'],
+      relations: {
+        user: true,
+        salons: true,
+      },
     });
 
     if (!profile) throw new NotFoundException('No se encontró el perfil');
 
-    return {
-      profile,
-      user: profile.user,
-    };
+    return profile;
   }
 
   async update(user_id: string, updateProfileInput: UpdateProfileInput) {

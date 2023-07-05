@@ -28,7 +28,7 @@ export class User {
   email: string;
 
   @Field()
-  @Column({ type: 'varchar', length: 255 })
+  @Column('varchar')
   password: string;
 
   @Field()

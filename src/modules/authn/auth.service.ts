@@ -15,7 +15,14 @@ export class AuthService {
   ) {}
 
   async validateUser(payload: LoginInput): Promise<any> {
-    const user = await this.userRepo.findOneBy({ email: payload.email });
+    const user = await this.userRepo.findOne({
+      where: { email: payload.email },
+      relations: {
+        profile: {
+          salons: true,
+        },
+      },
+    });
     if (!user) {
       throw new BadRequestException(['Usuario o contraseña incorrectas']);
     }
