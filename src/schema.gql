@@ -2,30 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Service {
-  service_id: ID!
-  service_name: String!
-  category: String!
-  gender: String!
-  description: String!
-  price: Float!
-  cancellation: JSON!
-  timespan: JSON!
-  salon: Salon!
-  created_at: DateTime!
-  updated_at: DateTime!
-}
-
-"""
-The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
-scalar JSON
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type Salon {
   salon_id: ID!
   salon_name: String!
@@ -43,6 +19,40 @@ type Salon {
   updated_at: DateTime!
 }
 
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Service {
+  service_id: ID!
+  service_name: String!
+  category: String!
+  gender: String!
+  description: String!
+  price: Float!
+  cancellation: JSON!
+  timespan: JSON!
+  salon: Salon!
+  appointments: [Appointment!]!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Appointment {
+  appointment_id: ID!
+  date: DateTime!
+  subscriber: Profile!
+  services: [Service!]!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
 type Profile {
   profile_id: String!
   description: String
@@ -51,6 +61,7 @@ type Profile {
   image_gallery: [String!]
   user: User!
   salons: [Salon!]!
+  appointments: [Appointment!]!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -85,6 +96,7 @@ type Query {
   salon(salon_id: Int!): Salon!
   services: [Service!]!
   service(service_id: ID!): Service!
+  appointment(id: ID!): Appointment!
 }
 
 input FindByInput {
@@ -107,6 +119,9 @@ type Mutation {
   createService(salon_id: ID!, createServiceInput: CreateServiceInput!): Service!
   updateService(service_id: ID!, updateServiceInput: UpdateServiceInput!): Service!
   removeService(service_id: ID!): Service!
+  createAppointment(profile_id: String!, createAppointmentInput: CreateAppointmentInput!): Appointment!
+  updateAppointment(profile_id: ID!, updateAppointmentInput: UpdateAppointmentInput!): Appointment!
+  removeAppointment(appointment_id: ID!): Appointment!
 }
 
 input CreateUserInput {
@@ -201,4 +216,14 @@ input UpdateServiceInput {
   price: Float
   cancellation: JSON
   timespan: JSON
+}
+
+input CreateAppointmentInput {
+  date: DateTime!
+  services_ids: [String!]
+}
+
+input UpdateAppointmentInput {
+  date: DateTime
+  services_ids: [String!]
 }

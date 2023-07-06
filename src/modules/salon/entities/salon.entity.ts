@@ -67,7 +67,7 @@ export class Salon {
   schedule: object[];
 
   @Field(() => [Service])
-  @OneToMany(() => Service, (service) => service.salon)
+  @OneToMany(() => Service, (service) => service.salon, { cascade: true })
   services: Service[];
 
   @Field(() => Profile)

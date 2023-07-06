@@ -11,7 +11,6 @@ import { Repository } from 'typeorm';
 import { ProfileService } from '../profile/profile.service';
 import { EmailConfirmationService } from '../email/email-confirmation.service';
 
-import { FindByInput } from '../salon/dto/findBy.input';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { ConfirmEmailInput } from '../email/dto/confirm-email.input';

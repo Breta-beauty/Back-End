@@ -1,5 +1,6 @@
 import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
 import GraphQLJSON from 'graphql-type-json';
+import { Appointment } from 'src/modules/appointment/entities/appointment.entity';
 import { Salon } from 'src/modules/salon/entities/salon.entity';
 import {
   Column,
@@ -7,6 +8,8 @@ import {
   Entity,
   Index,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -52,6 +55,11 @@ export class Service {
   @ManyToOne(() => Salon, (salon) => salon.services)
   @JoinColumn({ name: 'salon_id' })
   salon: Salon;
+
+  @Field(() => [Appointment])
+  @ManyToMany(() => Appointment, (appointment) => appointment.services)
+  @JoinTable({ name: 'services<->appointments' })
+  appointments: Appointment[];
 
   @Field(() => GraphQLISODateTime)
   @CreateDateColumn({

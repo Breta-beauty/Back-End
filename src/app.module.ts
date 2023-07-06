@@ -15,6 +15,7 @@ import * as Joi from '@hapi/joi';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { SalonModule } from './modules/salon/salon.module';
 import { ServicesModule } from './modules/services/services.module';
+import { AppointmentModule } from './modules/appointment/appointment.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { ServicesModule } from './modules/services/services.module';
     EmailModule,
     SalonModule,
     ServicesModule,
+    AppointmentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

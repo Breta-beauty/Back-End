@@ -52,7 +52,7 @@ export class User {
   is_verified: boolean;
 
   @Field(() => Profile)
-  @OneToOne(() => Profile, { onDelete: 'CASCADE' })
+  @OneToOne(() => Profile, { cascade: true })
   @JoinColumn({ name: 'profile_id' })
   profile: Profile;
 

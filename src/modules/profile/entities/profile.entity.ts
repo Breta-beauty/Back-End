@@ -1,4 +1,5 @@
 import { ObjectType, Field, GraphQLISODateTime } from '@nestjs/graphql';
+import { Appointment } from 'src/modules/appointment/entities/appointment.entity';
 import { Salon } from 'src/modules/salon/entities/salon.entity';
 import { User } from 'src/modules/user/entities/user.entity';
 import {
@@ -39,8 +40,14 @@ export class Profile {
   user: User;
 
   @Field(() => [Salon])
-  @OneToMany(() => Salon, (salon) => salon.owner)
+  @OneToMany(() => Salon, (salon) => salon.owner, { cascade: true })
   salons: Salon[];
+
+  @Field(() => [Appointment])
+  @OneToMany(() => Appointment, (appointment) => appointment.subscriber, {
+    cascade: true,
+  })
+  appointments: Appointment[];
 
   @Field(() => GraphQLISODateTime)
   @CreateDateColumn({

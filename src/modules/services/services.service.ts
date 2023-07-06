@@ -1,4 +1,4 @@
-import { ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import {
   BadRequestException,
   Injectable,
@@ -11,7 +11,6 @@ import { Service } from './entities/service.entity';
 
 import { CreateServiceInput } from './dto/create-service.input';
 import { UpdateServiceInput } from './dto/update-service.input';
-import { FindByInput } from '../salon/dto/findBy.input';
 
 @Injectable()
 export class ServicesService {
