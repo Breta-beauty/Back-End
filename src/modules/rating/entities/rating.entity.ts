@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -27,10 +28,12 @@ export class Rating {
 
   @Field(() => Profile)
   @ManyToOne(() => Profile, (profile) => profile.rates)
+  @JoinColumn({ name: 'user' })
   user: Profile;
 
   @Field(() => Salon)
   @ManyToOne(() => Salon, (salon) => salon.ratings)
+  @JoinColumn({ name: 'salon' })
   salon: Salon;
 
   @Field(() => GraphQLISODateTime)
