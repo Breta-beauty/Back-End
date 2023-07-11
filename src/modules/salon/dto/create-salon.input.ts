@@ -1,7 +1,8 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { InputType, Field, Float } from '@nestjs/graphql';
 import {
   IsEmail,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsPhoneNumber,
   IsString,
@@ -50,4 +51,9 @@ export class CreateSalonInput {
 
   @Field(() => [GraphQLJSON])
   schedule: object[];
+
+  @Field(() => Float, { nullable: true })
+  @IsNumber()
+  @IsOptional()
+  size: number;
 }

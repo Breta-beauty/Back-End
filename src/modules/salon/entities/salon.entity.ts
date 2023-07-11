@@ -74,7 +74,7 @@ export class Salon {
   schedule: object[];
 
   @Field(() => Float)
-  @Column('float')
+  @Column('float', { nullable: true, default: 1 })
   size: number;
 
   @Field(() => [Service])
