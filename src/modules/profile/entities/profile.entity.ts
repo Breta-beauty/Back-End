@@ -1,5 +1,6 @@
 import { ObjectType, Field, GraphQLISODateTime } from '@nestjs/graphql';
 import { Appointment } from 'src/modules/appointment/entities/appointment.entity';
+import { Rating } from 'src/modules/rating/entities/rating.entity';
 import { Salon } from 'src/modules/salon/entities/salon.entity';
 import { User } from 'src/modules/user/entities/user.entity';
 import {
@@ -42,6 +43,10 @@ export class Profile {
   @Field(() => [Salon])
   @OneToMany(() => Salon, (salon) => salon.owner, { cascade: true })
   salons: Salon[];
+
+  @Field(() => [Rating])
+  @OneToMany(() => Rating, (rating) => rating.user)
+  rates: Rating[];
 
   @Field(() => [Appointment])
   @OneToMany(() => Appointment, (appointment) => appointment.subscriber, {

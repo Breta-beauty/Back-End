@@ -2,6 +2,21 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Rating {
+  rating_id: ID!
+  score: Float!
+  comment: String!
+  user: Profile!
+  salon: Salon!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Salon {
   salon_id: ID!
   salon_name: String!
@@ -13,8 +28,10 @@ type Salon {
   description: String!
   location: JSON!
   schedule: [JSON!]!
+  size: Float!
   services: [Service!]!
   owner: Profile!
+  ratings: [Rating!]!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -23,11 +40,6 @@ type Salon {
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
 scalar JSON
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type Service {
   service_id: ID!
@@ -61,6 +73,7 @@ type Profile {
   image_gallery: [String!]
   user: User!
   salons: [Salon!]!
+  rates: [Rating!]!
   appointments: [Appointment!]!
   created_at: DateTime!
   updated_at: DateTime!
@@ -97,6 +110,8 @@ type Query {
   services: [Service!]!
   service(service_id: ID!): Service!
   appointment(id: ID!): Appointment!
+  ratings: [Rating!]!
+  rating(rating_id: Int!): Rating!
 }
 
 input FindByInput {
@@ -122,6 +137,9 @@ type Mutation {
   createAppointment(profile_id: String!, createAppointmentInput: CreateAppointmentInput!): Appointment!
   updateAppointment(profile_id: ID!, updateAppointmentInput: UpdateAppointmentInput!): Appointment!
   removeAppointment(appointment_id: ID!): Appointment!
+  createRating(profile_id: String!, salon_id: Float!, createRatingInput: CreateRatingInput!): Rating!
+  updateRating(rating_id: ID!, updateRatingInput: UpdateRatingInput!): Rating!
+  removeRating(rating_id: ID!): Rating!
 }
 
 input CreateUserInput {
@@ -226,4 +244,14 @@ input CreateAppointmentInput {
 input UpdateAppointmentInput {
   date: DateTime
   services_ids: [String!]
+}
+
+input CreateRatingInput {
+  score: Int!
+  comment: String!
+}
+
+input UpdateRatingInput {
+  score: Int
+  comment: String
 }

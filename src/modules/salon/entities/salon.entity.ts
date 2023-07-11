@@ -1,4 +1,10 @@
-import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
+import {
+  ObjectType,
+  Field,
+  ID,
+  GraphQLISODateTime,
+  Float,
+} from '@nestjs/graphql';
 
 import { Profile } from 'src/modules/profile/entities/profile.entity';
 import { Service } from 'src/modules/services/entities/service.entity';
@@ -16,6 +22,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Rating } from 'src/modules/rating/entities/rating.entity';
 
 @Entity({ name: 'salons' })
 @ObjectType()
@@ -66,6 +73,10 @@ export class Salon {
   @Column('jsonb')
   schedule: object[];
 
+  @Field(() => Float)
+  @Column('float')
+  size: number;
+
   @Field(() => [Service])
   @OneToMany(() => Service, (service) => service.salon, { cascade: true })
   services: Service[];
@@ -74,6 +85,10 @@ export class Salon {
   @ManyToOne(() => Profile)
   @JoinColumn({ name: 'owner' })
   owner: Profile;
+
+  @Field(() => [Rating])
+  @OneToMany(() => Rating, (rating) => rating.salon, { cascade: true })
+  ratings: Rating[];
 
   @Field(() => GraphQLISODateTime)
   @CreateDateColumn({
