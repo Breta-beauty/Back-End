@@ -202,7 +202,7 @@ input CreateSalonInput {
   description: String!
   location: JSON!
   schedule: [JSON!]!
-  size: Float!
+  size: Float
 }
 
 input UpdateSalonInput {
