@@ -12,29 +12,35 @@ import { Salon } from '../salon/entities/salon.entity';
 
 import { CreateRatingInput } from './dto/create-rating.input';
 import { UpdateRatingInput } from './dto/update-rating.input';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class RatingService {
   constructor(
     @InjectRepository(Rating) private raitingRepo: Repository<Rating>,
-    @InjectRepository(Profile) private profileRepo: Repository<Profile>,
+    @InjectRepository(User) private profileRepo: Repository<User>,
     @InjectRepository(Salon) private salonRepo: Repository<Salon>,
   ) {}
 
   async create(
-    profile_id: string,
+    user_id: string,
     salon_id: number,
     createRatingInput: CreateRatingInput,
   ) {
-    const profile = await this.profileRepo.findOneBy({ profile_id });
+    const user = await this.profileRepo.findOne({
+      where: { user_id },
+      relations: { profile: true },
+    });
 
-    if (!profile) throw new BadRequestException(['Utilize un usuario valido']);
+    if (!user) throw new BadRequestException(['Utilize un usuario valido']);
 
     const salon = await this.salonRepo.findOneBy({ salon_id });
 
     if (!salon) throw new BadRequestException(['Seleccione un salón valido']);
 
     const newRating = this.raitingRepo.create(createRatingInput);
+
+    const profile = user.profile;
 
     newRating.user = profile;
     newRating.salon = salon;

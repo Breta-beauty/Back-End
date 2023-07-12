@@ -10,11 +10,11 @@ export class RatingResolver {
 
   @Mutation(() => Rating)
   createRating(
-    @Args('profile_id') profile_id: string,
+    @Args('user_id') user_id: string,
     @Args('salon_id') salon_id: number,
     @Args('createRatingInput') createRatingInput: CreateRatingInput,
   ) {
-    return this.ratingService.create(profile_id, salon_id, createRatingInput);
+    return this.ratingService.create(user_id, salon_id, createRatingInput);
   }
 
   @Query(() => [Rating], { name: 'ratings' })
