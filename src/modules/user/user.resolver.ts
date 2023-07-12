@@ -1,21 +1,24 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { UserService } from './user.service';
 import { User } from './entities/user.entity';
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+
+import { UserService } from './user.service';
 import { AuthService } from '../authn/auth.service';
-import { LoginResponse } from './dto/login-response';
-import { LoginInput } from './dto/login.input';
+
+import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
+
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/guards/auth/jwt-auth.guard';
+
+import { LoginInput } from './dto/login.input';
+import { CreateUserInput } from './dto/create-user.input';
+import { UpdateUserInput } from './dto/update-user.input';
 import { ConfirmEmailInput } from '../email/dto/confirm-email.input';
+import { UpdateProfileInput } from '../profile/dto/update-profile.input';
+
+import { LoginResponse } from './dto/login-response';
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(
-    @InjectRepository(User) private userRepo: Repository<User>,
     private readonly userService: UserService,
     private authService: AuthService,
   ) {}
@@ -30,23 +33,32 @@ export class UserResolver {
     return this.userService.findAll();
   }
 
-  @Query(() => User, { name: 'user' })
-  findOne(@Args('user_id', { type: () => Int }) user_id: string) {
+  @Query(() => User, { name: 'user', nullable: true })
+  findOne(@Args('user_id', { type: () => String }) user_id: string) {
     return this.userService.findOne(user_id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @Query(() => [User], { name: 'findBy' })
+  // findUsersByName(@Args('findByInput') findByInput: FindByInput) {
+  //   return this.userService.findBy(findByInput);
+  // }
+
   @Mutation(() => User)
   updateUser(
-    @Args('user_id') user_id: string,
+    @Args('user_id', { type: () => ID }) user_id: string,
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
+    @Args('updateProfileInput') updateProfileInput?: UpdateProfileInput,
   ) {
-    return this.userService.update(user_id, updateUserInput);
+    return this.userService.update(
+      user_id,
+      updateUserInput,
+      updateProfileInput,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
   @Mutation(() => User)
-  removeUser(@Args('user_id', { type: () => Int }) user_id: string) {
+  removeUser(@Args('user_id', { type: () => ID }) user_id: string) {
     return this.userService.remove(user_id);
   }
 

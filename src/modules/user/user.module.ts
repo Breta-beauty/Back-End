@@ -1,14 +1,23 @@
 import { Module } from '@nestjs/common';
-import { UserService } from './user.service';
-import { UserResolver } from './user.resolver';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { EmailModule } from '../email/email.module';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule } from '@nestjs/config';
+import { EmailModule } from '../email/email.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProfileModule } from '../profile/profile.module';
+
+import { User } from './entities/user.entity';
+import { Profile } from '../profile/entities/profile.entity';
+
+import { UserService } from './user.service';
+
+import { UserResolver } from './user.resolver';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), EmailModule, JwtModule, ConfigModule],
+  imports: [
+    TypeOrmModule.forFeature([User, Profile]),
+    EmailModule,
+    JwtModule,
+    ProfileModule,
+  ],
   providers: [UserResolver, UserService],
   exports: [UserService],
 })

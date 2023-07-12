@@ -12,6 +12,11 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { ProfileModule } from './modules/profile/profile.module';
 import { EmailModule } from './modules/email/email.module';
 import * as Joi from '@hapi/joi';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { SalonModule } from './modules/salon/salon.module';
+import { ServicesModule } from './modules/services/services.module';
+import { AppointmentModule } from './modules/appointment/appointment.module';
+import { RatingModule } from './modules/rating/rating.module';
 
 @Module({
   imports: [
@@ -38,11 +43,19 @@ import * as Joi from '@hapi/joi';
         EMAIL_CONFIRMATION_URL: Joi.string().required(),
       }),
     }),
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 10,
+    }),
     UserModule,
     DatabaseModule,
     AuthModule,
     ProfileModule,
     EmailModule,
+    SalonModule,
+    ServicesModule,
+    AppointmentModule,
+    RatingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

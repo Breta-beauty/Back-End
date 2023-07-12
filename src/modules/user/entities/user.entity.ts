@@ -1,5 +1,7 @@
 import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
+
 import { Profile } from 'src/modules/profile/entities/profile.entity';
+
 import {
   Column,
   CreateDateColumn,
@@ -18,28 +20,40 @@ export class User {
   user_id: string;
 
   @Field()
-  @Column({ type: 'varchar', length: 150, unique: true })
-  username: string;
+  @Column('varchar')
+  full_name: string;
 
   @Field()
-  @Column({ type: 'varchar', length: 150, unique: true })
+  @Column('varchar', { unique: true })
   email: string;
 
   @Field()
-  @Column({ type: 'varchar', length: 255 })
+  @Column('varchar')
   password: string;
 
-  @Field({ defaultValue: 'customer', nullable: true })
-  @Column({ type: 'varchar', length: 20, default: 'customer' })
-  type: 'salon' | 'customer';
+  @Field()
+  @Column('varchar', { unique: true })
+  cellphone: string;
 
   @Field({ nullable: true })
-  @Column({ type: 'boolean', default: false })
-  is_Verified: boolean;
+  @Column('date', { nullable: true })
+  birthday: Date;
+
+  @Field({ nullable: true })
+  @Column('varchar', { default: 'undetermined' })
+  gender: 'male' | 'female' | 'undetermined';
+
+  @Field({ nullable: true })
+  @Column('varchar', { default: 'customer' })
+  type: 'owner' | 'customer';
+
+  @Field({ nullable: true })
+  @Column('boolean', { default: false })
+  is_verified: boolean;
 
   @Field(() => Profile)
-  @OneToOne(() => Profile, { nullable: true })
-  @JoinColumn()
+  @OneToOne(() => Profile, { cascade: true })
+  @JoinColumn({ name: 'profile_id' })
   profile: Profile;
 
   @Field(() => GraphQLISODateTime)
@@ -47,12 +61,12 @@ export class User {
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  created_At: Date;
+  created_at: Date;
 
   @Field(() => GraphQLISODateTime)
   @UpdateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  updated_At: Date;
+  updated_at: Date;
 }

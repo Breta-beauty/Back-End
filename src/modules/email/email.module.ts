@@ -9,7 +9,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 @Module({
   imports: [
     MailerModule.forRootAsync({
-      useFactory:async (config: ConfigService) => ({
+      useFactory: async (config: ConfigService) => ({
         transport: {
           service: config.get('EMAIL_SERVICE'),
           auth: {
@@ -28,10 +28,12 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
           },
         },
       }),
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
-    JwtModule, ConfigModule],
+    JwtModule,
+    ConfigModule,
+  ],
   providers: [EmailService, EmailConfirmationService],
-  exports: [EmailConfirmationService]
+  exports: [EmailConfirmationService],
 })
 export class EmailModule {}

@@ -33,8 +33,8 @@ export class EmailConfirmationService {
       template: 'confirm-email',
       context: {
         name: name,
-        token: token
-      }
+        token: token,
+      },
     });
   }
 
