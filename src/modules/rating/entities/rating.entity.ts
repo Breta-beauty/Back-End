@@ -19,7 +19,7 @@ export class Rating {
   rating_id: number;
 
   @Field()
-  @Column('int4range')
+  @Column('int2')
   score: 1 | 2 | 3 | 4 | 5;
 
   @Field()
