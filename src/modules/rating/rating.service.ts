@@ -7,18 +7,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Rating } from './entities/rating.entity';
-import { Profile } from '../profile/entities/profile.entity';
+import { User } from '../user/entities/user.entity';
 import { Salon } from '../salon/entities/salon.entity';
 
 import { CreateRatingInput } from './dto/create-rating.input';
 import { UpdateRatingInput } from './dto/update-rating.input';
-import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class RatingService {
   constructor(
     @InjectRepository(Rating) private raitingRepo: Repository<Rating>,
-    @InjectRepository(User) private profileRepo: Repository<User>,
+    @InjectRepository(User) private userRepo: Repository<User>,
     @InjectRepository(Salon) private salonRepo: Repository<Salon>,
   ) {}
 
@@ -27,7 +26,7 @@ export class RatingService {
     salon_id: number,
     createRatingInput: CreateRatingInput,
   ) {
-    const user = await this.profileRepo.findOne({
+    const user = await this.userRepo.findOne({
       where: { user_id },
       relations: { profile: true },
     });
