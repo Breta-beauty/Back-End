@@ -33,7 +33,9 @@ export class SalonService {
   }
 
   async findAll() {
-    const salons = await this.salonRepo.find();
+    const salons = await this.salonRepo.find({
+      relations: { services: true, owner: true, ratings: true },
+    });
 
     if (!salons) throw new NotFoundException(['No se encontraron salones']);
 
@@ -42,7 +44,7 @@ export class SalonService {
 
   async findBy(findByInput: FindByInput) {
     const salons = await this.salonRepo.find({
-      relations: ['services'],
+      relations: { services: true, ratings: true, owner: true },
       where: [
         {
           salon_name: ILike(`%${findByInput.search_input}%`),
@@ -64,7 +66,10 @@ export class SalonService {
   }
 
   async findOne(salon_id: number) {
-    const salon = await this.salonRepo.findOneBy({ salon_id });
+    const salon = await this.salonRepo.findOne({
+      where: { salon_id },
+      relations: { services: true, ratings: true, owner: true },
+    });
 
     if (!salon) throw new NotFoundException(['No se encontró el salón']);
 
