@@ -58,7 +58,7 @@ export class SalonService {
 
     if (!salons || salons.length === 0) {
       throw new NotFoundException([
-        `No se encontraron resultado similares a: ${findByInput.search_input}`,
+        `No se encontraron resultados similares a: ${findByInput.search_input}`,
       ]);
     }
 
