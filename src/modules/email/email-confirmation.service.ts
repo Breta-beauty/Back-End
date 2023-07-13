@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { EmailService } from './email.service';
 import VerificationTokenPayload from './interfaces/verificationTokenPayload.interface';
+import { MailerService } from '@nestjs-modules/mailer/dist';
 
 @Injectable()
 export class EmailConfirmationService {
@@ -10,9 +11,10 @@ export class EmailConfirmationService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly emailService: EmailService,
+    private readonly mailerService: MailerService,
   ) {}
 
-  public sendVerificationLink(email: string) {
+  public sendVerificationLink(email: string, name: string) {
     const payload: VerificationTokenPayload = { email };
     const token = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_VERIFICATION_TOKEN_SECRET'),
@@ -25,10 +27,14 @@ export class EmailConfirmationService {
     )}?token=${token}`;
     const text = `Welcome to Breta. To confirm the email address, click here: ${url}`;
 
-    return this.emailService.sendMail({
+    return this.mailerService.sendMail({
       to: email,
-      subject: 'Email confirmation',
-      text,
+      subject: 'Confirmacion de correo electronico',
+      template: 'confirm-email',
+      context: {
+        name: name,
+        token: token,
+      },
     });
   }
 

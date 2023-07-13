@@ -2,17 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Profile {
-  profile_id: String!
-  full_name: String!
-  cellphone: String!
-  description: String
-  wallpaper: String
-  profile_picture: String
-  location: String
-  user: User!
-  created_At: DateTime!
-  updated_At: DateTime!
+type Rating {
+  rating_id: ID!
+  score: Float!
+  comment: String!
+  user: Profile!
+  salon: Salon!
+  created_at: DateTime!
+  updated_at: DateTime!
 }
 
 """
@@ -20,16 +17,81 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Salon {
+  salon_id: ID!
+  salon_name: String!
+  email: String!
+  cellphone: String!
+  main_picture: String!
+  wallpaper: String!
+  image_gallery: [String!]!
+  description: String!
+  location: JSON!
+  schedule: [JSON!]!
+  size: Float!
+  services: [Service!]!
+  owner: Profile!
+  ratings: [Rating!]!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type Service {
+  service_id: ID!
+  service_name: String!
+  category: String!
+  gender: String!
+  description: String!
+  price: Float!
+  cancellation: JSON!
+  timespan: JSON!
+  salon: Salon!
+  appointments: [Appointment!]!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Appointment {
+  appointment_id: ID!
+  date: DateTime!
+  subscriber: Profile!
+  services: [Service!]!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Profile {
+  profile_id: String!
+  description: String
+  wallpaper: String
+  profile_picture: String
+  image_gallery: [String!]
+  user: User!
+  salons: [Salon!]!
+  rates: [Rating!]!
+  appointments: [Appointment!]!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
 type User {
   user_id: ID!
-  username: String!
+  full_name: String!
   email: String!
   password: String!
+  cellphone: String!
+  birthday: DateTime
+  gender: String
   type: String
-  is_Verified: Boolean
+  is_verified: Boolean
   profile: Profile!
-  created_At: DateTime!
-  updated_At: DateTime!
+  created_at: DateTime!
+  updated_at: DateTime!
 }
 
 type LoginResponse {
@@ -37,43 +99,76 @@ type LoginResponse {
   user: User
 }
 
-type getProfileResponse {
-  profile: Profile!
-  user: User
-}
-
 type Query {
   users: [User!]!
-  user(user_id: Int!): User!
+  user(user_id: String!): User
   profiles: [Profile!]!
-  profile(profile_id: ID!): getProfileResponse!
+  profile(profile_id: ID!): Profile!
+  salons: [Salon!]!
+  findSalonsBy(findByInput: FindByInput!): [Salon!]!
+  salon(salon_id: Int!): Salon!
+  services: [Service!]!
+  service(service_id: ID!): Service!
+  appointment(id: ID!): Appointment!
+  ratings: [Rating!]!
+  rating(rating_id: Int!): Rating!
+}
+
+input FindByInput {
+  search_input: String
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
-  updateUser(user_id: String!, updateUserInput: UpdateUserInput!): User!
-  removeUser(user_id: Int!): User!
+  updateUser(user_id: ID!, updateUserInput: UpdateUserInput!, updateProfileInput: UpdateProfileInput!): User!
+  removeUser(user_id: ID!): User!
   login(loginUserInput: LoginInput!): LoginResponse!
   confirmEmail(confirmEmailInput: ConfirmEmailInput!): User!
   createProfile(user_id: ID!, createProfileInput: CreateProfileInput!): Profile!
   updateProfile(user_id: ID!, updateProfileInput: UpdateProfileInput!): Profile!
+  addToGallery(galleryInput: GalleryInput!): Profile!
   removeProfile(user_id: ID!): Profile!
+  createSalon(user_id: ID!, createSalonInput: CreateSalonInput!): Salon!
+  updateSalon(salon_id: ID!, updateSalonInput: UpdateSalonInput!): Salon!
+  removeSalon(salon_id: ID!): Salon!
+  createService(salon_id: ID!, createServiceInput: CreateServiceInput!): Service!
+  updateService(service_id: ID!, updateServiceInput: UpdateServiceInput!): Service!
+  removeService(service_id: ID!): Service!
+  createAppointment(profile_id: String!, createAppointmentInput: CreateAppointmentInput!): Appointment!
+  updateAppointment(profile_id: ID!, updateAppointmentInput: UpdateAppointmentInput!): Appointment!
+  removeAppointment(appointment_id: ID!): Appointment!
+  createRating(profile_id: String!, salon_id: Float!, createRatingInput: CreateRatingInput!): Rating!
+  updateRating(rating_id: ID!, updateRatingInput: UpdateRatingInput!): Rating!
+  removeRating(rating_id: ID!): Rating!
 }
 
 input CreateUserInput {
-  username: String!
   email: String!
   password: String!
   type: String! = "customer"
-  is_Verified: Boolean! = false
+  is_verified: Boolean! = false
+  full_name: String!
+  cellphone: String!
+  birthday: DateTime
+  gender: String = "undetermined"
 }
 
 input UpdateUserInput {
-  username: String
   email: String
   password: String
   type: String = "customer"
-  is_Verified: Boolean = false
+  is_verified: Boolean = false
+  full_name: String
+  cellphone: String
+  birthday: DateTime
+  gender: String = "undetermined"
+}
+
+input UpdateProfileInput {
+  wallpaper: String
+  profile_picture: String
+  image_gallery: [String!]
+  description: String
 }
 
 input LoginInput {
@@ -87,18 +182,78 @@ input ConfirmEmailInput {
 
 input CreateProfileInput {
   wallpaper: String
-  profile_image: String
-  full_name: String!
-  cellphone: String!
+  profile_picture: String
+  image_gallery: [String!]
   description: String
-  location: String
 }
 
-input UpdateProfileInput {
+input GalleryInput {
+  user_id: String!
+  images: [String!]!
+}
+
+input CreateSalonInput {
+  salon_name: String!
+  email: String!
+  cellphone: String!
+  main_picture: String
   wallpaper: String
-  profile_image: String
-  full_name: String
+  image_gallery: [String!]
+  description: String!
+  location: JSON!
+  schedule: [JSON!]!
+  size: Float
+}
+
+input UpdateSalonInput {
+  salon_name: String
+  email: String
   cellphone: String
+  main_picture: String
+  wallpaper: String
+  image_gallery: [String!]
   description: String
-  location: String
+  location: JSON
+  schedule: [JSON!]
+  size: Float
+}
+
+input CreateServiceInput {
+  service_name: String!
+  category: String!
+  gender: String!
+  description: String!
+  price: Float!
+  cancellation: JSON!
+  timespan: JSON!
+}
+
+input UpdateServiceInput {
+  service_name: String
+  category: String
+  gender: String
+  description: String
+  price: Float
+  cancellation: JSON
+  timespan: JSON
+}
+
+input CreateAppointmentInput {
+  date: DateTime!
+  services_ids: [String!]
+}
+
+input UpdateAppointmentInput {
+  date: DateTime
+  services_ids: [String!]
+}
+
+input CreateRatingInput {
+  score: Int!
+  comment: String!
+}
+
+input UpdateRatingInput {
+  score: Int
+  comment: String
 }

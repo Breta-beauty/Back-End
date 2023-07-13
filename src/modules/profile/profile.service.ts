@@ -1,10 +1,12 @@
+import { User } from '../user/entities/user.entity';
+import { Profile } from './entities/profile.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
+
 import { CreateProfileInput } from './dto/create-profile.input';
 import { UpdateProfileInput } from './dto/update-profile.input';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Profile } from './entities/profile.entity';
-import { User } from '../user/entities/user.entity';
+import { GalleryInput } from '../user/dto/gallery.input';
 
 @Injectable()
 export class ProfileService {
@@ -13,7 +15,7 @@ export class ProfileService {
     @InjectRepository(User) private userRepo: Repository<User>,
   ) {}
 
-  async create(user_id: string, createProfileInput: CreateProfileInput) {
+  async create(user_id: string, createProfileInput?: CreateProfileInput) {
     const user = await this.userRepo.findOneBy({ user_id });
 
     if (!user) throw new NotFoundException('Usuario no encontrado');
@@ -35,31 +37,55 @@ export class ProfileService {
   async findOne(profile_id: string) {
     const profile = await this.profileRepo.findOne({
       where: { profile_id },
-      relations: ['user'],
+      relations: {
+        user: true,
+        salons: true,
+      },
     });
 
     if (!profile) throw new NotFoundException('No se encontró el perfil');
 
-    return {
-      profile,
-      user: profile.user,
-    };
+    return profile;
   }
 
   async update(user_id: string, updateProfileInput: UpdateProfileInput) {
     const user = await this.userRepo.findOne({
       where: { user_id },
-      relations: ['profile'],
+      relations: { profile: true },
     });
+
+    if (!user) throw new NotFoundException(['No se encontró al usuario']);
 
     const profile_id = user.profile.profile_id;
 
-    const profile = await this.profileRepo.findOneBy({ profile_id });
+    const profile = await this.profileRepo.findOne({
+      where: { profile_id },
+      relations: { user: true },
+    });
 
     if (!profile) throw new NotFoundException('No se encontró perfil');
 
     this.profileRepo.merge(profile, updateProfileInput);
+
     return this.profileRepo.save(profile);
+  }
+
+  async addToGallery(galleryInput: GalleryInput) {
+    const user = await this.userRepo.findOne({
+      where: { user_id: galleryInput.user_id },
+      relations: { profile: true },
+    });
+
+    if (!user) throw new NotFoundException(['No se encontró al usuario']);
+
+    const profile_id = user.profile.profile_id;
+
+    return await this.profileRepo.update(
+      { profile_id },
+      {
+        image_gallery: { ...galleryInput.images },
+      },
+    );
   }
 
   async remove(user_id: string) {
