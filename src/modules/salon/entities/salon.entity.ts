@@ -19,10 +19,12 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Rating } from 'src/modules/rating/entities/rating.entity';
+import { Address } from 'src/modules/address/entities/address.entity';
 
 @Entity({ name: 'salons' })
 @ObjectType()
@@ -76,6 +78,11 @@ export class Salon {
   @Field(() => Float)
   @Column('float', { nullable: true, default: 1 })
   size: number;
+
+  @Field(() => Address)
+  @OneToOne(() => Address, (address) => address.salon)
+  @JoinColumn({ name: 'address' })
+  address: Address;
 
   @Field(() => [Service])
   @OneToMany(() => Service, (service) => service.salon, { cascade: true })

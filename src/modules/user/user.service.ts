@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { ProfileService } from '../profile/profile.service';
+import { PaymentsService } from '../payments/payments.service';
 import { EmailConfirmationService } from '../email/email-confirmation.service';
 
 import { CreateUserInput } from './dto/create-user.input';
@@ -25,6 +26,7 @@ export class UserService {
     @InjectRepository(Profile) private profileRepo: Repository<Profile>,
     private profileService: ProfileService,
     private readonly emailConfirmationService: EmailConfirmationService,
+    private paymentsService: PaymentsService,
   ) {}
 
   async create(payload: CreateUserInput): Promise<User> {
@@ -47,6 +49,17 @@ export class UserService {
         payload.full_name,
       );
     }
+
+    if (newUser.type === 'customer') {
+      const stripeCustomer = await this.paymentsService.createStripeCustomer(
+        payload.full_name,
+        payload.email,
+        payload.type,
+      );
+
+      newUser.stripe_customer_id = stripeCustomer.id;
+    }
+
     await this.userRepo.save(newUser);
 
     await this.profileService.create(newUser.user_id);
@@ -60,35 +73,6 @@ export class UserService {
 
     return users;
   }
-
-  // async findBy(findByInput: FindByInput): Promise<User[]> {
-  //   const users = await this.userRepo
-  //     .createQueryBuilder('users')
-  //     .leftJoinAndSelect('users.profile', 'profiles')
-  //     .where('full_name ilike :name and "type" = :type', {
-  //       name: `%${findByInput.search_input}%`,
-  //       type: findByInput.type,
-  //     })
-  //     .orWhere(
-  //       `array_to_string("profiles".services, ',') ilike :name and "type" = :type`,
-  //       {
-  //         name: `%${findByInput.search_input}%`,
-  //         type: findByInput.type,
-  //       },
-  //     )
-  //     .orderBy('full_name', 'ASC')
-  //     .getMany();
-
-  //   if (!users || users.length === 0) {
-  //     throw new NotFoundException([
-  //       `Ningún resultado coincide con: ${
-  //         findByInput.search_input || findByInput.type
-  //       }`,
-  //     ]);
-  //   }
-
-  //   return users;
-  // }
 
   async findOne(user_id: string): Promise<User> {
     const user = await this.userRepo.findOne({
@@ -113,7 +97,7 @@ export class UserService {
     user_id: string,
     updateUserInput: UpdateUserInput,
     updateProfileInput?: UpdateProfileInput,
-  ) {
+  ): Promise<User> {
     const user = await this.userRepo.findOne({
       where: { user_id },
       relations: { profile: true },
@@ -140,6 +124,14 @@ export class UserService {
     }
 
     return this.userRepo.save(user);
+  }
+
+  async changePassword(user_id: string) {
+    const user = await this.userRepo.findOneBy({ user_id });
+
+    if (!user) throw new BadRequestException(['El usuario no es valido']);
+
+    // this.userRepo.merge();
   }
 
   async emailConfirmed(email: string) {

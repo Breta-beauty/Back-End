@@ -17,6 +17,19 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Address {
+  address_id: Float!
+  city: String!
+  country: String!
+  street: String!
+  postal_code: Float!
+  exterior_number: Float!
+  interior_number: Float!
+  salon: Salon!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
 type Salon {
   salon_id: ID!
   salon_name: String!
@@ -29,6 +42,7 @@ type Salon {
   location: JSON!
   schedule: [JSON!]!
   size: Float!
+  address: Address!
   services: [Service!]!
   owner: Profile!
   ratings: [Rating!]!
@@ -112,6 +126,8 @@ type Query {
   appointment(id: ID!): Appointment!
   ratings: [Rating!]!
   rating(rating_id: Int!): Rating!
+  addresses: [Address!]!
+  address(address_id: ID!): Address!
 }
 
 input FindByInput {
@@ -137,9 +153,12 @@ type Mutation {
   createAppointment(profile_id: String!, createAppointmentInput: CreateAppointmentInput!): Appointment!
   updateAppointment(profile_id: ID!, updateAppointmentInput: UpdateAppointmentInput!): Appointment!
   removeAppointment(appointment_id: ID!): Appointment!
-  createRating(profile_id: String!, salon_id: Float!, createRatingInput: CreateRatingInput!): Rating!
+  createRating(user_id: String!, salon_id: Float!, createRatingInput: CreateRatingInput!): Rating!
   updateRating(rating_id: ID!, updateRatingInput: UpdateRatingInput!): Rating!
   removeRating(rating_id: ID!): Rating!
+  createAddress(salon_id: Float!, createAddressInput: CreateAddressInput!): Address!
+  updateAddress(address_id: ID!, updateAddressInput: UpdateAddressInput!): Address!
+  removeAddress(id: ID!): Address!
 }
 
 input CreateUserInput {
@@ -256,4 +275,22 @@ input CreateRatingInput {
 input UpdateRatingInput {
   score: Int
   comment: String
+}
+
+input CreateAddressInput {
+  country: String
+  city: String!
+  street: String!
+  postal_code: Float!
+  exterior_number: Float!
+  interior_number: Float
+}
+
+input UpdateAddressInput {
+  country: String
+  city: String
+  street: String
+  postal_code: Float
+  exterior_number: Float
+  interior_number: Float
 }

@@ -1,22 +1,30 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { ConfigModule } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ThrottlerModule } from '@nestjs/throttler';
+
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
-import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from './modules/database/database.module';
-import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { join } from 'path';
 import { AuthModule } from './modules/authn/auth.module';
-import { GraphQLError, GraphQLFormattedError } from 'graphql';
-import { ProfileModule } from './modules/profile/profile.module';
 import { EmailModule } from './modules/email/email.module';
-import * as Joi from '@hapi/joi';
-import { ThrottlerModule } from '@nestjs/throttler';
 import { SalonModule } from './modules/salon/salon.module';
-import { ServicesModule } from './modules/services/services.module';
-import { AppointmentModule } from './modules/appointment/appointment.module';
 import { RatingModule } from './modules/rating/rating.module';
+import { ProfileModule } from './modules/profile/profile.module';
+import { AddressModule } from './modules/address/address.module';
+import { ServicesModule } from './modules/services/services.module';
+import { DatabaseModule } from './modules/database/database.module';
+import { AppointmentModule } from './modules/appointment/appointment.module';
+
+import { AppController } from './app.controller';
+
+import { GraphQLError, GraphQLFormattedError } from 'graphql';
+
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+
+import * as Joi from '@hapi/joi';
+
+import { join } from 'path';
+import { PaymentsModule } from './modules/payments/payments.module';
 
 @Module({
   imports: [
@@ -56,6 +64,8 @@ import { RatingModule } from './modules/rating/rating.module';
     ServicesModule,
     AppointmentModule,
     RatingModule,
+    AddressModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

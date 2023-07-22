@@ -13,11 +13,11 @@ import { FindByInput } from './dto/findBy.input';
 export class SalonService {
   constructor(
     @InjectRepository(Salon) private salonRepo: Repository<Salon>,
-    @InjectRepository(User) private profileRepo: Repository<User>,
+    @InjectRepository(User) private userRepo: Repository<User>,
   ) {}
 
   async create(user_id: string, createSalonInput: CreateSalonInput) {
-    const user = await this.profileRepo.findOne({
+    const user = await this.userRepo.findOne({
       where: { user_id },
       relations: { profile: true },
     });
@@ -34,7 +34,7 @@ export class SalonService {
 
   async findAll() {
     const salons = await this.salonRepo.find({
-      relations: { services: true, owner: true, ratings: true },
+      relations: { services: true, ratings: true },
     });
 
     if (!salons) throw new NotFoundException(['No se encontraron salones']);

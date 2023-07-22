@@ -1,6 +1,9 @@
 import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
-import { RatingService } from './rating.service';
+
 import { Rating } from './entities/rating.entity';
+
+import { RatingService } from './rating.service';
+
 import { CreateRatingInput } from './dto/create-rating.input';
 import { UpdateRatingInput } from './dto/update-rating.input';
 

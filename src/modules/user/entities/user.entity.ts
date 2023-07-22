@@ -20,6 +20,10 @@ export class User {
   user_id: string;
 
   @Field()
+  @Column({ nullable: true })
+  stripe_customer_id?: string;
+
+  @Field()
   @Column('varchar')
   full_name: string;
 

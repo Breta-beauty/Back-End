@@ -21,8 +21,12 @@ export class Appointment {
   appointment_id: number;
 
   @Field()
-  @Column('date')
-  date: Date;
+  @Column('timestamp')
+  start: Date;
+
+  @Field()
+  @Column('timestamp')
+  end: Date;
 
   @Field(() => Profile)
   @ManyToOne(() => Profile, (profile) => profile.appointments)
