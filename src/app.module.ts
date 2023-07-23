@@ -13,6 +13,7 @@ import { ProfileModule } from './modules/profile/profile.module';
 import { AddressModule } from './modules/address/address.module';
 import { ServicesModule } from './modules/services/services.module';
 import { DatabaseModule } from './modules/database/database.module';
+import { PaymentsModule } from './modules/payments/payments.module';
 import { AppointmentModule } from './modules/appointment/appointment.module';
 
 import { AppController } from './app.controller';
@@ -24,7 +25,6 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import * as Joi from '@hapi/joi';
 
 import { join } from 'path';
-import { PaymentsModule } from './modules/payments/payments.module';
 
 @Module({
   imports: [
