@@ -114,13 +114,6 @@ type LoginResponse {
   user: User
 }
 
-type PaymentResponse {
-  id: String!
-  amount: Float!
-  currency: String!
-  payment_method_types: [String!]!
-}
-
 type Query {
   users: [User!]!
   user(user_id: String!): User
@@ -152,7 +145,7 @@ type Mutation {
   updateProfile(user_id: ID!, updateProfileInput: UpdateProfileInput!): Profile!
   addToGallery(galleryInput: GalleryInput!): Profile!
   removeProfile(user_id: ID!): Profile!
-  stripeCharge(stripe_customer_id: String!, stripeChargeInput: StripeChargeInput!): PaymentResponse!
+  stripeCharge(stripe_customer_id: String!, stripeChargeInput: StripeChargeInput!): JSON!
   createSalon(user_id: ID!, createSalonInput: CreateSalonInput!): Salon!
   updateSalon(salon_id: ID!, updateSalonInput: UpdateSalonInput!): Salon!
   removeSalon(salon_id: ID!): Salon!

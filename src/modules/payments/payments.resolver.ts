@@ -5,13 +5,13 @@ import { Payment } from './entities/payment.entity';
 import { PaymentsService } from './payments.service';
 
 import { StripeChargeInput } from './dto/stripe-charge.input';
-import { PaymentResponse } from './dto/payment.response';
+import GraphQLJSON from 'graphql-type-json';
 
 @Resolver(() => Payment)
 export class PaymentsResolver {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @Mutation(() => PaymentResponse)
+  @Mutation(() => GraphQLJSON)
   stripeCharge(
     @Args('stripe_customer_id') stripeCustomerID: string,
     @Args('stripeChargeInput') stripeChargeInput: StripeChargeInput,
