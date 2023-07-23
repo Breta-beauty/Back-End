@@ -36,18 +36,14 @@ export class CreateSalonInput {
   @IsOptional()
   wallpaper: string;
 
-  @Field(() => [String], { nullable: true })
-  @IsString()
+  @Field(() => [GraphQLJSON], { nullable: true })
   @IsOptional()
-  image_gallery?: string[];
+  image_gallery?: object[];
 
   @Field()
   @IsString()
   @IsNotEmpty()
   description: string;
-
-  @Field(() => GraphQLJSON)
-  location: object;
 
   @Field(() => [GraphQLJSON])
   schedule: object[];

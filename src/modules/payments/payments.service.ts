@@ -26,6 +26,10 @@ export class PaymentsService {
     });
   }
 
+  public async deleteStripeCustomer(stripeCustomerId: string) {
+    return this.stripe.customers.del(stripeCustomerId);
+  }
+
   public async stripeCharge(
     amount: number,
     paymentMethodId: string,

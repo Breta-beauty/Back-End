@@ -5,7 +5,7 @@ import { AuthService } from '../authn/auth.service';
 
 import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, UseInterceptors } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/guards/auth/jwt-auth.guard';
 
 import { LoginInput } from './dto/login.input';
@@ -38,16 +38,12 @@ export class UserResolver {
     return this.userService.findOne(user_id);
   }
 
-  // @Query(() => [User], { name: 'findBy' })
-  // findUsersByName(@Args('findByInput') findByInput: FindByInput) {
-  //   return this.userService.findBy(findByInput);
-  // }
-
   @Mutation(() => User)
   updateUser(
     @Args('user_id', { type: () => ID }) user_id: string,
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
-    @Args('updateProfileInput') updateProfileInput?: UpdateProfileInput,
+    @Args('updateProfileInput', { nullable: true })
+    updateProfileInput?: UpdateProfileInput,
   ) {
     return this.userService.update(
       user_id,

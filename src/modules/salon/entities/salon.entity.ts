@@ -59,17 +59,13 @@ export class Salon {
   })
   wallpaper: string;
 
-  @Field(() => [String])
-  @Column('text', { array: true, nullable: true })
-  image_gallery: string[];
+  @Field(() => [GraphQLJSON])
+  @Column('json', { nullable: true })
+  image_gallery: object[];
 
   @Field()
   @Column('text')
   description: string;
-
-  @Field(() => GraphQLJSON)
-  @Column('jsonb')
-  location: object;
 
   @Field(() => [GraphQLJSON])
   @Column('jsonb')

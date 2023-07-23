@@ -37,9 +37,8 @@ type Salon {
   cellphone: String!
   main_picture: String!
   wallpaper: String!
-  image_gallery: [String!]!
+  image_gallery: [JSON!]!
   description: String!
-  location: JSON!
   schedule: [JSON!]!
   size: Float!
   address: Address!
@@ -72,7 +71,8 @@ type Service {
 
 type Appointment {
   appointment_id: ID!
-  date: DateTime!
+  start: DateTime!
+  end: DateTime!
   subscriber: Profile!
   services: [Service!]!
   created_at: DateTime!
@@ -95,6 +95,7 @@ type Profile {
 
 type User {
   user_id: ID!
+  stripe_customer_id: String!
   full_name: String!
   email: String!
   password: String!
@@ -111,6 +112,13 @@ type User {
 type LoginResponse {
   access_token: String!
   user: User
+}
+
+type PaymentResponse {
+  id: String!
+  amount: Float!
+  currency: String!
+  payment_method_types: [String!]!
 }
 
 type Query {
@@ -136,7 +144,7 @@ input FindByInput {
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
-  updateUser(user_id: ID!, updateUserInput: UpdateUserInput!, updateProfileInput: UpdateProfileInput!): User!
+  updateUser(user_id: ID!, updateUserInput: UpdateUserInput!, updateProfileInput: UpdateProfileInput): User!
   removeUser(user_id: ID!): User!
   login(loginUserInput: LoginInput!): LoginResponse!
   confirmEmail(confirmEmailInput: ConfirmEmailInput!): User!
@@ -144,6 +152,7 @@ type Mutation {
   updateProfile(user_id: ID!, updateProfileInput: UpdateProfileInput!): Profile!
   addToGallery(galleryInput: GalleryInput!): Profile!
   removeProfile(user_id: ID!): Profile!
+  stripeCharge(stripe_customer_id: String!, stripeChargeInput: StripeChargeInput!): PaymentResponse!
   createSalon(user_id: ID!, createSalonInput: CreateSalonInput!): Salon!
   updateSalon(salon_id: ID!, updateSalonInput: UpdateSalonInput!): Salon!
   removeSalon(salon_id: ID!): Salon!
@@ -158,7 +167,7 @@ type Mutation {
   removeRating(rating_id: ID!): Rating!
   createAddress(salon_id: Float!, createAddressInput: CreateAddressInput!): Address!
   updateAddress(address_id: ID!, updateAddressInput: UpdateAddressInput!): Address!
-  removeAddress(id: ID!): Address!
+  removeAddress(address_id: ID!): Address!
 }
 
 input CreateUserInput {
@@ -211,15 +220,19 @@ input GalleryInput {
   images: [String!]!
 }
 
+input StripeChargeInput {
+  amount: Int!
+  paymentMethodId: String!
+}
+
 input CreateSalonInput {
   salon_name: String!
   email: String!
   cellphone: String!
   main_picture: String
   wallpaper: String
-  image_gallery: [String!]
+  image_gallery: [JSON!]
   description: String!
-  location: JSON!
   schedule: [JSON!]!
   size: Float
 }
@@ -230,9 +243,8 @@ input UpdateSalonInput {
   cellphone: String
   main_picture: String
   wallpaper: String
-  image_gallery: [String!]
+  image_gallery: [JSON!]
   description: String
-  location: JSON
   schedule: [JSON!]
   size: Float
 }
@@ -258,12 +270,14 @@ input UpdateServiceInput {
 }
 
 input CreateAppointmentInput {
-  date: DateTime!
-  services_ids: [String!]
+  start: DateTime!
+  end: DateTime!
+  services_ids: [String!]!
 }
 
 input UpdateAppointmentInput {
-  date: DateTime
+  start: DateTime
+  end: DateTime
   services_ids: [String!]
 }
 

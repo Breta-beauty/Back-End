@@ -1,14 +1,17 @@
 import { Resolver, Mutation, Args } from '@nestjs/graphql';
-import { PaymentsService } from './payments.service';
+
 import { Payment } from './entities/payment.entity';
+
+import { PaymentsService } from './payments.service';
+
 import { StripeChargeInput } from './dto/stripe-charge.input';
-import { CreatePaymentInput } from './dto/create-payment.input';
+import { PaymentResponse } from './dto/payment.response';
 
 @Resolver(() => Payment)
 export class PaymentsResolver {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @Mutation()
+  @Mutation(() => PaymentResponse)
   stripeCharge(
     @Args('stripe_customer_id') stripeCustomerID: string,
     @Args('stripeChargeInput') stripeChargeInput: StripeChargeInput,
@@ -18,12 +21,5 @@ export class PaymentsResolver {
       stripeChargeInput.paymentMethodId,
       stripeCustomerID,
     );
-  }
-
-  @Mutation()
-  middlewareTest(
-    @Args('createPaymentInput') createPaymentInput: CreatePaymentInput,
-  ) {
-    return createPaymentInput;
   }
 }

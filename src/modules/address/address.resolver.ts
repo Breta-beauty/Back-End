@@ -38,7 +38,7 @@ export class AddressResolver {
   }
 
   @Mutation(() => Address)
-  removeAddress(@Args('id', { type: () => ID }) id: number) {
-    return this.addressService.remove(id);
+  removeAddress(@Args('address_id', { type: () => ID }) address_id: number) {
+    return this.addressService.remove(address_id);
   }
 }

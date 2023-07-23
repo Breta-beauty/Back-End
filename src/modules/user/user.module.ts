@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
 import { EmailModule } from '../email/email.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProfileModule } from '../profile/profile.module';
@@ -10,15 +9,17 @@ import { Profile } from '../profile/entities/profile.entity';
 import { UserService } from './user.service';
 
 import { UserResolver } from './user.resolver';
+import { PaymentsModule } from '../payments/payments.module';
+import { HashService } from 'src/services/hash.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Profile]),
     EmailModule,
-    JwtModule,
     ProfileModule,
+    PaymentsModule,
   ],
-  providers: [UserResolver, UserService],
+  providers: [UserResolver, UserService, HashService],
   exports: [UserService],
 })
 export class UserModule {}
