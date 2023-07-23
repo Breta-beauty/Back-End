@@ -35,7 +35,7 @@ export class PaymentsService {
     paymentMethodId: string,
     stripeCustomerId: string,
   ) {
-    return this.stripe.paymentIntents.create({
+    return await this.stripe.paymentIntents.create({
       amount,
       customer: stripeCustomerId,
       payment_method: paymentMethodId,
