@@ -68,7 +68,7 @@ export class SalonService {
   async findOne(salon_id: number) {
     const salon = await this.salonRepo.findOne({
       where: { salon_id },
-      relations: { services: true, ratings: true, owner: true },
+      relations: { services: true, ratings: true, owner: true, address: true },
     });
 
     if (!salon) throw new NotFoundException(['No se encontró el salón']);
