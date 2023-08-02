@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import Stripe from 'stripe';
+import { StripeChargeInput } from './dto/stripe-charge.input';
 
 @Injectable()
 export class PaymentsService {
@@ -31,16 +32,16 @@ export class PaymentsService {
   }
 
   public async stripeCharge(
-    amount: number,
-    paymentMethodId: string,
     stripeCustomerId: string,
+    stripeChargeInput: StripeChargeInput,
   ) {
-    return await this.stripe.paymentIntents.create({
-      amount,
+    const paymentIntent = await this.stripe.paymentIntents.create({
+      amount: stripeChargeInput.amount,
       customer: stripeCustomerId,
-      payment_method: paymentMethodId,
-      currency: this.configService.get('STRIPE_CURRENCY'),
-      confirm: true,
+      payment_method_types: stripeChargeInput.paymentMethodTypes,
+      currency: stripeChargeInput.currency,
     });
+
+    return { clientSecret: paymentIntent.client_secret };
   }
 }

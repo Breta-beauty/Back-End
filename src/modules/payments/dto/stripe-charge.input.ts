@@ -1,5 +1,5 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
-import { IsNumber, IsString } from 'class-validator';
+import { IsArray, IsNumber } from 'class-validator';
 
 @InputType()
 export class StripeChargeInput {
@@ -7,7 +7,10 @@ export class StripeChargeInput {
   @IsNumber()
   amount: number;
 
+  @Field(() => [String])
+  @IsArray()
+  paymentMethodTypes: string[];
+
   @Field()
-  @IsString()
-  paymentMethodId: string;
+  currency: string;
 }

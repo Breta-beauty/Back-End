@@ -73,8 +73,16 @@ type Appointment {
   appointment_id: ID!
   start: DateTime!
   end: DateTime!
+  is_active: Boolean
+  status: String
   subscriber: Profile!
   services: [Service!]!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Notification {
+  profile: [Profile!]!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -88,6 +96,7 @@ type Profile {
   user: User!
   salons: [Salon!]!
   rates: [Rating!]!
+  notifications: [Notification!]!
   appointments: [Appointment!]!
   created_at: DateTime!
   updated_at: DateTime!
@@ -125,6 +134,8 @@ type Query {
   services: [Service!]!
   service(service_id: ID!): Service!
   appointment(id: ID!): Appointment!
+  notifications: [Notification!]!
+  notification(notification_id: ID!): Notification!
   ratings: [Rating!]!
   rating(rating_id: Int!): Rating!
   addresses: [Address!]!
@@ -145,7 +156,7 @@ type Mutation {
   updateProfile(user_id: ID!, updateProfileInput: UpdateProfileInput!): Profile!
   addToGallery(galleryInput: GalleryInput!): Profile!
   removeProfile(user_id: ID!): Profile!
-  stripeCharge(stripe_customer_id: String!, stripeChargeInput: StripeChargeInput!): JSON!
+  stripeCharge(stripe_customer_id: String!, stripeChargeInput: StripeChargeInput!): String!
   createSalon(user_id: ID!, createSalonInput: CreateSalonInput!): Salon!
   updateSalon(salon_id: ID!, updateSalonInput: UpdateSalonInput!): Salon!
   removeSalon(salon_id: ID!): Salon!
@@ -155,6 +166,9 @@ type Mutation {
   createAppointment(profile_id: String!, createAppointmentInput: CreateAppointmentInput!): Appointment!
   updateAppointment(profile_id: ID!, updateAppointmentInput: UpdateAppointmentInput!): Appointment!
   removeAppointment(appointment_id: ID!): Appointment!
+  createNotification(profile_id: ID!, createNotificationInput: CreateNotificationInput!): Notification!
+  updateNotification(notification_id: Float!, updateNotificationInput: UpdateNotificationInput!): Notification!
+  removeNotification(notification_id: ID!): Notification!
   createRating(user_id: String!, salon_id: Float!, createRatingInput: CreateRatingInput!): Rating!
   updateRating(rating_id: ID!, updateRatingInput: UpdateRatingInput!): Rating!
   removeRating(rating_id: ID!): Rating!
@@ -215,7 +229,8 @@ input GalleryInput {
 
 input StripeChargeInput {
   amount: Int!
-  paymentMethodId: String!
+  paymentMethodTypes: [String!]!
+  currency: String!
 }
 
 input CreateSalonInput {
@@ -272,6 +287,14 @@ input UpdateAppointmentInput {
   start: DateTime
   end: DateTime
   services_ids: [String!]
+}
+
+input CreateNotificationInput {
+  message: String!
+}
+
+input UpdateNotificationInput {
+  message: String
 }
 
 input CreateRatingInput {

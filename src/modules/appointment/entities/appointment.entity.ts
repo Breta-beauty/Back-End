@@ -28,6 +28,14 @@ export class Appointment {
   @Column('timestamp')
   end: Date;
 
+  @Field({ nullable: true })
+  @Column('boolean', { default: false })
+  is_active: boolean;
+
+  @Field({ nullable: true })
+  @Column('varchar', { default: 'undetermined' })
+  status: 'accepted' | 'rejected' | 'undetermined';
+
   @Field(() => Profile)
   @ManyToOne(() => Profile, (profile) => profile.appointments)
   @JoinColumn({ name: 'subscriber' })

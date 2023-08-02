@@ -12,6 +12,7 @@ import { Profile } from '../profile/entities/profile.entity';
 import { CreateAppointmentInput } from './dto/create-appointment.input';
 import { UpdateAppointmentInput } from './dto/update-appointment.input';
 import { Service } from '../services/entities/service.entity';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class AppointmentService {
@@ -22,6 +23,7 @@ export class AppointmentService {
     private profileRepo: Repository<Profile>,
     @InjectRepository(Service)
     private servicesRepo: Repository<Service>,
+    private notificationsService: NotificationsService,
   ) {}
 
   async create(
@@ -79,13 +81,21 @@ export class AppointmentService {
     appointment_id: number,
     updateAppointmentInput: UpdateAppointmentInput,
   ) {
-    const appointment = await this.appointmentRepo.findOneBy({
-      appointment_id,
+    const appointment = await this.appointmentRepo.findOne({
+      relations: { subscriber: true },
+      where: { appointment_id },
     });
 
     if (!appointment) throw new BadRequestException(['Cita equivocada']);
 
     this.appointmentRepo.merge(appointment, updateAppointmentInput);
+
+    if (appointment.status === 'rejected') {
+      this.notificationsService.create(appointment.subscriber.profile_id, {
+        message: 'Tú cita fue rechazada',
+      });
+      return this.remove(appointment.appointment_id);
+    }
 
     return this.appointmentRepo.save(appointment);
   }

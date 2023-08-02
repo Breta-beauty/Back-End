@@ -3,6 +3,7 @@ import { Appointment } from 'src/modules/appointment/entities/appointment.entity
 import { Rating } from 'src/modules/rating/entities/rating.entity';
 import { Salon } from 'src/modules/salon/entities/salon.entity';
 import { User } from 'src/modules/user/entities/user.entity';
+import { Notification } from 'src/modules/notifications/entities/notification.entity';
 import {
   Column,
   CreateDateColumn,
@@ -47,6 +48,10 @@ export class Profile {
   @Field(() => [Rating])
   @OneToMany(() => Rating, (rating) => rating.user)
   rates: Rating[];
+
+  @Field(() => [Notification])
+  @OneToMany(() => Notification, (notification) => notification.profile)
+  notifications: Notification[];
 
   @Field(() => [Appointment])
   @OneToMany(() => Appointment, (appointment) => appointment.subscriber, {

@@ -15,6 +15,7 @@ import { ServicesModule } from './modules/services/services.module';
 import { DatabaseModule } from './modules/database/database.module';
 import { PaymentsModule } from './modules/payments/payments.module';
 import { AppointmentModule } from './modules/appointment/appointment.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 import { AppController } from './app.controller';
 
@@ -66,6 +67,7 @@ import { join } from 'path';
     RatingModule,
     AddressModule,
     PaymentsModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
