@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 
 import { Payment } from './entities/payment.entity';
 
@@ -19,5 +19,10 @@ export class PaymentsResolver {
       stripeCustomerId,
       stripeChargeInput,
     );
+  }
+
+  @Query(() => String)
+  stripePublishableKey() {
+    return this.paymentsService.getStripePublishableKey();
   }
 }

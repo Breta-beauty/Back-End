@@ -14,6 +14,10 @@ export class PaymentsService {
     });
   }
 
+  public async getStripePublishableKey() {
+    return this.configService.get('STRIPE_PUBLISHABLE_KEY');
+  }
+
   public async createStripeCustomer(
     name: string,
     email: string,
