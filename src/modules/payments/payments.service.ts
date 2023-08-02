@@ -40,12 +40,12 @@ export class PaymentsService {
     stripeChargeInput: StripeChargeInput,
   ) {
     const paymentIntent = await this.stripe.paymentIntents.create({
-      amount: stripeChargeInput.amount,
+      amount: stripeChargeInput.amount * 100,
       customer: stripeCustomerId,
       payment_method_types: stripeChargeInput.paymentMethodTypes,
       currency: stripeChargeInput.currency,
     });
 
-    return { clientSecret: paymentIntent.client_secret };
+    return paymentIntent.client_secret;
   }
 }

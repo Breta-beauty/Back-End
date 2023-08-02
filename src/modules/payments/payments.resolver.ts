@@ -11,7 +11,7 @@ export class PaymentsResolver {
   constructor(private readonly paymentsService: PaymentsService) {}
 
   @Mutation(() => String)
-  stripeCharge(
+  clientSecret(
     @Args('stripe_customer_id') stripeCustomerId: string,
     @Args('stripeChargeInput') stripeChargeInput: StripeChargeInput,
   ) {
