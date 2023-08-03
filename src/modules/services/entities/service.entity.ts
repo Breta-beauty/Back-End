@@ -51,6 +51,10 @@ export class Service {
   @Column('jsonb')
   timespan: object;
 
+  @Field(() => Boolean, { nullable: true })
+  @Column('boolean', { default: false })
+  paid: boolean;
+
   @Field(() => Salon)
   @ManyToOne(() => Salon, (salon) => salon.services)
   @JoinColumn({ name: 'salon_id' })

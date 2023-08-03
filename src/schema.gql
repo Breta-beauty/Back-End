@@ -37,14 +37,15 @@ type Salon {
   cellphone: String!
   main_picture: String!
   wallpaper: String!
-  image_gallery: [JSON!]!
+  image_gallery: [JSON!]
   description: String!
   schedule: [JSON!]!
   size: Float!
-  address: Address!
-  services: [Service!]!
+  address: Address
+  services: [Service!]
   owner: Profile!
-  ratings: [Rating!]!
+  ratings: [Rating!]
+  customers: [Profile!]
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -63,6 +64,7 @@ type Service {
   price: Float!
   cancellation: JSON!
   timespan: JSON!
+  paid: Boolean
   salon: Salon!
   appointments: [Appointment!]!
   created_at: DateTime!
@@ -97,6 +99,7 @@ type Profile {
   salons: [Salon!]!
   rates: [Rating!]!
   notifications: [Notification!]!
+  has_purchased_in: [Salon!]!
   appointments: [Appointment!]!
   created_at: DateTime!
   updated_at: DateTime!
@@ -123,6 +126,11 @@ type LoginResponse {
   user: User
 }
 
+type Client {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
   users: [User!]!
   user(user_id: String!): User
@@ -134,13 +142,15 @@ type Query {
   salon(salon_id: Int!): Salon!
   services: [Service!]!
   service(service_id: ID!): Service!
-  appointment(id: ID!): Appointment!
+  appointments: [Appointment!]!
+  appointment(appointment_id: ID!): Appointment!
   notifications: [Notification!]!
   notification(notification_id: ID!): Notification!
   ratings: [Rating!]!
   rating(rating_id: Int!): Rating!
   addresses: [Address!]!
   address(address_id: ID!): Address!
+  client(id: Int!): Client!
 }
 
 input FindByInput {
@@ -165,7 +175,7 @@ type Mutation {
   updateService(service_id: ID!, updateServiceInput: UpdateServiceInput!): Service!
   removeService(service_id: ID!): Service!
   createAppointment(profile_id: String!, createAppointmentInput: CreateAppointmentInput!): Appointment!
-  updateAppointment(profile_id: ID!, updateAppointmentInput: UpdateAppointmentInput!): Appointment!
+  updateAppointment(appointment_id: ID!, updateAppointmentInput: UpdateAppointmentInput!): Appointment!
   removeAppointment(appointment_id: ID!): Appointment!
   createNotification(profile_id: ID!, createNotificationInput: CreateNotificationInput!): Notification!
   updateNotification(notification_id: Float!, updateNotificationInput: UpdateNotificationInput!): Notification!
@@ -176,6 +186,9 @@ type Mutation {
   createAddress(salon_id: Float!, createAddressInput: CreateAddressInput!): Address!
   updateAddress(address_id: ID!, updateAddressInput: UpdateAddressInput!): Address!
   removeAddress(address_id: ID!): Address!
+  createClient(createClientInput: CreateClientInput!): Client!
+  updateClient(updateClientInput: UpdateClientInput!): Client!
+  removeClient(id: Int!): Client!
 }
 
 input CreateUserInput {
@@ -288,6 +301,7 @@ input UpdateAppointmentInput {
   start: DateTime
   end: DateTime
   services_ids: [String!]
+  status: String
 }
 
 input CreateNotificationInput {
@@ -324,4 +338,15 @@ input UpdateAddressInput {
   postal_code: Float
   exterior_number: Float
   interior_number: Float
+}
+
+input CreateClientInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateClientInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }

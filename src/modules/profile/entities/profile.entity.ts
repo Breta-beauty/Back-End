@@ -8,6 +8,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -52,6 +53,10 @@ export class Profile {
   @Field(() => [Notification])
   @OneToMany(() => Notification, (notification) => notification.profile)
   notifications: Notification[];
+
+  @Field(() => [Salon])
+  @ManyToMany(() => Salon, (salon) => salon.customers)
+  has_purchased_in: Salon[];
 
   @Field(() => [Appointment])
   @OneToMany(() => Appointment, (appointment) => appointment.subscriber, {

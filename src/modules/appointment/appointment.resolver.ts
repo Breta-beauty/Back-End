@@ -20,19 +20,19 @@ export class AppointmentResolver {
     return this.appointmentService.create(profile_id, createAppointmentInput);
   }
 
-  @Query(() => [Appointment], { name: 'appointment' })
+  @Query(() => [Appointment], { name: 'appointments' })
   findAll() {
     return this.appointmentService.findAll();
   }
 
   @Query(() => Appointment, { name: 'appointment' })
-  findOne(@Args('id', { type: () => ID }) id: number) {
+  findOne(@Args('appointment_id', { type: () => ID }) id: number) {
     return this.appointmentService.findOne(id);
   }
 
   @Mutation(() => Appointment)
   updateAppointment(
-    @Args('profile_id', { type: () => ID }) appointment_id: number,
+    @Args('appointment_id', { type: () => ID }) appointment_id: number,
     @Args('updateAppointmentInput')
     updateAppointmentInput: UpdateAppointmentInput,
   ) {

@@ -26,6 +26,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import * as Joi from '@hapi/joi';
 
 import { join } from 'path';
+import { ClientModule } from './modules/client/client.module';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { join } from 'path';
     AddressModule,
     PaymentsModule,
     NotificationsModule,
+    ClientModule,
   ],
   controllers: [AppController],
   providers: [AppService],

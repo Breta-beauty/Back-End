@@ -17,6 +17,8 @@ import {
   Entity,
   Index,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -59,7 +61,7 @@ export class Salon {
   })
   wallpaper: string;
 
-  @Field(() => [GraphQLJSON])
+  @Field(() => [GraphQLJSON], { nullable: true })
   @Column('json', { nullable: true })
   image_gallery: object[];
 
@@ -72,15 +74,15 @@ export class Salon {
   schedule: object[];
 
   @Field(() => Float)
-  @Column('float', { nullable: true, default: 1 })
+  @Column('float', { default: 1 })
   size: number;
 
-  @Field(() => Address)
+  @Field(() => Address, { nullable: true })
   @OneToOne(() => Address, (address) => address.salon)
   @JoinColumn({ name: 'address' })
   address: Address;
 
-  @Field(() => [Service])
+  @Field(() => [Service], { nullable: true })
   @OneToMany(() => Service, (service) => service.salon, { cascade: true })
   services: Service[];
 
@@ -89,9 +91,14 @@ export class Salon {
   @JoinColumn({ name: 'owner' })
   owner: Profile;
 
-  @Field(() => [Rating])
+  @Field(() => [Rating], { nullable: true })
   @OneToMany(() => Rating, (rating) => rating.salon, { cascade: true })
   ratings: Rating[];
+
+  @Field(() => [Profile], { nullable: true })
+  @ManyToMany(() => Profile, (profile) => profile.has_purchased_in)
+  @JoinTable({ name: 'customers' })
+  customers: Profile[];
 
   @Field(() => GraphQLISODateTime)
   @CreateDateColumn({

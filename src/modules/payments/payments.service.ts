@@ -48,4 +48,8 @@ export class PaymentsService {
 
     return paymentIntent.client_secret;
   }
+
+  public async cancelCharge(paymentIntentId: string) {
+    return this.stripe.paymentIntents.cancel(paymentIntentId);
+  }
 }
