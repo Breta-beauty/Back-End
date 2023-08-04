@@ -36,7 +36,7 @@ export class Salon {
   salon_id: number;
 
   @Field()
-  @Index({ unique: true })
+  @Index()
   @Column('varchar')
   salon_name: string;
 
