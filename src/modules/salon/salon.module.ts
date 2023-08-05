@@ -7,9 +7,10 @@ import { User } from '../user/entities/user.entity';
 import { SalonService } from './salon.service';
 
 import { SalonResolver } from './salon.resolver';
+import { AddressModule } from '../address/address.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Salon, User])],
+  imports: [TypeOrmModule.forFeature([Salon, User]), AddressModule],
   providers: [SalonResolver, SalonService],
   exports: [SalonService],
 })

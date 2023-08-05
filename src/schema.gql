@@ -140,6 +140,8 @@ type Query {
   salons: [Salon!]!
   findSalonsBy(findByInput: FindByInput!): [Salon!]!
   salon(salon_id: Int!): Salon!
+  addresses: [Address!]!
+  address(address_id: ID!): Address!
   services: [Service!]!
   service(service_id: ID!): Service!
   appointments: [Appointment!]!
@@ -148,8 +150,6 @@ type Query {
   notification(notification_id: ID!): Notification!
   ratings: [Rating!]!
   rating(rating_id: Int!): Rating!
-  addresses: [Address!]!
-  address(address_id: ID!): Address!
   client(id: Int!): Client!
 }
 
@@ -168,9 +168,12 @@ type Mutation {
   addToGallery(galleryInput: GalleryInput!): Profile!
   removeProfile(user_id: ID!): Profile!
   clientSecret(stripe_customer_id: String!, stripeChargeInput: StripeChargeInput!): String!
-  createSalon(user_id: ID!, createSalonInput: CreateSalonInput!): Salon!
-  updateSalon(salon_id: ID!, updateSalonInput: UpdateSalonInput!): Salon!
+  createSalon(user_id: ID!, createSalonInput: CreateSalonInput!, createAddressInput: CreateAddressInput): Salon!
+  updateSalon(salon_id: ID!, updateSalonInput: UpdateSalonInput!, updateAddressInput: UpdateAddressInput): Salon!
   removeSalon(salon_id: ID!): Salon!
+  createAddress(salon_id: Float!, createAddressInput: CreateAddressInput!): Address!
+  updateAddress(address_id: ID!, updateAddressInput: UpdateAddressInput!): Address!
+  removeAddress(address_id: ID!): Address!
   createService(salon_id: ID!, createServiceInput: CreateServiceInput!): Service!
   updateService(service_id: ID!, updateServiceInput: UpdateServiceInput!): Service!
   removeService(service_id: ID!): Service!
@@ -183,9 +186,6 @@ type Mutation {
   createRating(user_id: String!, salon_id: Float!, createRatingInput: CreateRatingInput!): Rating!
   updateRating(rating_id: ID!, updateRatingInput: UpdateRatingInput!): Rating!
   removeRating(rating_id: ID!): Rating!
-  createAddress(salon_id: Float!, createAddressInput: CreateAddressInput!): Address!
-  updateAddress(address_id: ID!, updateAddressInput: UpdateAddressInput!): Address!
-  removeAddress(address_id: ID!): Address!
   createClient(createClientInput: CreateClientInput!): Client!
   updateClient(updateClientInput: UpdateClientInput!): Client!
   removeClient(id: Int!): Client!
@@ -259,6 +259,15 @@ input CreateSalonInput {
   size: Float
 }
 
+input CreateAddressInput {
+  country: String
+  city: String!
+  street: String!
+  postal_code: Float!
+  exterior_number: Float!
+  interior_number: Float
+}
+
 input UpdateSalonInput {
   salon_name: String
   email: String
@@ -269,6 +278,15 @@ input UpdateSalonInput {
   description: String
   schedule: [JSON!]
   size: Float
+}
+
+input UpdateAddressInput {
+  country: String
+  city: String
+  street: String
+  postal_code: Float
+  exterior_number: Float
+  interior_number: Float
 }
 
 input CreateServiceInput {
@@ -320,24 +338,6 @@ input CreateRatingInput {
 input UpdateRatingInput {
   score: Int
   comment: String
-}
-
-input CreateAddressInput {
-  country: String
-  city: String!
-  street: String!
-  postal_code: Float!
-  exterior_number: Float!
-  interior_number: Float
-}
-
-input UpdateAddressInput {
-  country: String
-  city: String
-  street: String
-  postal_code: Float
-  exterior_number: Float
-  interior_number: Float
 }
 
 input CreateClientInput {

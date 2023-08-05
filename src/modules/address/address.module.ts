@@ -11,5 +11,6 @@ import { AddressResolver } from './address.resolver';
 @Module({
   imports: [TypeOrmModule.forFeature([Address, Salon])],
   providers: [AddressResolver, AddressService],
+  exports: [AddressService],
 })
 export class AddressModule {}
