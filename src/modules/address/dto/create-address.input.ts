@@ -1,31 +1,22 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 @InputType()
 export class CreateAddressInput {
-  @Field({ nullable: true })
-  @IsString()
-  @IsOptional()
-  country: string;
+  @Field(() => String, { nullable: true })
+  country?: string;
 
-  @Field()
-  @IsString()
+  @Field(() => String)
   city: string;
 
-  @Field()
-  @IsString()
+  @Field(() => String)
   street: string;
 
-  @Field()
-  @IsNumber()
+  @Field(() => Number)
   postal_code: number;
 
-  @Field()
-  @IsNumber()
+  @Field(() => Number)
   exterior_number: number;
 
-  @Field({ nullable: true })
-  @IsNumber()
-  @IsOptional()
+  @Field(() => Number, { nullable: true })
   interior_number: number;
 }

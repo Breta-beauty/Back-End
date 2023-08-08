@@ -168,7 +168,7 @@ type Mutation {
   addToGallery(galleryInput: GalleryInput!): Profile!
   removeProfile(user_id: ID!): Profile!
   clientSecret(stripe_customer_id: String!, stripeChargeInput: StripeChargeInput!): String!
-  createSalon(user_id: ID!, createSalonInput: CreateSalonInput!, createAddressInput: CreateAddressInput): Salon!
+  createSalon(user_id: ID!, createSalonInput: CreateSalonInput!, createAddressInput: CreateAddressInput = null): Salon!
   updateSalon(salon_id: ID!, updateSalonInput: UpdateSalonInput!, updateAddressInput: UpdateAddressInput): Salon!
   removeSalon(salon_id: ID!): Salon!
   createAddress(salon_id: Float!, createAddressInput: CreateAddressInput!): Address!

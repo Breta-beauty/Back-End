@@ -18,8 +18,8 @@ export class SalonResolver {
   createSalon(
     @Args('user_id', { type: () => ID }) user_id: string,
     @Args('createSalonInput') createSalonInput: CreateSalonInput,
-    @Args('createAddressInput', { nullable: true })
-    createAddressInput: CreateAddressInput,
+    @Args('createAddressInput', { nullable: true, defaultValue: null })
+    createAddressInput?: CreateAddressInput | null,
   ) {
     return this.salonService.create(
       user_id,

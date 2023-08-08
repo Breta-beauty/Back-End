@@ -9,22 +9,23 @@ import { CreateSalonInput } from './dto/create-salon.input';
 import { UpdateSalonInput } from './dto/update-salon.input';
 import { FindByInput } from './dto/findBy.input';
 import { CreateAddressInput } from '../address/dto/create-address.input';
-import { Address } from '../address/entities/address.entity';
 import { AddressService } from '../address/address.service';
 import { UpdateAddressInput } from '../address/dto/update-address.input';
+import { Address } from '../address/entities/address.entity';
 
 @Injectable()
 export class SalonService {
   constructor(
     @InjectRepository(Salon) private salonRepo: Repository<Salon>,
     @InjectRepository(User) private userRepo: Repository<User>,
+    @InjectRepository(Address) private addressRepo: Repository<Address>,
     private addressService: AddressService,
   ) {}
 
   async create(
     user_id: string,
     createSalonInput: CreateSalonInput,
-    createAddressInput?: CreateAddressInput,
+    createAddressInput?: CreateAddressInput | null,
   ) {
     const user = await this.userRepo.findOne({
       where: { user_id },
@@ -39,7 +40,8 @@ export class SalonService {
     newSalon.owner = profile;
 
     if (createAddressInput) {
-      this.addressService.create(newSalon.salon_id, createAddressInput);
+      const newAddress = this.addressRepo.create(createAddressInput);
+      newAddress.salon = newSalon;
     }
 
     return this.salonRepo.save(newSalon);
