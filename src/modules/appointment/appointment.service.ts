@@ -43,7 +43,7 @@ export class AppointmentService {
       where: { service_id: In(createAppointmentInput.services_ids) },
     });
 
-    if (services.length === 0) {
+    if (!services || services.length === 0) {
       throw new BadRequestException([
         'Selecciona por lo menos un servicio valido',
       ]);

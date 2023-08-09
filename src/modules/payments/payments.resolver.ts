@@ -10,6 +10,11 @@ import { StripeChargeInput } from './dto/stripe-charge.input';
 export class PaymentsResolver {
   constructor(private readonly paymentsService: PaymentsService) {}
 
+  @Query(() => String)
+  stripePublishableKey() {
+    return this.paymentsService.getStripePublishableKey();
+  }
+
   @Mutation(() => String)
   clientSecret(
     @Args('stripe_customer_id') stripeCustomerId: string,
@@ -21,8 +26,8 @@ export class PaymentsResolver {
     );
   }
 
-  @Query(() => String)
-  stripePublishableKey() {
-    return this.paymentsService.getStripePublishableKey();
+  @Mutation(() => String)
+  cancelStripeCharge(@Args('paymentIntentId') paymentIntentId: string) {
+    return this.paymentsService.cancelStripeCharge(paymentIntentId);
   }
 }
