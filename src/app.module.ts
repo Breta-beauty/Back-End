@@ -27,6 +27,8 @@ import * as Joi from '@hapi/joi';
 
 import { join } from 'path';
 import { ClientModule } from './modules/client/client.module';
+import { EmployeesModule } from './modules/employees/employees.module';
+import { RoleModule } from './modules/role/role.module';
 
 @Module({
   imports: [
@@ -70,6 +72,8 @@ import { ClientModule } from './modules/client/client.module';
     PaymentsModule,
     NotificationsModule,
     ClientModule,
+    EmployeesModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

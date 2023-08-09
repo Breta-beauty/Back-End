@@ -30,6 +30,27 @@ type Address {
   updated_at: DateTime!
 }
 
+type Employee {
+  employee_id: Float!
+  profile_picture: String!
+  employee_name: String!
+  cellphone: String!
+  email: String!
+  role: [Roles!]!
+  salon: Salon!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Roles {
+  role_id: Float!
+  role_name: String!
+  employee: Employee
+  salon: Salon!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
 type Salon {
   salon_id: ID!
   salon_name: String!
@@ -47,6 +68,8 @@ type Salon {
   ratings: [Rating!]
   customers: [Profile!]
   appointments: [Appointment!]!
+  employee: [Employee!]!
+  roles: [Roles!]!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -153,6 +176,9 @@ type Query {
   ratings: [Rating!]!
   rating(rating_id: Int!): Rating!
   client(id: Int!): Client!
+  employees: [Employee!]!
+  employee(employee_id: Int!): Employee!
+  roles(role_id: Int!): Roles!
 }
 
 input FindByInput {
@@ -191,6 +217,12 @@ type Mutation {
   createClient(createClientInput: CreateClientInput!): Client!
   updateClient(updateClientInput: UpdateClientInput!): Client!
   removeClient(id: Int!): Client!
+  createEmployee(salon_id: Float!, role_name: String!, createRatingInput: CreateEmployeeInput!): Employee!
+  updateEmployee(employee_id: ID!, updateEmployeeInput: UpdateEmployeeInput!): Employee!
+  removeEmployee(employee_id: ID!): Employee!
+  createRole(salon_id: Float!, createRoleInput: CreateRoleInput!): Roles!
+  updateRole(role_id: ID!, updateRoleInput: UpdateRoleInput!): Roles!
+  remove(role_id: ID!): Roles!
 }
 
 input CreateUserInput {
@@ -353,4 +385,26 @@ input UpdateClientInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
+}
+
+input CreateEmployeeInput {
+  employee_name: String!
+  profile_picture: String!
+  email: String!
+  cellphone: String!
+}
+
+input UpdateEmployeeInput {
+  employee_name: String
+  profile_picture: String
+  email: String
+  cellphone: String
+}
+
+input CreateRoleInput {
+  role_name: String!
+}
+
+input UpdateRoleInput {
+  role_name: String
 }

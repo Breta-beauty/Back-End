@@ -28,6 +28,8 @@ import {
 import { Rating } from 'src/modules/rating/entities/rating.entity';
 import { Address } from 'src/modules/address/entities/address.entity';
 import { Appointment } from 'src/modules/appointment/entities/appointment.entity';
+import { Roles } from 'src/modules/role/entities/role.entity';
+import { Employee } from 'src/modules/employees/entities/employee.entity';
 
 @Entity({ name: 'salons' })
 @ObjectType()
@@ -104,6 +106,14 @@ export class Salon {
   @Field(() => [Appointment])
   @OneToMany(() => Appointment, (appointment) => appointment.salon)
   appointments: Appointment[];
+
+  @Field(() => [Employee])
+  @OneToMany(() => Employee, (employee) => employee.salon, { cascade: true })
+  employee: Employee[];
+
+  @Field(() => [Roles])
+  @OneToMany(() => Roles, (roles) => roles.salon, { cascade: true })
+  roles: Roles[];
 
   @Field(() => GraphQLISODateTime)
   @CreateDateColumn({
