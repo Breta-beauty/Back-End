@@ -5,6 +5,7 @@ import { Payment } from './entities/payment.entity';
 import { PaymentsService } from './payments.service';
 
 import { StripeChargeInput } from './dto/stripe-charge.input';
+import GraphQLJSON from 'graphql-type-json';
 
 @Resolver(() => Payment)
 export class PaymentsResolver {
@@ -26,7 +27,7 @@ export class PaymentsResolver {
     );
   }
 
-  @Mutation(() => String)
+  @Mutation(() => GraphQLJSON)
   cancelStripeCharge(@Args('paymentIntentId') paymentIntentId: string) {
     return this.paymentsService.cancelStripeCharge(paymentIntentId);
   }
