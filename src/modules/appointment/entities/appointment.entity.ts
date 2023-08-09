@@ -12,6 +12,7 @@ import {
 
 import { Service } from 'src/modules/services/entities/service.entity';
 import { Profile } from 'src/modules/profile/entities/profile.entity';
+import { Salon } from 'src/modules/salon/entities/salon.entity';
 
 @Entity({ name: 'appointments' })
 @ObjectType()
@@ -44,6 +45,11 @@ export class Appointment {
   @Field(() => [Service])
   @ManyToMany(() => Service, (service) => service.appointments)
   services: Service[];
+
+  @Field()
+  @ManyToOne(() => Salon, (salon) => salon.appointments)
+  @JoinColumn({ name: 'salon' })
+  salon: Salon;
 
   @Field(() => GraphQLISODateTime)
   @CreateDateColumn({

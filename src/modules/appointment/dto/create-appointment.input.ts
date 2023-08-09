@@ -1,4 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
+import { number } from 'joi';
 
 @InputType()
 export class CreateAppointmentInput {
@@ -10,4 +11,7 @@ export class CreateAppointmentInput {
 
   @Field(() => [String])
   services_ids: string[];
+
+  @Field(() => Number)
+  salon_id: number;
 }

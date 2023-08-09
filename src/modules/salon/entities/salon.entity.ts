@@ -27,6 +27,7 @@ import {
 } from 'typeorm';
 import { Rating } from 'src/modules/rating/entities/rating.entity';
 import { Address } from 'src/modules/address/entities/address.entity';
+import { Appointment } from 'src/modules/appointment/entities/appointment.entity';
 
 @Entity({ name: 'salons' })
 @ObjectType()
@@ -99,6 +100,10 @@ export class Salon {
   @ManyToMany(() => Profile, (profile) => profile.has_purchased_in)
   @JoinTable({ name: 'customers' })
   customers: Profile[];
+
+  @Field(() => [Appointment])
+  @OneToMany(() => Appointment, (appointment) => appointment.salon)
+  appointments: Appointment[];
 
   @Field(() => GraphQLISODateTime)
   @CreateDateColumn({

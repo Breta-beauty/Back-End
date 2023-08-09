@@ -13,6 +13,7 @@ import { CreateAppointmentInput } from './dto/create-appointment.input';
 import { UpdateAppointmentInput } from './dto/update-appointment.input';
 import { Service } from '../services/entities/service.entity';
 import { NotificationsService } from '../notifications/notifications.service';
+import { Salon } from '../salon/entities/salon.entity';
 
 @Injectable()
 export class AppointmentService {
@@ -23,6 +24,8 @@ export class AppointmentService {
     private profileRepo: Repository<Profile>,
     @InjectRepository(Service)
     private servicesRepo: Repository<Service>,
+    @InjectRepository(Salon)
+    private salonRepo: Repository<Salon>,
     private notificationsService: NotificationsService,
   ) {}
 
@@ -40,14 +43,21 @@ export class AppointmentService {
       where: { service_id: In(createAppointmentInput.services_ids) },
     });
 
-    if (!services) {
+    if (services.length === 0) {
       throw new BadRequestException([
         'Selecciona por lo menos un servicio valido',
       ]);
     }
 
+    const salon = await this.salonRepo.findOne({
+      where: { salon_id: createAppointmentInput.salon_id },
+    });
+
+    if (!salon) throw new BadRequestException(['Selecciona un salon valido']);
+
     const newAppointment = this.appointmentRepo.create(createAppointmentInput);
 
+    newAppointment.salon = salon;
     newAppointment.subscriber = profile;
     newAppointment.services = services;
 
@@ -55,9 +65,11 @@ export class AppointmentService {
   }
 
   async findAll() {
-    const appointments = await this.appointmentRepo.find();
+    const appointments = await this.appointmentRepo.find({
+      relations: { subscriber: true, services: true, salon: true },
+    });
 
-    if (!appointments) {
+    if (!appointments || appointments.length === 0) {
       throw new NotFoundException(['No se encontró ninguna cita']);
     }
 
@@ -67,7 +79,7 @@ export class AppointmentService {
   async findOne(appointment_id: number) {
     const appointment = await this.appointmentRepo.findOne({
       where: { appointment_id },
-      relations: { subscriber: true, services: true },
+      relations: { subscriber: true, services: true, salon: true },
     });
 
     if (!appointment) {

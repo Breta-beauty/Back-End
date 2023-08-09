@@ -46,6 +46,7 @@ type Salon {
   owner: Profile!
   ratings: [Rating!]
   customers: [Profile!]
+  appointments: [Appointment!]!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -79,6 +80,7 @@ type Appointment {
   status: String
   subscriber: Profile!
   services: [Service!]!
+  salon: Salon!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -313,12 +315,14 @@ input CreateAppointmentInput {
   start: DateTime!
   end: DateTime!
   services_ids: [String!]!
+  salon_id: Float!
 }
 
 input UpdateAppointmentInput {
   start: DateTime
   end: DateTime
   services_ids: [String!]
+  salon_id: Float
   status: String
 }
 

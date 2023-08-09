@@ -8,6 +8,8 @@ import {
   IsDate,
   IsOptional,
   IsPhoneNumber,
+  MinLength,
+  MaxLength,
 } from 'class-validator';
 
 @InputType()
@@ -19,9 +21,11 @@ export class CreateUserInput {
 
   @Field()
   @IsNotEmpty({ message: 'La contraseña no puede estar vacía.' })
-  @Length(8, 30, {
-    message:
-      'La contraseña no puede ser menor a 8 caracteres ni superior a 30.',
+  @MinLength(8, {
+    message: 'La contraseña no puede ser menor a 8 caracteres',
+  })
+  @MaxLength(30, {
+    message: 'La contraseña no puede ser mayor a 30 caracteres',
   })
   password: string;
 
