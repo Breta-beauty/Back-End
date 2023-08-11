@@ -11,12 +11,17 @@ export class CreateEmployeeInput {
   @Field()
   @IsString()
   @IsNotEmpty()
-  employee_name: string;
-
+  profile_picture: string;
+  
   @Field()
   @IsString()
   @IsNotEmpty()
-  profile_picture: string;
+  employee_name: string;
+
+  @Field()
+  @IsNotEmpty()
+  @IsPhoneNumber('MX')
+  cellphone: string;
 
   @Field()
   @IsEmail()
@@ -24,8 +29,18 @@ export class CreateEmployeeInput {
   email: string;
 
   @Field()
+  @IsString()
   @IsNotEmpty()
-  @IsPhoneNumber('MX')
-  cellphone: string;
+  commission: string;
+
+  @Field()
+  @IsString()
+  @IsNotEmpty()
+  paymentCycle: string;
+
+  @Field()
+  @IsString()
+  @IsNotEmpty()
+  payday: string;
 
 }

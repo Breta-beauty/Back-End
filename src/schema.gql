@@ -35,7 +35,10 @@ type Employee {
   profile_picture: String!
   employee_name: String!
   cellphone: String!
-  email: String!
+  email: String
+  commission: String!
+  paymentCycle: String!
+  payday: String!
   role: [Roles!]!
   salon: Salon!
   created_at: DateTime!
@@ -388,17 +391,23 @@ input UpdateClientInput {
 }
 
 input CreateEmployeeInput {
-  employee_name: String!
   profile_picture: String!
-  email: String!
+  employee_name: String!
   cellphone: String!
+  email: String!
+  commission: String!
+  paymentCycle: String!
+  payday: String!
 }
 
 input UpdateEmployeeInput {
-  employee_name: String
   profile_picture: String
-  email: String
+  employee_name: String
   cellphone: String
+  email: String
+  commission: String
+  paymentCycle: String
+  payday: String
 }
 
 input CreateRoleInput {

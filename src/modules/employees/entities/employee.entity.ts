@@ -5,7 +5,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToOne,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -30,9 +29,21 @@ export class Employee {
   @Column('varchar', { unique: true })
   cellphone: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Column('varchar', { unique: true })
   email: string;
+
+  @Field()
+  @Column('varchar')
+  commission: string;
+
+  @Field()
+  @Column('varchar')
+  paymentCycle: string;
+
+  @Field()
+  @Column('varchar')
+  payday: string;
 
   @Field(() => [Roles])
   @ManyToOne(() => Roles, (roles) => roles.employee)
