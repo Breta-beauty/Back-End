@@ -23,8 +23,6 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql';
 
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
-import * as Joi from '@hapi/joi';
-
 import { join } from 'path';
 import { ClientModule } from './modules/client/client.module';
 
@@ -45,13 +43,7 @@ import { ClientModule } from './modules/client/client.module';
       },
     }),
     ConfigModule.forRoot({
-      envFilePath: '.env',
       isGlobal: true,
-      validationSchema: Joi.object({
-        JWT_VERIFICATION_TOKEN_SECRET: Joi.string().required(),
-        JWT_VERIFICATION_TOKEN_EXPIRATION_TIME: Joi.string().required(),
-        EMAIL_CONFIRMATION_URL: Joi.string().required(),
-      }),
     }),
     ThrottlerModule.forRoot({
       ttl: 60,

@@ -11,6 +11,7 @@ import { UserService } from './user.service';
 import { UserResolver } from './user.resolver';
 import { PaymentsModule } from '../payments/payments.module';
 import { HashService } from 'src/services/hash.service';
+import { UserController } from './user.controller';
 
 @Module({
   imports: [
@@ -21,5 +22,6 @@ import { HashService } from 'src/services/hash.service';
   ],
   providers: [UserResolver, UserService, HashService],
   exports: [UserService],
+  controllers: [UserController],
 })
 export class UserModule {}

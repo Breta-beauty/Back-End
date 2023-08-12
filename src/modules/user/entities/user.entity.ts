@@ -32,11 +32,11 @@ export class User {
   email: string;
 
   @Field()
-  @Column('varchar')
+  @Column('varchar', { nullable: true })
   password: string;
 
   @Field()
-  @Column('varchar', { unique: true })
+  @Column('varchar', { unique: true, nullable: true })
   cellphone: string;
 
   @Field({ nullable: true })
@@ -49,7 +49,7 @@ export class User {
 
   @Field({ nullable: true })
   @Column('varchar', { default: 'customer' })
-  type: 'owner' | 'customer';
+  type: 'owner' | 'customer' = 'customer';
 
   @Field({ nullable: true })
   @Column('boolean', { default: false })

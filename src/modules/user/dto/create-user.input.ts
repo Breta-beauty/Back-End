@@ -3,7 +3,6 @@ import { InputType, Field } from '@nestjs/graphql';
 import {
   IsEmail,
   IsNotEmpty,
-  Length,
   IsString,
   IsDate,
   IsOptional,
@@ -31,10 +30,11 @@ export class CreateUserInput {
 
   @Field()
   @IsString()
+  @IsOptional()
   type: 'owner' | 'customer' = 'customer';
 
   @Field()
-  is_verified: true | false = false;
+  is_verified: true | false;
 
   @Field()
   @IsString()

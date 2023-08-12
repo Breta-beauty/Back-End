@@ -5,7 +5,7 @@ import { AuthService } from '../authn/auth.service';
 
 import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 
-import { UseGuards, UseInterceptors } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/guards/auth/jwt-auth.guard';
 
 import { LoginInput } from './dto/login.input';
@@ -60,7 +60,7 @@ export class UserResolver {
 
   @Mutation(() => LoginResponse, { name: 'login' })
   login(@Args('loginUserInput') loginUserInput: LoginInput) {
-    return this.authService.login(loginUserInput);
+    return this.authService.jwtLogin(loginUserInput);
   }
 
   @Mutation(() => User)
