@@ -1,9 +1,9 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { VerifyCallback } from 'passport-google-oauth20';
+import { InputType, Field } from '@nestjs/graphql';
+
+import { IsEmail, IsNotEmpty, IsString, IsOptional } from 'class-validator';
 
 @InputType()
-export class GoogleLoginInput {
+export class CreateOAuthUserInput {
   @Field()
   @IsEmail({}, { message: 'Debes introducir un correo valido.' })
   @IsNotEmpty({ message: 'El campo email no puede estar vacío.' })
@@ -21,6 +21,4 @@ export class GoogleLoginInput {
   @IsString()
   @IsOptional()
   profile_picture?: string;
-
-  done?: VerifyCallback;
 }

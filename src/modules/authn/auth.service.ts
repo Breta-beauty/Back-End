@@ -12,12 +12,12 @@ import { EmailConfirmationService } from '../email/email-confirmation.service';
 
 import { LoginInput } from '../user/dto/login.input';
 
-import { GoogleLoginInput } from '../user/dto/google.input';
-import { CreateGoogleUserInput } from '../user/dto/create-google-user.input';
+import { CreateOAuthUserInput } from '../user/dto/create-oauth-user.input';
 
 import { Request } from 'express';
 
 import * as bcrypt from 'bcrypt';
+import { OAuthLoginInput } from '../user/dto/oauth.input';
 
 @Injectable()
 export class AuthService {
@@ -30,8 +30,8 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async validateGoogleUser(
-    payload: Promise<GoogleLoginInput> | GoogleLoginInput | any,
+  async validateOAuthUser(
+    payload: Promise<OAuthLoginInput> | OAuthLoginInput | any,
   ): Promise<User> {
     const done = payload.done;
 
@@ -42,7 +42,7 @@ export class AuthService {
       return user;
     }
 
-    const data: CreateGoogleUserInput = {
+    const data: CreateOAuthUserInput = {
       email: payload.email,
       full_name: payload.full_name,
       is_verified: payload.is_verified,
@@ -112,9 +112,9 @@ export class AuthService {
     };
   }
 
-  async googleLogin(req: Request) {
+  async oauthLogin(req: Request) {
     const _user = await req.user;
-    const user = await this.validateGoogleUser(_user);
+    const user = await this.validateOAuthUser(_user);
 
     if (!user) {
       throw new BadRequestException(['No se entregó el usuario de google']);

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy, VerifyCallback } from 'passport-google-oauth20';
-import { GoogleLoginInput } from 'src/modules/user/dto/google.input';
+import { OAuthLoginInput } from 'src/modules/user/dto/oauth.input';
 
 const configService = new ConfigService();
 
@@ -32,7 +32,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       is_verified = true;
     }
 
-    const payload: GoogleLoginInput = {
+    const payload: OAuthLoginInput = {
       email: email,
       full_name: name,
       profile_picture: picture,

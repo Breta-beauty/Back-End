@@ -16,6 +16,7 @@ import { GoogleStrategy } from './strategy/google.strategy';
 const configService = new ConfigService();
 
 import { config } from 'dotenv';
+import { FacebookStrategy } from './strategy/facebook.strategy';
 config();
 
 @Global()
@@ -30,7 +31,7 @@ config();
       signOptions: { expiresIn: '4h' },
     }),
   ],
-  providers: [AuthService, JwtStrategy, GoogleStrategy],
+  providers: [AuthService, JwtStrategy, GoogleStrategy, FacebookStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}

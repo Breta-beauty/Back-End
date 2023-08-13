@@ -19,7 +19,6 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { ConfirmEmailInput } from '../email/dto/confirm-email.input';
 
 import { UpdateProfileInput } from '../profile/dto/update-profile.input';
-import { CreateGoogleUserInput } from './dto/create-google-user.input';
 
 @Injectable()
 export class UserService {
