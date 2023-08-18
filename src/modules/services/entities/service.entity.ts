@@ -2,6 +2,7 @@ import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
 import GraphQLJSON from 'graphql-type-json';
 import { Appointment } from 'src/modules/appointment/entities/appointment.entity';
 import { Salon } from 'src/modules/salon/entities/salon.entity';
+import { Employee } from 'src/modules/employees/entities/employee.entity';
 import {
   Column,
   CreateDateColumn,
@@ -11,6 +12,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -54,6 +56,10 @@ export class Service {
   @Field(() => Boolean, { nullable: true })
   @Column('boolean', { default: false })
   paid: boolean;
+
+  @Field(() => Employee, {nullable: true})
+  @OneToMany(() => Employee, (employee) => employee.service)
+  employee: Employee;
 
   @Field(() => Salon)
   @ManyToOne(() => Salon, (salon) => salon.services)

@@ -30,6 +30,31 @@ type Address {
   updated_at: DateTime!
 }
 
+type Employee {
+  employee_id: Float!
+  profile_picture: String!
+  employee_name: String!
+  cellphone: String!
+  email: String
+  commission: String!
+  paymentCycle: String!
+  payday: String!
+  role: Roles!
+  service: [Service!]!
+  salon: Salon!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Roles {
+  role_id: Float!
+  role_name: String!
+  employee: Employee
+  salon: Salon!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
 type Salon {
   salon_id: ID!
   salon_name: String!
@@ -47,6 +72,8 @@ type Salon {
   ratings: [Rating!]
   customers: [Profile!]
   appointments: [Appointment!]!
+  employee: [Employee!]!
+  roles: [Roles!]!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -66,6 +93,7 @@ type Service {
   cancellation: JSON!
   timespan: JSON!
   paid: Boolean
+  employee: Employee
   salon: Salon!
   appointments: [Appointment!]!
   created_at: DateTime!
@@ -153,6 +181,9 @@ type Query {
   ratings: [Rating!]!
   rating(rating_id: Int!): Rating!
   client(id: Int!): Client!
+  employees: [Employee!]!
+  employee(employee_id: Int!): Employee!
+  roles(role_id: Int!): Roles!
 }
 
 input FindByInput {
@@ -192,6 +223,12 @@ type Mutation {
   createClient(createClientInput: CreateClientInput!): Client!
   updateClient(updateClientInput: UpdateClientInput!): Client!
   removeClient(id: Int!): Client!
+  createEmployee(salon_id: Float!, role_name: String!, createEmployeeInput: CreateEmployeeInput!): Employee!
+  updateEmployee(employee_id: ID!, updateEmployeeInput: UpdateEmployeeInput!): Employee!
+  removeEmployee(employee_id: ID!): Employee!
+  createRole(salon_id: Float!, createRoleInput: CreateRoleInput!): Roles!
+  updateRole(role_id: ID!, updateRoleInput: UpdateRoleInput!): Roles!
+  remove(role_id: ID!): Roles!
 }
 
 input CreateUserInput {
@@ -355,4 +392,32 @@ input UpdateClientInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
+}
+
+input CreateEmployeeInput {
+  profile_picture: String!
+  employee_name: String!
+  cellphone: String!
+  email: String!
+  commission: String!
+  paymentCycle: String!
+  payday: String!
+}
+
+input UpdateEmployeeInput {
+  profile_picture: String
+  employee_name: String
+  cellphone: String
+  email: String
+  commission: String
+  paymentCycle: String
+  payday: String
+}
+
+input CreateRoleInput {
+  role_name: String!
+}
+
+input UpdateRoleInput {
+  role_name: String
 }
