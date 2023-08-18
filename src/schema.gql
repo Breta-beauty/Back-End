@@ -226,6 +226,7 @@ input UpdateProfileInput {
 input LoginInput {
   email: String!
   password: String!
+  remember_me: Boolean = false
 }
 
 input ConfirmEmailInput {

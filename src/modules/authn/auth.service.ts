@@ -11,13 +11,13 @@ import { PaymentsService } from '../payments/payments.service';
 import { EmailConfirmationService } from '../email/email-confirmation.service';
 
 import { LoginInput } from '../user/dto/login.input';
+import { OAuthLoginInput } from '../user/dto/oauth.input';
 
 import { CreateOAuthUserInput } from '../user/dto/create-oauth-user.input';
 
 import { Request } from 'express';
 
 import * as bcrypt from 'bcrypt';
-import { OAuthLoginInput } from '../user/dto/oauth.input';
 
 @Injectable()
 export class AuthService {
@@ -107,17 +107,19 @@ export class AuthService {
     };
 
     return {
-      access_token: this.jwtService.sign(_payload),
+      access_token: payload.remember_me
+        ? this.jwtService.sign(_payload, { expiresIn: '60d' })
+        : this.jwtService.sign(_payload, { expiresIn: '4h' }),
       user: user,
     };
   }
 
-  async oauthLogin(req: Request) {
+  async oauthLogin(req: Request, remember?: boolean) {
     const _user = await req.user;
     const user = await this.validateOAuthUser(_user);
 
     if (!user) {
-      throw new BadRequestException(['No se entregó el usuario de google']);
+      throw new BadRequestException(['No se entregó el usuario']);
     }
 
     const _payload = {
@@ -125,7 +127,9 @@ export class AuthService {
     };
 
     return {
-      access_token: this.jwtService.sign(_payload),
+      access_token: remember
+        ? this.jwtService.sign(_payload, { expiresIn: '60d' })
+        : this.jwtService.sign(_payload, { expiresIn: '4h' }),
       user: user,
     };
   }

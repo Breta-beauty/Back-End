@@ -1,4 +1,4 @@
-import { Controller, Get, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Request, UseGuards, Body } from '@nestjs/common';
 import { GoogleOAuthGuard } from 'src/guards/auth/google-oauth.guard';
 import { AuthService } from '../authn/auth.service';
 import { FacebookOAuthGuard } from 'src/guards/auth/facebook-oauth.guard';
@@ -15,8 +15,8 @@ export class UserController {
 
   @Get('google-redirect')
   @UseGuards(GoogleOAuthGuard)
-  googleAuthRedirect(@Request() req) {
-    return this.authService.oauthLogin(req);
+  googleAuthRedirect(@Request() req, @Body() remember?: boolean) {
+    return this.authService.oauthLogin(req, remember);
   }
 
   @Get('facebook-auth')

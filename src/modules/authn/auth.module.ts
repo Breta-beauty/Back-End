@@ -28,7 +28,6 @@ config();
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
       secret: configService.get('SECRET'),
-      signOptions: { expiresIn: '4h' },
     }),
   ],
   providers: [AuthService, JwtStrategy, GoogleStrategy, FacebookStrategy],
