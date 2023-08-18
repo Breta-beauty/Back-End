@@ -15,7 +15,7 @@ export class EmployeesResolver {
         createEmployee(
             @Args('salon_id') salon_id: number,
             @Args('role_name') role_name: string,
-            @Args('createRatingInput') createEmployeeInput: CreateEmployeeInput,
+            @Args('createEmployeeInput') createEmployeeInput: CreateEmployeeInput,
     ) {
         return this.employeeService.create(salon_id, role_name, createEmployeeInput);
     }

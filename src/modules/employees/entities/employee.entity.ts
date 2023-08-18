@@ -1,6 +1,7 @@
 import { ObjectType, Field, GraphQLISODateTime } from '@nestjs/graphql';
 import { Roles } from 'src/modules/role/entities/role.entity';
 import { Salon } from 'src/modules/salon/entities/salon.entity';
+import { Service } from 'src/modules/services/entities/service.entity';
 import {
   Column,
   CreateDateColumn,
@@ -45,9 +46,13 @@ export class Employee {
   @Column('varchar')
   payday: string;
 
-  @Field(() => [Roles])
+  @Field(() => Roles)
   @ManyToOne(() => Roles, (roles) => roles.employee)
   role: Roles;
+
+  @Field(() => [Service])
+  @ManyToOne(() => Service, (services) => services.employee)
+  service: Service;
 
   @Field(() => Salon) 
   @ManyToOne(() => Salon, (salon) => salon.employee)

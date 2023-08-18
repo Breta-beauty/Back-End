@@ -39,7 +39,8 @@ type Employee {
   commission: String!
   paymentCycle: String!
   payday: String!
-  role: [Roles!]!
+  role: Roles!
+  service: [Service!]!
   salon: Salon!
   created_at: DateTime!
   updated_at: DateTime!
@@ -92,6 +93,7 @@ type Service {
   cancellation: JSON!
   timespan: JSON!
   paid: Boolean
+  employee: Employee
   salon: Salon!
   appointments: [Appointment!]!
   created_at: DateTime!
@@ -220,7 +222,7 @@ type Mutation {
   createClient(createClientInput: CreateClientInput!): Client!
   updateClient(updateClientInput: UpdateClientInput!): Client!
   removeClient(id: Int!): Client!
-  createEmployee(salon_id: Float!, role_name: String!, createRatingInput: CreateEmployeeInput!): Employee!
+  createEmployee(salon_id: Float!, role_name: String!, createEmployeeInput: CreateEmployeeInput!): Employee!
   updateEmployee(employee_id: ID!, updateEmployeeInput: UpdateEmployeeInput!): Employee!
   removeEmployee(employee_id: ID!): Employee!
   createRole(salon_id: Float!, createRoleInput: CreateRoleInput!): Roles!

@@ -49,7 +49,7 @@ export class EmployeesService {
     async findOne(employee_id: number) {
         const employee = await this.employeeRepo.findOne({
           where: { employee_id },
-          relations: {salon: true },
+          relations: {salon: true, role: true },
         });
     
         if (!employee) throw new NotFoundException(['No se encontró el rating']);
