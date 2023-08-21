@@ -34,9 +34,6 @@ export class CreateUserInput {
   type: 'owner' | 'customer' = 'customer';
 
   @Field()
-  is_verified: true | false;
-
-  @Field()
   @IsString()
   @IsNotEmpty({ message: 'Debes introducir tu nombre' })
   full_name: string;
