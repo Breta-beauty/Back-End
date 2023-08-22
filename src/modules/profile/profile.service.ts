@@ -27,7 +27,9 @@ export class ProfileService {
   }
 
   async findAll() {
-    const profiles = await this.profileRepo.find();
+    const profiles = await this.profileRepo.find({
+      relations: { user: true },
+    });
 
     if (!profiles) throw new NotFoundException('No se encontró ningún perfil');
 
