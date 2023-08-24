@@ -95,24 +95,34 @@ export class Salon {
   owner: Profile;
 
   @Field(() => [Rating], { nullable: true })
-  @OneToMany(() => Rating, (rating) => rating.salon, { cascade: true })
+  @OneToMany(() => Rating, (rating) => rating.salon, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   ratings: Rating[];
 
   @Field(() => [Profile], { nullable: true })
-  @ManyToMany(() => Profile, (profile) => profile.has_purchased_in)
+  @ManyToMany(() => Profile, (profile) => profile.has_purchased_in, {
+    onDelete: 'CASCADE',
+  })
   @JoinTable({ name: 'customers' })
   customers: Profile[];
 
   @Field(() => [Appointment])
-  @OneToMany(() => Appointment, (appointment) => appointment.salon)
+  @OneToMany(() => Appointment, (appointment) => appointment.salon, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   appointments: Appointment[];
 
   @Field(() => [Employee])
-  @OneToMany(() => Employee, (employee) => employee.salon, { cascade: true })
+  @OneToMany(() => Employee, (employee) => employee.salon, {
+    onDelete: 'CASCADE',
+  })
   employee: Employee[];
 
   @Field(() => [Roles])
-  @OneToMany(() => Roles, (roles) => roles.salon, { cascade: true })
+  @OneToMany(() => Roles, (roles) => roles.salon, { onDelete: 'CASCADE' })
   roles: Roles[];
 
   @Field(() => GraphQLISODateTime)

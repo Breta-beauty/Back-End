@@ -400,7 +400,7 @@ input UpdateClientInput {
 }
 
 input CreateEmployeeInput {
-  profile_picture: String!
+  profile_picture: String
   employee_name: String!
   cellphone: String!
   email: String!

@@ -21,7 +21,10 @@ export class Employee {
   employee_id: number;
 
   @Field()
-  @Column('varchar')
+  @Column('varchar', {
+    default:
+      'https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg',
+  })
   profile_picture: string;
 
   @Field()

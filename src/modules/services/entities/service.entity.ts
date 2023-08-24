@@ -68,7 +68,11 @@ export class Service {
 
   @Field(() => [Appointment])
   @ManyToMany(() => Appointment, (appointment) => appointment.services)
-  @JoinTable({ name: 'services<->appointments' })
+  @JoinTable({
+    name: 'services<->appointments',
+    joinColumn: { name: 'service_id' },
+    inverseJoinColumn: { name: 'appointment_id' },
+  })
   appointments: Appointment[];
 
   @Field(() => GraphQLISODateTime)

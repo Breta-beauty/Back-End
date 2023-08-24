@@ -43,7 +43,10 @@ export class Profile {
   user: User;
 
   @Field(() => [Salon])
-  @OneToMany(() => Salon, (salon) => salon.owner, { cascade: true })
+  @OneToMany(() => Salon, (salon) => salon.owner, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   salons: Salon[];
 
   @Field(() => [Rating])
@@ -51,7 +54,9 @@ export class Profile {
   rates: Rating[];
 
   @Field(() => [Notification])
-  @OneToMany(() => Notification, (notification) => notification.profile)
+  @OneToMany(() => Notification, (notification) => notification.profile, {
+    onDelete: 'CASCADE',
+  })
   notifications: Notification[];
 
   @Field(() => [Salon])
@@ -61,6 +66,7 @@ export class Profile {
   @Field(() => [Appointment])
   @OneToMany(() => Appointment, (appointment) => appointment.subscriber, {
     cascade: true,
+    onDelete: 'CASCADE',
   })
   appointments: Appointment[];
 

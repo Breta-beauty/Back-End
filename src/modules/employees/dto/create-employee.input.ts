@@ -2,17 +2,18 @@ import { InputType, Field, Float } from '@nestjs/graphql';
 import {
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsPhoneNumber,
   IsString,
 } from 'class-validator';
 
 @InputType()
 export class CreateEmployeeInput {
-  @Field()
+  @Field({ nullable: true })
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   profile_picture: string;
-  
+
   @Field()
   @IsString()
   @IsNotEmpty()
@@ -42,5 +43,4 @@ export class CreateEmployeeInput {
   @IsString()
   @IsNotEmpty()
   payday: string;
-
 }

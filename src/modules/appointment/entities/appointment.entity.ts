@@ -55,8 +55,18 @@ export class Appointment {
   salon: Salon;
 
   @Field(() => [Employee])
-  @ManyToMany(() => Employee, (employee) => employee.appointments)
-  @JoinTable({ name: 'attended_by' })
+  @ManyToMany(() => Employee, (employee) => employee.appointments, {
+    onDelete: 'CASCADE',
+  })
+  @JoinTable({
+    name: 'attended_by',
+    joinColumn: {
+      name: 'appointment_id',
+    },
+    inverseJoinColumn: {
+      name: 'employee_id',
+    },
+  })
   attended_by: Employee[];
 
   @Field(() => GraphQLISODateTime)

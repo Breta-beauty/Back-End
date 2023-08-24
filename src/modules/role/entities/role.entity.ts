@@ -16,17 +16,17 @@ import {
 export class Roles {
   @Field()
   @PrimaryGeneratedColumn()
-  role_id: number; 
+  role_id: number;
 
   @Field()
   @Column('varchar')
   role_name: string;
 
-  @Field(() => Employee, {nullable: true})
+  @Field(() => Employee, { nullable: true })
   @OneToMany(() => Employee, (employee) => employee.role)
   employee: Employee;
 
-  @Field(() => Salon) 
+  @Field(() => Salon)
   @ManyToOne(() => Salon, (salon) => salon.roles)
   salon: Salon;
 
