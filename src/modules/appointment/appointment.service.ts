@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { In, Repository } from 'typeorm';
+import { Between, In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Appointment } from './entities/appointment.entity';
@@ -14,6 +14,7 @@ import { UpdateAppointmentInput } from './dto/update-appointment.input';
 import { Service } from '../services/entities/service.entity';
 import { NotificationsService } from '../notifications/notifications.service';
 import { Salon } from '../salon/entities/salon.entity';
+import { Employee } from '../employees/entities/employee.entity';
 
 @Injectable()
 export class AppointmentService {
@@ -26,6 +27,8 @@ export class AppointmentService {
     private servicesRepo: Repository<Service>,
     @InjectRepository(Salon)
     private salonRepo: Repository<Salon>,
+    @InjectRepository(Employee)
+    private employeeRepo: Repository<Employee>,
     private notificationsService: NotificationsService,
   ) {}
 
@@ -55,11 +58,22 @@ export class AppointmentService {
 
     if (!salon) throw new BadRequestException(['Selecciona un salon valido']);
 
+    const employees = await this.employeeRepo.find({
+      where: { employee_id: In(createAppointmentInput.employees_ids) },
+    });
+
+    if (!employees || employees.length === 0) {
+      throw new BadRequestException([
+        'Selecciona por lo menos a un empleado valido',
+      ]);
+    }
+
     const newAppointment = this.appointmentRepo.create(createAppointmentInput);
 
     newAppointment.salon = salon;
     newAppointment.subscriber = profile;
     newAppointment.services = services;
+    newAppointment.attended_by = employees;
 
     return this.appointmentRepo.save(newAppointment);
   }
@@ -87,6 +101,19 @@ export class AppointmentService {
     }
 
     return appointment;
+  }
+
+  async findByDate(start: Date, end: Date) {
+    const appointments = await this.appointmentRepo.find({
+      relations: { services: { employee: true }, salon: true },
+      where: [{ start: Between(start, end) }],
+    });
+
+    if (!appointments || appointments.length === 0) {
+      throw new NotFoundException('No se encontraron citas para esta fecha');
+    }
+
+    return appointments;
   }
 
   async update(

@@ -57,7 +57,7 @@ export class Service {
   @Column('boolean', { default: false })
   paid: boolean;
 
-  @Field(() => Employee, {nullable: true})
+  @Field(() => Employee, { nullable: true })
   @OneToMany(() => Employee, (employee) => employee.service)
   employee: Employee;
 

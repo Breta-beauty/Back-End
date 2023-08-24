@@ -42,6 +42,7 @@ type Employee {
   role: Roles!
   service: [Service!]!
   salon: Salon!
+  appointments: [Appointment!]!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -109,6 +110,7 @@ type Appointment {
   subscriber: Profile!
   services: [Service!]!
   salon: Salon!
+  attended_by: [Employee!]!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -212,6 +214,7 @@ type Mutation {
   updateService(service_id: ID!, updateServiceInput: UpdateServiceInput!): Service!
   removeService(service_id: ID!): Service!
   createAppointment(profile_id: String!, createAppointmentInput: CreateAppointmentInput!): Appointment!
+  findByDate(start_date: DateTime!, end_date: DateTime): [Appointment!]!
   updateAppointment(appointment_id: ID!, updateAppointmentInput: UpdateAppointmentInput!): Appointment!
   removeAppointment(appointment_id: ID!): Appointment!
   createNotification(profile_id: ID!, createNotificationInput: CreateNotificationInput!): Notification!
@@ -235,7 +238,6 @@ input CreateUserInput {
   email: String!
   password: String!
   type: String! = "customer"
-  is_verified: Boolean!
   full_name: String!
   cellphone: String!
   birthday: DateTime
@@ -246,7 +248,6 @@ input UpdateUserInput {
   email: String
   password: String
   type: String = "customer"
-  is_verified: Boolean
   full_name: String
   cellphone: String
   birthday: DateTime
@@ -338,6 +339,7 @@ input CreateServiceInput {
   price: Float!
   cancellation: JSON!
   timespan: JSON!
+  employee_id: Float
 }
 
 input UpdateServiceInput {
@@ -348,6 +350,7 @@ input UpdateServiceInput {
   price: Float
   cancellation: JSON
   timespan: JSON
+  employee_id: Float
 }
 
 input CreateAppointmentInput {
@@ -355,6 +358,7 @@ input CreateAppointmentInput {
   end: DateTime!
   services_ids: [String!]!
   salon_id: Float!
+  employees_ids: [Float!]!
 }
 
 input UpdateAppointmentInput {
@@ -362,6 +366,7 @@ input UpdateAppointmentInput {
   end: DateTime
   services_ids: [String!]
   salon_id: Float
+  employees_ids: [Float!]
   status: String
 }
 

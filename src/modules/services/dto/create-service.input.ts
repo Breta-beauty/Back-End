@@ -3,6 +3,7 @@ import {
   IsNotEmpty,
   IsNotEmptyObject,
   IsNumber,
+  IsOptional,
   IsString,
 } from 'class-validator';
 import GraphQLJSON from 'graphql-type-json';
@@ -41,4 +42,9 @@ export class CreateServiceInput {
   @Field(() => GraphQLJSON)
   @IsNotEmptyObject()
   timespan: object;
+
+  @Field({ nullable: true })
+  @IsNumber()
+  @IsOptional()
+  employee_id?: number;
 }

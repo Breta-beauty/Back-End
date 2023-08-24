@@ -4,8 +4,10 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -13,6 +15,7 @@ import {
 import { Service } from 'src/modules/services/entities/service.entity';
 import { Profile } from 'src/modules/profile/entities/profile.entity';
 import { Salon } from 'src/modules/salon/entities/salon.entity';
+import { Employee } from 'src/modules/employees/entities/employee.entity';
 
 @Entity({ name: 'appointments' })
 @ObjectType()
@@ -22,11 +25,11 @@ export class Appointment {
   appointment_id: number;
 
   @Field()
-  @Column('timestamp')
+  @Column('timestamptz')
   start: Date;
 
   @Field()
-  @Column('timestamp')
+  @Column('timestamptz')
   end: Date;
 
   @Field({ nullable: true })
@@ -51,10 +54,16 @@ export class Appointment {
   @JoinColumn({ name: 'salon' })
   salon: Salon;
 
+  @Field(() => [Employee])
+  @ManyToMany(() => Employee, (employee) => employee.appointments)
+  @JoinTable({ name: 'attended_by' })
+  attended_by: Employee[];
+
   @Field(() => GraphQLISODateTime)
   @CreateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
+    precision: 3,
   })
   created_at: Date;
 
@@ -62,6 +71,7 @@ export class Appointment {
   @UpdateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
+    precision: 3,
   })
   updated_at: Date;
 }

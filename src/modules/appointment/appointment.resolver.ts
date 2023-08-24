@@ -25,6 +25,14 @@ export class AppointmentResolver {
     return this.appointmentService.findAll();
   }
 
+  @Mutation(() => [Appointment])
+  findByDate(
+    @Args('start_date') start_date: Date,
+    @Args('end_date', { nullable: true }) end_date?: Date,
+  ) {
+    return this.appointmentService.findByDate(start_date, end_date);
+  }
+
   @Query(() => Appointment, { name: 'appointment' })
   findOne(@Args('appointment_id', { type: () => ID }) id: number) {
     return this.appointmentService.findOne(id);

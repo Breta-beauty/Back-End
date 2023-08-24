@@ -9,10 +9,11 @@ import { Salon } from '../salon/entities/salon.entity';
 
 import { AppointmentService } from './appointment.service';
 import { AppointmentResolver } from './appointment.resolver';
+import { Employee } from '../employees/entities/employee.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Appointment, Profile, Service, Salon]),
+    TypeOrmModule.forFeature([Appointment, Profile, Service, Salon, Employee]),
     NotificationsModule,
   ],
   providers: [AppointmentResolver, AppointmentService],
