@@ -2,6 +2,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 
 import { config } from 'dotenv';
+import { join } from 'path';
 config();
 
 const configService = new ConfigService();
@@ -15,6 +16,8 @@ export const dataSourceOptions: DataSourceOptions = {
   password: configService.get('POSTGRES_PASSWORD'),
   ssl: configService.get('SSL', false),
   synchronize: true,
+
+  entities: [join('dist', '**', '*.entity.{ts,js}')],
 
   migrations: ['dist/migrations/*.{ts,js}'],
 };

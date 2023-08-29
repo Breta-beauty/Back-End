@@ -68,6 +68,21 @@ export class AppointmentService {
       ]);
     }
 
+    const conflictingAppointments = await this.appointmentRepo.find({
+      relations: { attended_by: true },
+      where: {
+        start: Between(
+          createAppointmentInput.start,
+          createAppointmentInput.end,
+        ),
+        attended_by: In(createAppointmentInput.employees_ids),
+      },
+    });
+
+    if (conflictingAppointments) {
+      throw new BadRequestException(['No es posible agendar cita']);
+    }
+
     const newAppointment = this.appointmentRepo.create(createAppointmentInput);
 
     newAppointment.salon = salon;

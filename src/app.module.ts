@@ -5,15 +5,18 @@ import { ThrottlerModule } from '@nestjs/throttler';
 
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
+import { RoleModule } from './modules/role/role.module';
 import { AuthModule } from './modules/authn/auth.module';
 import { EmailModule } from './modules/email/email.module';
 import { SalonModule } from './modules/salon/salon.module';
 import { RatingModule } from './modules/rating/rating.module';
+import { ClientModule } from './modules/client/client.module';
 import { ProfileModule } from './modules/profile/profile.module';
 import { AddressModule } from './modules/address/address.module';
 import { ServicesModule } from './modules/services/services.module';
 import { DatabaseModule } from './modules/database/database.module';
 import { PaymentsModule } from './modules/payments/payments.module';
+import { EmployeesModule } from './modules/employees/employees.module';
 import { AppointmentModule } from './modules/appointment/appointment.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 
@@ -24,9 +27,7 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 import { join } from 'path';
-import { ClientModule } from './modules/client/client.module';
-import { EmployeesModule } from './modules/employees/employees.module';
-import { RoleModule } from './modules/role/role.module';
+import configSchema from 'src/config/config.schema';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { RoleModule } from './modules/role/role.module';
     }),
     ConfigModule.forRoot({
       isGlobal: true,
+      validationSchema: [configSchema],
     }),
     ThrottlerModule.forRoot({
       ttl: 60,

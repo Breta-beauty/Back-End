@@ -27,7 +27,7 @@ config();
     EmailModule,
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
-      secret: configService.get('SECRET'),
+      secret: configService.get('JWT_SECRET'),
     }),
   ],
   providers: [AuthService, JwtStrategy, GoogleStrategy, FacebookStrategy],
