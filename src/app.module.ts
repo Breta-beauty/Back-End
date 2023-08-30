@@ -47,7 +47,7 @@ import configSchema from 'src/config/config.schema';
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: [configSchema],
+      validationSchema: configSchema,
     }),
     ThrottlerModule.forRoot({
       ttl: 60,
