@@ -4,24 +4,30 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { User } from './entities/user.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Profile } from '../profile/entities/profile.entity';
 
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+
+import { HashService } from 'src/services/hash.service';
 import { ProfileService } from '../profile/profile.service';
+import { PaymentsService } from '../payments/payments.service';
 import { EmailConfirmationService } from '../email/email-confirmation.service';
 
-import { FindByInput } from './dto/findBy.input';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { ConfirmEmailInput } from '../email/dto/confirm-email.input';
 
-import * as bcrypt from 'bcrypt';
+import { UpdateProfileInput } from '../profile/dto/update-profile.input';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepo: Repository<User>,
+    @InjectRepository(Profile) private profileRepo: Repository<Profile>,
+    private hashService: HashService,
     private profileService: ProfileService,
+    private paymentsService: PaymentsService,
     private readonly emailConfirmationService: EmailConfirmationService,
   ) {}
 
@@ -31,11 +37,7 @@ export class UserService {
     });
     if (user) throw new BadRequestException([['El usuario ya existe']]);
 
-    const saltRounds = 10;
-    const password = payload.password;
-    const hash = await bcrypt.hash(password, saltRounds);
-
-    payload.password = hash;
+    payload.password = await this.hashService.hash(payload.password);
 
     const newUser = this.userRepo.create(payload);
 
@@ -45,6 +47,17 @@ export class UserService {
         payload.full_name,
       );
     }
+
+    if (newUser.type === 'customer') {
+      const stripeCustomer = await this.paymentsService.createStripeCustomer(
+        payload.full_name,
+        payload.email,
+        payload.type,
+      );
+
+      newUser.stripe_customer_id = stripeCustomer.id;
+    }
+
     await this.userRepo.save(newUser);
 
     await this.profileService.create(newUser.user_id);
@@ -55,35 +68,6 @@ export class UserService {
   async findAll(): Promise<User[]> {
     const users = await this.userRepo.find();
     if (!users) throw new NotFoundException(['No se encontraron usuarios']);
-
-    return users;
-  }
-
-  async findBy(findByInput: FindByInput): Promise<User[]> {
-    const users = await this.userRepo
-      .createQueryBuilder('users')
-      .leftJoinAndSelect('users.profile', 'profiles')
-      .where('full_name ilike :name and "type" = :type', {
-        name: `%${findByInput.search_input}%`,
-        type: findByInput.type,
-      })
-      .orWhere(
-        `array_to_string("profiles".services, ',') ilike :name and "type" = :type`,
-        {
-          name: `%${findByInput.search_input}%`,
-          type: findByInput.type,
-        },
-      )
-      .orderBy('full_name', 'ASC')
-      .getMany();
-
-    if (!users || users.length === 0) {
-      throw new NotFoundException([
-        `Ningún resultado coincide con: ${
-          findByInput.search_input || findByInput.type
-        }`,
-      ]);
-    }
 
     return users;
   }
@@ -107,34 +91,57 @@ export class UserService {
     return user;
   }
 
-  async update(user_id: string, changes: UpdateUserInput) {
-    const user = await this.userRepo.findOneBy({ user_id });
+  async update(
+    user_id: string,
+    updateUserInput: UpdateUserInput,
+    updateProfileInput?: UpdateProfileInput,
+  ): Promise<User> {
+    const user = await this.userRepo.findOne({
+      where: { user_id },
+      relations: { profile: true },
+    });
     if (!user) throw new NotFoundException(['No se encontró al usuario']);
 
-    if (changes.password) {
-      const saltRounds = 10;
-      const password = changes.password;
-      const hash = await bcrypt.hash(password, saltRounds);
-      changes.password = hash;
+    if (updateUserInput.password) {
+      const password = updateUserInput.password;
+      updateUserInput.password = await this.hashService.hash(password);
     }
 
-    this.userRepo.merge(user, changes);
+    this.userRepo.merge(user, updateUserInput);
+
+    if (updateProfileInput) {
+      const profile = await this.profileRepo.findOneBy({
+        profile_id: user.profile.profile_id,
+      });
+
+      this.profileRepo.merge(profile, updateProfileInput);
+
+      this.profileRepo.save(profile);
+    }
 
     return this.userRepo.save(user);
   }
+
+  // async changePassword(user_id: string) {
+  //   const user = await this.userRepo.findOneBy({ user_id });
+
+  //   if (!user) throw new BadRequestException(['El usuario no es valido']);
+
+  //   this.userRepo.merge();
+  // }
 
   async emailConfirmed(email: string) {
     return await this.userRepo.update(
       { email },
       {
-        is_Verified: true,
+        is_verified: true,
       },
     );
   }
 
   public async confirmEmail(email: string) {
     const user = await this.userRepo.findOneBy({ email });
-    if (user.is_Verified) {
+    if (user.is_verified) {
       throw new BadRequestException(['Email already confirmed']);
     }
     return await this.emailConfirmed(email);
@@ -150,5 +157,11 @@ export class UserService {
   async remove(user_id: string) {
     const user = await this.userRepo.findOneBy({ user_id });
     if (!user) throw new NotFoundException(['El usuario no existe']);
+
+    if (user.type === 'customer') {
+      this.paymentsService.deleteStripeCustomer(user.stripe_customer_id);
+    }
+
+    return this.userRepo.delete(user_id);
   }
 }

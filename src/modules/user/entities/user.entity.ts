@@ -1,5 +1,7 @@
 import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
+
 import { Profile } from 'src/modules/profile/entities/profile.entity';
+
 import {
   Column,
   CreateDateColumn,
@@ -17,45 +19,45 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   user_id: string;
 
-  // @Field()
-  // @Column({ type: 'varchar', length: 150, unique: true })
-  // username: string;
+  @Field()
+  @Column({ nullable: true })
+  stripe_customer_id?: string;
 
   @Field()
-  @Column({ type: 'varchar', length: 150 })
+  @Column('varchar')
   full_name: string;
 
   @Field()
-  @Column({ type: 'varchar', length: 150, unique: true })
+  @Column('varchar', { unique: true })
   email: string;
 
   @Field()
-  @Column({ type: 'varchar', length: 255 })
+  @Column('varchar', { nullable: true })
   password: string;
 
   @Field()
-  @Column({ type: 'varchar', length: 50, unique: true })
+  @Column('varchar', { unique: true, nullable: true })
   cellphone: string;
 
   @Field({ nullable: true })
-  @Column({ type: 'date', nullable: true })
+  @Column('date', { nullable: true })
   birthday: Date;
 
   @Field({ nullable: true })
-  @Column({ type: 'varchar', default: 'undetermined' })
-  gender: 'male' | 'female' | 'undetermined' = 'undetermined';
+  @Column('varchar', { default: 'undetermined' })
+  gender: 'male' | 'female' | 'undetermined';
 
   @Field({ nullable: true })
-  @Column({ type: 'varchar', length: 20, default: 'customer' })
-  type: 'salon' | 'customer';
+  @Column('varchar', { default: 'customer' })
+  type: 'owner' | 'customer' = 'customer';
 
   @Field({ nullable: true })
-  @Column({ type: 'boolean', default: false })
-  is_Verified: boolean;
+  @Column('boolean', { default: false })
+  is_verified: boolean;
 
   @Field(() => Profile)
-  @OneToOne(() => Profile, { nullable: true })
-  @JoinColumn()
+  @OneToOne(() => Profile, { cascade: true })
+  @JoinColumn({ name: 'profile_id' })
   profile: Profile;
 
   @Field(() => GraphQLISODateTime)
@@ -63,12 +65,12 @@ export class User {
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  created_At: Date;
+  created_at: Date;
 
   @Field(() => GraphQLISODateTime)
   @UpdateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  updated_At: Date;
+  updated_at: Date;
 }

@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { EmailService } from './email.service';
 import VerificationTokenPayload from './interfaces/verificationTokenPayload.interface';
+import { MailerService } from '@nestjs-modules/mailer/dist';
 
 @Injectable()
 export class EmailConfirmationService {
@@ -10,6 +11,7 @@ export class EmailConfirmationService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly emailService: EmailService,
+    private readonly mailerService: MailerService,
   ) {}
 
   public sendVerificationLink(email: string, name: string) {
@@ -25,17 +27,14 @@ export class EmailConfirmationService {
     )}?token=${token}`;
     const text = `Welcome to Breta. To confirm the email address, click here: ${url}`;
 
-    return this.emailService.sendMail({
+    return this.mailerService.sendMail({
       to: email,
-      subject: 'Email confirmation',
-      text,
-      html: `<html>
-              <h1>Hello ${name}!</h1>
-              <p>Click in the link below to verify your email account</p>
-              <form action="http://127.0.0.1:3000/?token=${token}">
-                <input type="submit" value="Click Here" />
-              </form>
-            </html>`,
+      subject: 'Confirmacion de correo electronico',
+      template: 'confirm-email',
+      context: {
+        name: name,
+        token: token,
+      },
     });
   }
 
@@ -51,9 +50,9 @@ export class EmailConfirmationService {
       throw new BadRequestException();
     } catch (error) {
       if (error?.name === 'TokenExpiredError') {
-        throw new BadRequestException('Email confirmation token expired');
+        throw new BadRequestException(['Email confirmation token expired']);
       }
-      throw new BadRequestException('Bad confirmation token');
+      throw new BadRequestException(['Bad confirmation token']);
     }
   }
 }

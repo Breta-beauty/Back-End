@@ -11,4 +11,7 @@ export class LoginInput {
   @Field()
   @IsNotEmpty({ message: 'Debes introducir una contraseña' })
   password: string;
+
+  @Field(() => Boolean, { nullable: true })
+  remember_me?: true | false = false;
 }

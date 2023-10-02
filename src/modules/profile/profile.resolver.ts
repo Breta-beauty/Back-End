@@ -1,13 +1,12 @@
 import { Profile } from './entities/profile.entity';
-import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 
 import { ProfileService } from './profile.service';
 
+import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
+
+import { GalleryInput } from '../user/dto/gallery.input';
 import { CreateProfileInput } from './dto/create-profile.input';
 import { UpdateProfileInput } from './dto/update-profile.input';
-
-import { getProfileResponse } from './dto/profile-response';
-import { GalleryInput } from '../user/dto/gallery.input';
 
 @Resolver(() => Profile)
 export class ProfileResolver {
@@ -26,11 +25,7 @@ export class ProfileResolver {
     return this.profileService.findAll();
   }
 
-  @Query(() => [Profile], { name: 'findProfilesBy' })
-  findBy(@Args('service', { type: () => [String] }) service: string[]) {
-    return this.profileService.findBy(service);
-  }
-  @Query(() => getProfileResponse, { name: 'profile' })
+  @Query(() => Profile, { name: 'profile' })
   findOne(@Args('profile_id', { type: () => ID }) profile_id: string) {
     return this.profileService.findOne(profile_id);
   }
